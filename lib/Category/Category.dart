@@ -283,3 +283,65 @@ class Category extends StatelessWidget {
     );
   }
 }
+Widget _buildNestedSection({required String title, required List<Widget> items, bool isFixed = false}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 10.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: const Color(0xff777474).withOpacity(0.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 6,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: isFixed
+              ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: items.map((item) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEAE4DD),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: item,
+              );
+            }).toList(),
+          )
+              : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: items.map((item) {
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEAE4DD),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: item,
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}

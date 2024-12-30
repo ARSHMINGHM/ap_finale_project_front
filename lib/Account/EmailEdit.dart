@@ -39,6 +39,7 @@ class ChangeEmail extends State<changeEmail> {
       backgroundColor: const Color(0xFFDFF2EB),
         bottomNavigationBar: ConvexAppBar(
           color: const Color(0XFF757C84),
+
           initialActiveIndex: 2,
           top: -12.0,
           activeColor: const Color(0XFF000000),

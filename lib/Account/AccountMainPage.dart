@@ -189,6 +189,7 @@ Widget build(BuildContext context) {
 
       bottomNavigationBar: ConvexAppBar(
         color: Color(0XFF757C84),
+        initialActiveIndex: 2,
         top: -12.0,
         activeColor: Color(0XFF000000),
         backgroundColor: Color(0XFFDFF2EB),
