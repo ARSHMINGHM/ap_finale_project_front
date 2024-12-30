@@ -4,6 +4,8 @@ import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
+
+import '../Cart/Cart.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
@@ -167,10 +169,15 @@ Widget build(BuildContext context) {
                     children: [
                       Icon(Icons.shopping_cart_outlined, color: Colors.blue[700]),  // آیکون سبد خرید
                       SizedBox(width: 5),  // فاصله بین آیکون و متن
-                      Text(
+                      TextButton(onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                        );
+                      }, child: Text(
                         'سبد خرید',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue[700]),
-                      ),
+                      ),)
                     ],
                   ),
                 ),
