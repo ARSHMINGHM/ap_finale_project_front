@@ -7,7 +7,7 @@ import 'package:ap_finale_project_front/Cart/Cart.dart';
 CartProduct b = CartProduct(
   name: 'گوشی موبایل تایتانیک مدل 2 Phone با سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت',
   price: 11250000,
-  image: 'assets/phone.png',
+  image: 'assets/Iphone.jpg',
   capacity: '512 گیگابایت',
   color: 'مشکی',
 );

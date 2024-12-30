@@ -189,7 +189,6 @@ class Home extends StatelessWidget{
                   );}
                 },
                 child:
-
                     Text(
                       "مشاهده همه",
                       style: TextStyle(color: color),
