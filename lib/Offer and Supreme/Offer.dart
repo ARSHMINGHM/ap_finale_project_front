@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
 final products = [
 Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
@@ -96,6 +97,10 @@ class Offer extends StatelessWidget{
               const SizedBox(width: 18),
               GestureDetector(
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Cart()),
+                  );
                 },
                 child: Container(
                   child: const Icon(

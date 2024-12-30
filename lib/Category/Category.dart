@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
 
 class Category extends StatelessWidget {
   const Category({super.key});
@@ -11,36 +12,56 @@ class Category extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFDFF2EB),
       appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes default back button
         backgroundColor: const Color(0xFFD8EBE4),
-        elevation: 0,
         title: Row(
           children: [
             // Search Bar
             Expanded(
               child: Container(
-                height: 40,
+                height: 35,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   color: const Color(0xFFC1D2CC),
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(
-                          hintText: '... جستجو محصول',
+                        decoration: const InputDecoration(
+                          hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
+                        onSubmitted: (value) {
+                          print('Search: $value');
+                        },
                       ),
                     ),
-                    Icon(Icons.search, color: Colors.black),
+                    const Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(width: 16),
-            const Icon(Icons.shopping_cart, color: Colors.black, size: 24),
+            const SizedBox(width: 18),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Cart()),
+                );
+              },
+              child: Container(
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Color(0xFF000000),
+                  size: 24.0,
+                ),
+              ),
+            ),
           ],
         ),
       ),

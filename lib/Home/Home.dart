@@ -4,6 +4,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
 class Home extends StatelessWidget{
   const Home({super.key});
   @override
@@ -15,7 +16,6 @@ class Home extends StatelessWidget{
     backgroundColor: const Color(0xFFD8EBE4),
     title: Row(
       children: [
-
         // Search Bar
         Expanded(
           child: Container(
@@ -49,6 +49,10 @@ class Home extends StatelessWidget{
         const SizedBox(width: 18),
         GestureDetector(
           onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Cart()),
+            );
           },
           child: Container(
             child: const Icon(
