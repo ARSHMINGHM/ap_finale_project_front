@@ -5,6 +5,9 @@ import 'NameEdit.dart';
 import 'NumberEdit.dart';
 import 'PassEdit.dart';
 import 'SubscriptionEdit.dart';
+import 'users.dart';
+
+
 
 
 User a = User(fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",nationalID: "0025379151",password: "1234",sub: "معمولی");
