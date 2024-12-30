@@ -201,7 +201,7 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
                           showNotification("ورود موفقیت‌آمیز بود!",Color(0xFF3E7B27), Icons.check_circle_outline);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => home()),
+                            MaterialPageRoute(builder: (context) => Home()),
                           );
                         }
                       });

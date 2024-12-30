@@ -3,6 +3,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
@@ -17,7 +18,7 @@ Widget build(BuildContext context) {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => home()), // جایگزین صفحه مقصد
+              MaterialPageRoute(builder: (context) => Home()), // جایگزین صفحه مقصد
             );
           },
         ),
@@ -201,12 +202,12 @@ Widget build(BuildContext context) {
           if (i == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => category()),
+              MaterialPageRoute(builder: (context) => Category()),
             );
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => home()),
+              MaterialPageRoute(builder: (context) => Home()),
             );
           } else if (i == 2) {
             Navigator.push(

@@ -4,16 +4,11 @@ import 'NameEdit.dart';
 import 'NumberEdit.dart';
 import 'PassEdit.dart';
 import 'SubscriptionEdit.dart';
-<<<<<<< HEAD
-import 'users.dart';
-
-
-=======
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:ap_finale_project_front/main.dart';
->>>>>>> 24cb7951985f79ec36f114f2f4da2187a91b7243
+import 'package:ap_finale_project_front/Category/Category.dart';
 
 
 class Account extends StatelessWidget {
@@ -454,12 +449,12 @@ class Account extends StatelessWidget {
             if (i == 0) {
               Navigator.push(
              context,
-            MaterialPageRoute(builder: (context) => category()),
+            MaterialPageRoute(builder: (context) => Category()),
             );
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
             } else if (i == 2) {
               Navigator.push(

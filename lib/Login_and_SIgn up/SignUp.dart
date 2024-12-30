@@ -313,7 +313,7 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
                         if(valid){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => home()),
+                            MaterialPageRoute(builder: (context) => Home()),
                           );
                         }
                       }
