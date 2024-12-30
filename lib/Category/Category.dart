@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:untitled/Profile.dart';
 import 'package:untitled/home.dart';
 
-
 class category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -57,8 +56,8 @@ class category extends StatelessWidget {
         onTap: (int i) {
           if (i == 0) {
             Navigator.push(
-             context,
-             MaterialPageRoute(builder: (context) => category()),
+              context,
+              MaterialPageRoute(builder: (context) => category()),
             );
           } else if (i == 1) {
             Navigator.push(
@@ -78,26 +77,98 @@ class category extends StatelessWidget {
           _buildNestedSection(
             title: "کالای دیجیتال",
             items: [
-              _buildProductCard("لوازم جانبی", 'assets/mobile-accessories.jpg',12),
-              _buildProductCard("تبلت", 'assets/a950a328b44888bacbf40e3ab4a1fb49e8dc4a22_1669727482.jpg',12),
-              _buildProductCard("لپ‌تاپ", 'assets/Laptops.jpg',12),
+              _buildSelectableProductCard("لوازم جانبی", 'assets/mobile-accessories.jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("لوازم جانبی انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("تبلت", 'assets/a950a328b44888bacbf40e3ab4a1fb49e8dc4a22_1669727482.jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("تبلت انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("لپ‌تاپ", 'assets/Laptops.jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("لپ‌تاپ انتخاب شد");
+                },
+              ),
             ],
           ),
           _buildNestedSection(
             title: "مد و پوشاک",
             items: [
-              _buildProductCard("پوشاک مردانه", 'assets/thumb_16457792563144_index.jpg',60),
-              _buildProductCard("پوشاک زنانه", 'assets/images (4).jpg',12),
-              _buildProductCard("بچکانه", 'assets/1425382_772.jpg',12),
-              //_buildProductCard("ورزشی", 'assets/1545655016_I0oO9.jpg'),
+              _buildSelectableProductCard("پوشاک مردانه", 'assets/thumb_16457792563144_index.jpg', 60,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("پوشاک مردانه انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("پوشاک زنانه", 'assets/images (4).jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("پوشاک زنانه انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("بچکانه", 'assets/1425382_772.jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("بچکانه انتخاب شد");
+                },
+              ),
             ],
           ),
           _buildNestedSection(
             title: "لوازم آرایشی و بهداشتی",
             items: [
-              _buildProductCard("لوازم آرایشی", 'assets/cosmetic2.jpg',12),
-              _buildProductCard("مراقبت پوست", 'assets/images (6).jpg',12),
-              _buildProductCard("عطر و ادکلن", 'assets/images (5).jpg',12),
+              _buildSelectableProductCard("لوازم آرایشی", 'assets/cosmetic2.jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("لوازم آرایشی انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("مراقبت پوست", 'assets/images (6).jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+                  print("مراقبت پوست انتخاب شد");
+                },
+              ),
+              _buildSelectableProductCard("عطر و ادکلن", 'assets/images (5).jpg', 12,
+                    () {
+                      /*Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
+                      );*/
+
+                  print("عطر و ادکلن انتخاب شد");
+                },
+              ),
             ],
           ),
         ],
@@ -122,7 +193,6 @@ class category extends StatelessWidget {
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Color(0xff777474).withOpacity(0.5),
-              //borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -135,7 +205,7 @@ class category extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: items.map((item) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 6),
+                  margin: EdgeInsets.symmetric(horizontal: 8),
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Color(0xFFEAE4DD),
@@ -151,7 +221,13 @@ class category extends StatelessWidget {
     );
   }
 
-  Widget _buildProductCard(String title, String imagePath,double circular) {
+  Widget _buildSelectableProductCard(String title, String imagePath, double circular, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: _buildProductCard(title, imagePath, circular),
+    );
+  }
+  Widget _buildProductCard(String title, String imagePath, double circular) {
     return Container(
       width: 110,
       child: Column(
