@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
-import 'EditInfo.dart';
+
+
+import 'package:flutter/material.dart';
+import 'EmailEdit.dart';
+import 'IdEdit.dart';
+import 'NameEdit.dart';
+import 'NumberEdit.dart';
+import 'PassEdit.dart';
+import 'SubscriptionEdit.dart';
+
 
 class changeSubscription extends StatefulWidget {
   @override
   _ChangeSubscriptionState createState() => _ChangeSubscriptionState();
 }
+
 class _ChangeSubscriptionState extends State<changeSubscription> {
-  int? selectedOption; // ذخیره انتخاب تنها یک گزینه
+  String? selectedOption = a.sub;
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +32,38 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
         backgroundColor: Color(0xFFDFF2EB),
       ),
       backgroundColor: Color(0xFFDFF2EB),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-        ],
-      ),
-      body: Padding(
+        bottomNavigationBar: ConvexAppBar(
+          color: Color(0XFF757C84),
+          top: -12.0,
+          activeColor: Color(0XFF000000),
+          backgroundColor: Color(0XFFDFF2EB),
+          style: TabStyle.textIn,
+          items: [
+            TabItem(icon: Icons.category_outlined, title: 'Category'),
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.people, title: 'Profile'),
+          ],
+          onTap: (int i) {
+            if (i == 0) {
+              /*Navigator.push(
+             // context,
+            //  MaterialPageRoute(builder: (context) => CategoryPage()),
+            );*/
+            } else if (i == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => home()),
+              );
+            } else if (i == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profile()),
+              );
+            }
+          },
+        ),
+
+    body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -46,7 +71,7 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'نوع اشتراک خود را معلوم کنید',
+                'نوع اشتراک خود را مشخص کنید',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.right,
               ),
@@ -61,12 +86,11 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
               ),
               child: Column(
                 children: [
-
-                  _buildCheckboxOption('اشتراک پایه', 1),
-                  SizedBox(height: 15,),
-                  _buildCheckboxOption('اشتراک استاندارد', 2),
-                  SizedBox(height: 15,),
-                  _buildCheckboxOption('اشتراک پریمیوم', 3),
+                  _buildRadioOption('اشتراک پایه', 'پایه'),
+                  SizedBox(height: 15),
+                  _buildRadioOption('اشتراک استاندارد', 'استاندارد'),
+                  SizedBox(height: 15),
+                  _buildRadioOption('اشتراک پریمیوم', 'پریمیوم'),
                 ],
               ),
             ),
@@ -80,6 +104,8 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
                 ),
               ),
               onPressed: () {
+
+                print('اشتراک انتخاب شده: ${a.sub}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Account()),
@@ -97,7 +123,8 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
     );
   }
 
-  Widget _buildCheckboxOption(String text, int value) {
+
+  Widget _buildRadioOption(String text, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -106,18 +133,16 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
-        Checkbox(
-          value: selectedOption == value,
-          onChanged: (bool? isSelected) {
+        Radio<String>(
+          value: value,
+          groupValue: selectedOption,
+          onChanged: (String? newValue) {
             setState(() {
-              selectedOption = isSelected! ? value : null;
+              selectedOption = newValue!;
+              a.sub = selectedOption;
             });
           },
           activeColor: Colors.blue,
-          checkColor: Colors.white,
-          shape: CircleBorder(),
-          side: BorderSide(color: Color(0xFF787474), width: 2),
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),
       ],
     );
