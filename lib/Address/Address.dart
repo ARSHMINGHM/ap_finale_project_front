@@ -1,8 +1,9 @@
+import 'package:ap_finale_project_front/Payment/Payment.dart';
 import 'package:flutter/material.dart';
 
 class Address extends StatefulWidget {
-  final double total;
-  final double deliveryFee;
+  final int total;
+  final int deliveryFee;
 
   const Address({
     required this.total,
@@ -163,6 +164,9 @@ class _AddressState extends State<Address> {
                       content: Text('آدرس تایید شد: ${addresses[selectedAddressIndex!]}'),
                     ),
                   );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Payment(total: widget.total)),);
                 }
               },
               child: const Text(
@@ -176,7 +180,7 @@ class _AddressState extends State<Address> {
     );
   }
 
-  Widget _buildPriceRow(String title, double amount, {bool isBold = false}) {
+  Widget _buildPriceRow(String title, int amount, {bool isBold = false}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
