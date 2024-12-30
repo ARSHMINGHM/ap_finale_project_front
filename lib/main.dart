@@ -2,8 +2,9 @@ import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Account/users.dart';
-import 'package:ap_finale_project_front/Offer and Supreme/Supreme.dart' as myAppSupreme;
+import 'package:ap_finale_project_front/Address/Address.dart' as MyAppAddress;
 import 'package:ap_finale_project_front/Cart/Cart.dart';
+
 CartProduct b = CartProduct(
   name: 'گوشی موبایل تایتانیک مدل 2 Phone با سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت',
   price: 11250000,
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      home: Cart(product: b),
+      home: MyAppAddress.Address(total: 1200000,),
     );
   }
 }
