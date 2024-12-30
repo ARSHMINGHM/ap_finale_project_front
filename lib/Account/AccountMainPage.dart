@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import 'EmailEdit.dart';
-import 'IdEdit.dart';
-import 'NameEdit.dart';
-import 'NumberEdit.dart';
-import 'PassEdit.dart';
-import 'SubscriptionEdit.dart';
-
-
-
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/main.dart';
 class Profile extends StatelessWidget {
+  const Profile({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDFF2EB), // رنگ پس‌زمینه
+      backgroundColor: const Color(0xFFDFF2EB), // رنگ پس‌زمینه
       appBar: AppBar(
-        backgroundColor: Color(0xFFDFF2EB), // هم‌رنگ با پس‌زمینه
+        backgroundColor: const Color(0xFFDFF2EB), // هم‌رنگ با پس‌زمینه
         elevation: 0, // حذف سایه
-        leading: Icon(Icons.arrow_back, color: Colors.black), // آیکون لوگو
+        leading: const Icon(Icons.arrow_back, color: Colors.black), // آیکون لوگو
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black), // آیکون تنظیمات
+            icon: const Icon(Icons.settings, color: Colors.black), // آیکون تنظیمات
             onPressed: () {},
           ),
         ],
@@ -30,20 +27,20 @@ class Profile extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundColor: Colors.grey[400],
-              backgroundImage: AssetImage('assets/images (8).jpg'),
+              backgroundImage: const AssetImage('assets/images (8).jpg'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // نام و شماره تلفن کاربر
             Text(
               '${a.fname} ${a.lname}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Text(
               '${a.phoneNumber}',
               style: TextStyle(fontSize: 14, color: Colors.grey[700]),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -51,7 +48,7 @@ class Profile extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: () {},
                   icon: ClipOval(
-                    child: Container(
+                    child: SizedBox(
                       width: 30,  // عرض دایره
                       height: 30, // ارتفاع دایره
                       child: Image.asset(
@@ -60,21 +57,21 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  label: Text('فعال سازی کیف پول', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  label: const Text('فعال سازی کیف پول', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[200],
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   ),
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Account()),
+                      MaterialPageRoute(builder: (context) => const Account()),
                     );
                   },
                   icon: ClipOval(
-                    child: Container(
+                    child: SizedBox(
                       width: 30,  // عرض دایره
                       height: 30, // ارتفاع دایره
                       child: Image.asset(
@@ -83,20 +80,20 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  label: Text('ویرایش اطلاعات کاربری', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                  label: const Text('ویرایش اطلاعات کاربری', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue[200],
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // فرم اطلاعات کاربری
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(15),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -104,15 +101,15 @@ class Profile extends StatelessWidget {
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.3),
                     blurRadius: 10,
-                    offset: Offset(0, 5),
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('اطلاعات کاربری', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  Divider(color: Colors.grey),
+                  const Text('اطلاعات کاربری', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Divider(color: Colors.grey),
                   buildInfoRow('نام و نام خانوادگی', '${a.fname} ${a.lname}'),
                   buildInfoRow('تلفن همراه', '${a.phoneNumber}'),
                   buildInfoRow('کد ملی', '${a.nationalID}'),
@@ -126,13 +123,13 @@ class Profile extends StatelessWidget {
 
 
             ),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
                   onTap: () {},
-                  child: Row(
+                  child: const Row(
                     children: [
                       Icon(Icons.favorite, color: Colors.redAccent),  // آیکون لیست علاقه مندی ها
                       SizedBox(width: 5),  // فاصله بین آیکون و متن
@@ -143,7 +140,7 @@ class Profile extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                const SizedBox(
                   height: 20, // ارتفاع خط
                   width: 1, // عرض خط
 
@@ -152,13 +149,13 @@ class Profile extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Account()),
+                      MaterialPageRoute(builder: (context) => const Account()),
                     );
                   },
                   child: Row(
                     children: [
                       Icon(Icons.shopping_cart_outlined, color: Colors.blue[700]),  // آیکون سبد خرید
-                      SizedBox(width: 5),  // فاصله بین آیکون و متن
+                      const SizedBox(width: 5),  // فاصله بین آیکون و متن
                       Text(
                         'سبد خرید',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue[700]),
@@ -170,7 +167,7 @@ class Profile extends StatelessWidget {
             ),
 
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // اضافه کردن لیست علاقه‌مندی‌ها
 
@@ -180,12 +177,13 @@ class Profile extends StatelessWidget {
       ),
 
       bottomNavigationBar: ConvexAppBar(
-        color: Color(0XFF757C84),
+        color: const Color(0XFF757C84),
         top: -12.0,
-        activeColor: Color(0XFF000000),
-        backgroundColor: Color(0XFFDFF2EB),
+        activeColor: const Color(0XFF000000),
+        backgroundColor: const Color(0XFFDFF2EB),
+        initialActiveIndex: 2,
         style: TabStyle.textIn,
-        items: [
+        items: const [
           TabItem(icon: Icons.category_outlined, title: 'Category',),
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.people, title: 'Profile'),
@@ -199,12 +197,12 @@ class Profile extends StatelessWidget {
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => home()),
+              MaterialPageRoute(builder: (context) => const Home()),
             );
           } else if (i == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Profile()),
+              MaterialPageRoute(builder: (context) => const Account()),
             );
           }
         },
@@ -219,7 +217,7 @@ class Profile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
-          Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ],
       ),
     );

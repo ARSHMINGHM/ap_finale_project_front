@@ -1,11 +1,13 @@
 class User {
+  String?userName;
   String? fname;
   String? lname;
   String? email;
   String? phoneNumber;
-  String? nationalID;
   String? password;
-  String? sub;
+  String? sub = "معمولی";
 
-  User({this.fname,this.lname, this.email, this.phoneNumber,this.nationalID,this.password,this.sub});
+  User({this.userName,this.fname,this.lname, this.email, this.phoneNumber,this.password});
 }
+
+List<User> users = [];
