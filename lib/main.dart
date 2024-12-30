@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      home: MyAppAddress.Address(total: 1200000,),
+      home: Home(),
     );
   }
 }

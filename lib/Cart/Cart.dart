@@ -1,3 +1,4 @@
+import 'package:ap_finale_project_front/Address/Address.dart';
 import 'package:ap_finale_project_front/Offer%20and%20Supreme/Offer.dart';
 import 'package:ap_finale_project_front/Offer%20and%20Supreme/Supreme.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -68,102 +69,6 @@ Key? key,
     );
   }
 }
-class CartCard extends StatelessWidget {
-  final CartProduct product;
-  final Function() onDelete;
-  final Function(int) onQuantityChange;
-
-  const CartCard({
-    required this.product,
-    required this.onDelete,
-    required this.onQuantityChange,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        children: [
-          Container(
-        width: 90,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-        ),
-            child: Center(
-              child: Image.asset(
-                product.image,
-                width: 80,
-                height: 80,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.name,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(product.color),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(product.capacity),
-              ],
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                onPressed: onDelete,
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.add_circle_outline),
-                    onPressed: () => onQuantityChange(product.quantity + 1),
-                  ),
-                  Text('${product.quantity}'),
-                  IconButton(
-                    icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: () => onQuantityChange(product.quantity - 1),
-                  ),
-                ],
-              ),
-              Text(
-                '${(product.price).toStringAsFixed(0)} تومان',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 class CartProduct {
   final String name;
   final int price;
@@ -181,21 +86,46 @@ class CartProduct {
     this.quantity = 1,
   });
 }
-class CartView extends StatelessWidget {
+
+class CartView extends StatefulWidget {
   final List<CartProduct> products;
-  const CartView({
-    required this.products,
-    Key? key,
-  }) : super(key: key);
+
+  const CartView({required this.products, Key? key}) : super(key: key);
+
+  @override
+  _CartViewState createState() => _CartViewState();
+}
+
+class _CartViewState extends State<CartView> {
+  int _calculateTotal() {
+    int total = 0;
+    for (CartProduct product in widget.products) {
+      total += product.price * product.quantity;
+    }
+    return total;
+  }
+
+  void _deleteProduct(int index) {
+    setState(() {
+      widget.products.removeAt(index);
+    });
+  }
+
+  void _updateQuantity(int index, int newQuantity) {
+    setState(() {
+      if (newQuantity > 0) {
+        widget.products[index].quantity = newQuantity;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    int total = 0;
-    for (CartProduct p in products){
-      total += p.price;
-    }
+    final total = _calculateTotal();
+
     return Column(
       children: [
+        // Header
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: const BoxDecoration(
@@ -213,21 +143,25 @@ class CartView extends StatelessWidget {
             ],
           ),
         ),
+
+        // Product List
         Expanded(
           child: ListView.builder(
-            itemCount: products.length,
+            itemCount: widget.products.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: CartCard(
-                  onDelete: (){},
-                  onQuantityChange: (quantity){},
-                  product: products[index],
+                  product: widget.products[index],
+                  onDelete: () => _deleteProduct(index),
+                  onQuantityChange: (quantity) => _updateQuantity(index, quantity),
                 ),
               );
             },
           ),
         ),
+
+        // Footer with Total and Confirm Button
         Container(
           padding: const EdgeInsets.all(16),
           decoration: const BoxDecoration(
@@ -267,7 +201,14 @@ class CartView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Address(total: total),
+                    ),
+                  );
+                },
                 child: const Text(
                   'تایید و تکمیل سفارش',
                   style: TextStyle(color: Colors.white),
@@ -277,6 +218,109 @@ class CartView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CartCard extends StatelessWidget {
+  final CartProduct product;
+  final VoidCallback onDelete;
+  final ValueChanged<int> onQuantityChange;
+
+  const CartCard({
+    required this.product,
+    required this.onDelete,
+    required this.onQuantityChange,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          // Product Image
+          Container(
+            width: 90,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Center(
+              child: Image.asset(
+                product.image,
+                width: 80,
+                height: 80,
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          // Product Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(product.color),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(product.capacity),
+              ],
+            ),
+          ),
+
+          // Actions (Delete and Quantity)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                onPressed: onDelete,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.add_circle_outline),
+                    onPressed: () => onQuantityChange(product.quantity + 1),
+                  ),
+                  Text('${product.quantity}'),
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle_outline),
+                    onPressed: () => onQuantityChange(product.quantity - 1),
+                  ),
+                ],
+              ),
+              Text(
+                '${(product.price * product.quantity).toStringAsFixed(0)} تومان',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
