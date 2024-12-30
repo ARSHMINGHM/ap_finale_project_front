@@ -1,4 +1,6 @@
 import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Category/Category.dart' as myAppCategory;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'Account/EditInfo.dart';
 void main() {
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: myAppCategory.Category(),
     );
   }
 }

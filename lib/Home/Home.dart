@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 class Home extends StatelessWidget{
   Widget build(BuildContext context) {
   return Scaffold(
-    backgroundColor: Color(0xFFDFF2EB),
-
     appBar: AppBar(
     automaticallyImplyLeading: false, // Removes default back button
     backgroundColor: Color(0xFFD8EBE4),
-
     title: Row(
       children: [
 
@@ -61,30 +58,38 @@ class Home extends StatelessWidget{
       child: Column(
         children: [
           _buildProductSection(
+            Left_img: 'assets/icon.jpg',
+            Right_img: 'assets/Offer.jpg',
             title: "تخفیفات شگفت انگیز",
-            backgroundColor: Color(0xFFFFE4E4),
+            backgroundColor: Color.fromRGBO(213, 49, 49, 0.6),
+            Color: Color(0xFFA80404),
             products: List.generate(
               3,
                   (index) => ProductCard(
-                title: "گوشی موبایل بلک ویو",
-                subtitle: "Shark 9 مدل",
-                price: "1,250,000",
+                title: " گوشی موبایل بلک ویو مدل Shark 9",
+                price: "12,500,000",
+                FullPrice: "11,529,000",
                 rating: "4.5",
-                backgroundColor: Color(0xFFFFE4E4),
+                backgroundColor: Color.fromRGBO(213, 49, 49, 0.6),
+                Img: 'assets/product.jpg',
               ),
             ),
           ),
           _buildProductSection(
-            title: "محصولات برتر",
-            backgroundColor: Color(0xFFFFF3D8),
+            Left_img: 'assets/Stars.jpg',
+            Right_img: 'assets/Star.jpg',
+            Color: Color(0xFFC07F00),
+            title: "محصولات برتر        ",
+            backgroundColor: Color.fromRGBO(255, 176, 0, 0.5),
             products: List.generate(
               3,
                   (index) => ProductCard(
-                title: "گوشی موبایل بلک ویو",
-                subtitle: "Shark 9 مدل",
-                price: "1,250,000",
-                rating: "4.5",
-                backgroundColor: Color(0xFFFFF3D8),
+                  title: " گوشی موبایل بلک ویو مدل Shark 9",
+                  price: "12,500,000",
+                  FullPrice: "11,529,000",
+                  rating: "4.5",
+                  backgroundColor: Color.fromRGBO(255, 176, 0, 0.5),
+                  Img: 'assets/product.jpg',
               ),
             ),
           ),
@@ -109,32 +114,44 @@ class Home extends StatelessWidget{
   Widget _buildProductSection({
     required String title,
     required Color backgroundColor,
+    required Color Color,
     required List<Widget> products,
+    required String Left_img,
+    required String Right_img,
   }) {
     return Container(
       padding: EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Image.asset(
+                Right_img,
+                height: 24,
+              ),
               Text(
                 title,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
+                  color: Color,
                 ),
               ),
+              SizedBox(width: 100,),
               TextButton(
                 onPressed: () {},
-                child: Text(
-                  "مشاهده همه",
-                  style: TextStyle(color: Colors.grey),
-                ),
+                child:
+                    Text(
+                      "مشاهده همه",
+                      style: TextStyle(color: Color),
+                    ),
+              ),
+              Image.asset(
+                Left_img,
+                height: 24,
               ),
             ],
           ),
-          SizedBox(height: 10),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -153,17 +170,19 @@ class Home extends StatelessWidget{
 }
 class ProductCard extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final String FullPrice;
   final String price;
   final String rating;
   final Color backgroundColor;
+  final String Img;
 
   const ProductCard({
     required this.title,
-    required this.subtitle,
+    required this.FullPrice,
     required this.price,
     required this.rating,
     required this.backgroundColor,
+    required this.Img
   });
 
   @override
@@ -181,28 +200,28 @@ class ProductCard extends StatelessWidget {
           // Product Image
           Center(
             child: Container(
-              height: 120,
-              width: 120,
+              height: 100,
+              width: 100,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Stack(
                 children: [
                   Center(
                     child: Image.asset(
-                      'assets/phone_image.png', // Replace with your image
+                      Img,
                       height: 100,
                     ),
                   ),
                   Positioned(
-                    top: 8,
-                    right: 8,
+                    top: 0,
+                    right: 0,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
                         children: [
@@ -220,7 +239,6 @@ class ProductCard extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          // Product Details
           Text(
             title,
             style: TextStyle(
@@ -228,33 +246,40 @@ class ProductCard extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
-            subtitle,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
-          ),
           SizedBox(height: 8),
-          Row(
+          // Product Details
+          Directionality(textDirection: TextDirection.ltr, child: Column(
             children: [
+              Row(
+                children: [
+                  SizedBox(width: 4),
+                  Image.asset(
+                    'assets/Toman.png',
+                    height: 16,
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    price,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               Text(
-                "تومان",
+                FullPrice,
                 style: TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  decorationColor: Colors.grey,
                   fontSize: 12,
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(width: 4),
-              Text(
-                price,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+            ]
+            )
+          )
+
         ],
       ),
     );
