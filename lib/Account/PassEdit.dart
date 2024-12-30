@@ -1,13 +1,9 @@
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:flutter/material.dart';
-
-
-import 'package:flutter/material.dart';
-import 'EmailEdit.dart';
-import 'IdEdit.dart';
-import 'NameEdit.dart';
-import 'NumberEdit.dart';
-import 'PassEdit.dart';
-import 'SubscriptionEdit.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
 class changePassword extends StatefulWidget {
   @override
@@ -70,7 +66,7 @@ class ChangePassword extends State<changePassword> {
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
             } else if (i == 2) {
               Navigator.push(

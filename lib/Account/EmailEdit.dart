@@ -1,15 +1,9 @@
-import 'material.dart';
-
-import 'NameEdit.dart';
-import 'NumberEdit.dart';
-import 'EditInfo.dart';
-import 'AccountMainPage.dart';
-import 'users.dart';
-import 'PassEdit.dart';
-import 'SubscriptionEdit.dart';
-
-
-
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:flutter/material.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class changeEmail extends StatefulWidget {
   @override
@@ -61,7 +55,7 @@ class ChangeEmail extends State<changeEmail> {
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
             } else if (i == 2) {
               Navigator.push(

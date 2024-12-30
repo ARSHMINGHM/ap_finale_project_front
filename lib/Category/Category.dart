@@ -1,9 +1,9 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled/Profile.dart';
-import 'package:untitled/home.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
-class category extends StatelessWidget {
+class Category extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,12 +57,12 @@ class category extends StatelessWidget {
           if (i == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => category()),
+              MaterialPageRoute(builder: (context) => Category()),
             );
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => home()),
+              MaterialPageRoute(builder: (context) => Home()),
             );
           } else if (i == 2) {
             Navigator.push(

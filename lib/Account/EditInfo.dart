@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'EmailEdit.dart';
-import 'IdEdit.dart';
 import 'NameEdit.dart';
 import 'NumberEdit.dart';
 import 'PassEdit.dart';
 import 'SubscriptionEdit.dart';
+import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:ap_finale_project_front/main.dart';
 
 
-User a = User(fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",nationalID: "0025379151",password: "1234",sub: "معمولی");
 class Account extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -430,12 +431,12 @@ class Account extends StatelessWidget {
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
             } else if (i == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Profile()),
+                MaterialPageRoute(builder: (context) => Account()),
               );
             }
           },
