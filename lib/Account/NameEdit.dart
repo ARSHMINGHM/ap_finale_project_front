@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
-class changeName extends StatelessWidget {
-  const changeName({super.key});
+
+import 'package:flutter/material.dart';
+import 'EmailEdit.dart';
+import 'IdEdit.dart';
+import 'NameEdit.dart';
+import 'NumberEdit.dart';
+import 'PassEdit.dart';
+import 'SubscriptionEdit.dart';
+class ChangeName extends StatefulWidget {
+  @override
+  changeName  createState() => changeName ();
+}
+class changeName extends State<ChangeName> {
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,23 +30,38 @@ class changeName extends StatelessWidget {
       ),
 
       backgroundColor: Color(0xFFDFF2EB),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: '',
-          ),
-        ],
-      ),
-      body: Padding(
+        bottomNavigationBar: ConvexAppBar(
+          color: Color(0XFF757C84),
+          top: -12.0,
+          activeColor: Color(0XFF000000),
+          backgroundColor: Color(0XFFDFF2EB),
+          style: TabStyle.textIn,
+          items: [
+            TabItem(icon: Icons.category_outlined, title: 'Category'),
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.people, title: 'Profile'),
+          ],
+          onTap: (int i) {
+            if (i == 0) {
+              /*Navigator.push(
+             // context,
+            //  MaterialPageRoute(builder: (context) => CategoryPage()),
+            );*/
+            } else if (i == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => home()),
+              );
+            } else if (i == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profile()),
+              );
+            }
+          },
+        ),
+
+    body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -52,9 +80,11 @@ class changeName extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 50,),
-                  TextField(textAlign: TextAlign.right,
+                  TextField(
+                    controller: firstNameController,
+                    textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: 'نام',
+                      hintText: '${a.fname}',
                       labelStyle: TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -65,9 +95,10 @@ class changeName extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
                   TextField(
+                    controller: lastNameController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: 'نام خانوادگی',
+                      hintText: ' ${a.lname}',
                       labelStyle: TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -93,10 +124,18 @@ class changeName extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // انتقال به صفحه HomePage
+                setState(() {
+                  if(!firstNameController.text.isEmpty){
+                    a.fname = firstNameController.text;
+                  }
+                  if(!lastNameController.text.isEmpty){
+                    a.lname = lastNameController.text;
+                  }
+
+                });
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => changeName()),
+                  MaterialPageRoute(builder: (context) => Account()),
                 );
               },
               child: Text(
