@@ -18,23 +18,22 @@ import 'package:ap_finale_project_front/main.dart';
 
 class Account extends StatelessWidget {
   const Account({super.key});
-
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFDFF2EB),
+      backgroundColor: Color(0xFFDFF2EB),
       appBar: AppBar(
-        title: const Text('ویرایش اطلاعات'),
+        title: Text('ویرایش اطلاعات'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Profile()),
+              MaterialPageRoute(builder: (context) => Profile()),
             );
           },
         ),
-        backgroundColor: const Color(0xFFDFF2EB),
+        backgroundColor: Color(0xFFDFF2EB),
       ),
       body: Center(
         child: Container(
@@ -42,13 +41,13 @@ class Account extends StatelessWidget {
           height: 700,
           alignment: Alignment.center, // Center the inner child
           decoration: BoxDecoration(
-            color: const Color(0xFFD9D9D9), // Move color here
+            color: Color(0xFFD9D9D9), // Move color here
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
             children: [
-              const SizedBox(height: 10),
-              const Align(
+              SizedBox(height: 10),
+              Align(
                 alignment: Alignment.center,
                 child: Text(
                   'ویرایش اطلاعات',
@@ -56,7 +55,7 @@ class Account extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               Container(
                 width: 300,
                 height: 600,
@@ -67,8 +66,8 @@ class Account extends StatelessWidget {
                 child : Column(
                   children: [
                     /////////////////////////////////////////name
-                    const SizedBox(height: 15,),
-                    const SizedBox(
+                    SizedBox(height: 15,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -80,8 +79,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 13),
-                    SizedBox(
+                    SizedBox(height: 13),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
@@ -89,7 +88,7 @@ class Account extends StatelessWidget {
                             alignment: Alignment.centerRight, // متن به سمت راست قرار می‌گیرد
                             child: Text(
                               "${a.fname} ${a.lname}",
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -101,10 +100,10 @@ class Account extends StatelessWidget {
                                 // هدایت به صفحه جدید
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const ChangeName()),
+                                  MaterialPageRoute(builder: (context) => ChangeName()),
                                 );
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_back, // آیکون فلش
                                 color: Colors.black,
                                 size: 16,
@@ -114,8 +113,8 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 7,),
-                    const SizedBox(
+                    SizedBox(height: 7,),
+                    Container(
                       width: 250,
                       child :Divider(  // خط افقی
                         color: Color(0xFF787474),  // رنگ خط
@@ -123,8 +122,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
                     ////////////////////////////////////////phone
-                    const SizedBox(height: 15,),
-                    const SizedBox(
+                    SizedBox(height: 15,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -137,16 +136,16 @@ class Account extends StatelessWidget {
                     ),
 
 
-                    const SizedBox(height: 13),
-                    SizedBox(
+                    SizedBox(height: 13),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${a.phoneNumber}',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              (a.phoneNumber?.isEmpty ?? true) ? '09**********' : a.phoneNumber!,
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -158,10 +157,10 @@ class Account extends StatelessWidget {
                                 // هدایت به صفحه جدید
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const changePhone()),
+                                  MaterialPageRoute(builder: (context) => changePhone()),
                                 );
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_back, // آیکون فلش
                                 color: Colors.black,
                                 size: 16,
@@ -174,8 +173,8 @@ class Account extends StatelessWidget {
 
 
 
-                    const SizedBox(height: 7,),
-                    const SizedBox(
+                    SizedBox(height: 7,),
+                    Container(
                       width: 250,
                       child :Divider(
                         color: Color(0xFF787474),
@@ -184,8 +183,8 @@ class Account extends StatelessWidget {
                     ),
 
                     ///////////////////////////////////////// national id
-                    const SizedBox(height: 15,),
-                    const SizedBox(
+              /*      SizedBox(height: 15,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -195,36 +194,58 @@ class Account extends StatelessWidget {
                           textAlign: TextAlign.right,
                         ),
                       ),
+
                     ),
 
-                    const SizedBox(height: 13),
-                    SizedBox(
+                    SizedBox(height: 13),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${a.nationalID}',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              '${a.nationalID ?? 'کد ملی وارد نشده'}',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+
+                            child: GestureDetector(
+                              onTap: () {
+
+                                // هدایت به صفحه جدید
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changeID()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back, // آیکون فلش
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+
 
                         ],
                       ),
                     ),
-                    const SizedBox(height: 7,),
-                    const SizedBox(
+                    SizedBox(height: 7,),
+                    Container(
                       width: 250,
                       child :Divider(
                         color: Color(0xFF787474),
                         thickness: 1,
                       ),
-                    ),
+                    ),*/
                     //////////////////////////////////email
-                    const SizedBox(height: 15,),
-                    const SizedBox(
+                    SizedBox(height: 15,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -236,8 +257,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 13),
-                    SizedBox(
+                    SizedBox(height: 13),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
@@ -245,7 +266,7 @@ class Account extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               '${a.email}',
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -257,10 +278,10 @@ class Account extends StatelessWidget {
                                 // هدایت به صفحه جدید
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const changeEmail()),
+                                  MaterialPageRoute(builder: (context) => changeEmail()),
                                 );
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_back, // آیکون فلش
                                 color: Colors.black,
                                 size: 16,
@@ -270,8 +291,8 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 7,),
-                    const SizedBox(
+                    SizedBox(height: 7,),
+                    Container(
                       width: 250,
                       child :Divider(  // خط افقی
                         color: Color(0xFF787474),  // رنگ خط
@@ -279,8 +300,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
                     /////////////////////////////////////////////////pass
-                    const SizedBox(height: 13,),
-                    const SizedBox(
+                    SizedBox(height: 13,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -292,8 +313,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 0),
-                    SizedBox(
+                    SizedBox(height: 0),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
@@ -308,11 +329,11 @@ class Account extends StatelessWidget {
 
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const changePassword()),
+                                      MaterialPageRoute(builder: (context) => changePassword()),
                                     );
                                   },
 
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.arrow_back, // آیکون فلش
                                     color: Colors.black,
                                     size: 16,
@@ -320,19 +341,19 @@ class Account extends StatelessWidget {
                                   ),
                                 ),
                                 // فیلد پسورد
-                                const SizedBox(height: 10,),
+                                SizedBox(height: 10,),
                                 Expanded(
                                   child: TextField(
                                     readOnly: true,
                                     obscureText: true,
                                     controller: TextEditingController(text: a.password),
                                     textAlign: TextAlign.right,
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       border: InputBorder.none, // حذف حاشیه
                                       hintText: '**************',
                                       contentPadding: EdgeInsets.only(top: 10),
                                     ),
-                                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                                   ),
                                 ),
                               ],
@@ -344,7 +365,7 @@ class Account extends StatelessWidget {
 
 
                     //SizedBox(height: 7,),
-                    const SizedBox(
+                    Container(
                       width: 250,
                       child :Divider(  // خط افقی
                         color: Color(0xFF787474),  // رنگ خط
@@ -353,8 +374,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
                     //////////////////////////////////////////
-                    const SizedBox(height: 15,),
-                    const SizedBox(
+                    SizedBox(height: 15,),
+                    Container(
                       width: 250,
                       child : Align(
                         alignment: Alignment.centerRight,
@@ -366,8 +387,8 @@ class Account extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 13),
-                    SizedBox(
+                    SizedBox(height: 13),
+                    Container(
                       width: 250,
                       child: Stack(
                         children: [
@@ -376,7 +397,7 @@ class Account extends StatelessWidget {
                             child: Text(
                               '${a.sub}',
 
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -388,10 +409,10 @@ class Account extends StatelessWidget {
 
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const changeSubscription()),
+                                  MaterialPageRoute(builder: (context) => changeSubscription()),
                                 );
                               },
-                              child: const Icon(
+                              child: Icon(
                                 Icons.arrow_back,
                                 color: Colors.black,
                                 size: 16,
@@ -401,8 +422,8 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 7,),
-                    const SizedBox(
+                    SizedBox(height: 7,),
+                    Container(
                       width: 250,
                       child :Divider(
                         color: Color(0xFF787474),
@@ -419,32 +440,31 @@ class Account extends StatelessWidget {
         ),
       ),
         bottomNavigationBar: ConvexAppBar(
-          color: const Color(0XFF757C84),
+          color: Color(0XFF757C84),
           top: -12.0,
-          activeColor: const Color(0XFF000000),
-          backgroundColor: const Color(0XFFDFF2EB),
-          initialActiveIndex: 2,
+          activeColor: Color(0XFF000000),
+          backgroundColor: Color(0XFFDFF2EB),
           style: TabStyle.textIn,
-          items: const [
+          items: [
             TabItem(icon: Icons.category_outlined, title: 'Category'),
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.people, title: 'Profile'),
           ],
           onTap: (int i) {
             if (i == 0) {
-              /*Navigator.push(
-             // context,
-            //  MaterialPageRoute(builder: (context) => CategoryPage()),
-            );*/
+              Navigator.push(
+             context,
+            MaterialPageRoute(builder: (context) => category()),
+            );
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) => home()),
               );
             } else if (i == 2) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Account()),
+                MaterialPageRoute(builder: (context) => Profile()),
               );
             }
           },
@@ -452,4 +472,3 @@ class Account extends StatelessWidget {
     );
   }
 }
-
