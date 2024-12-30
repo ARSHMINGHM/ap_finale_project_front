@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
-
+import 'package:ap_finale_project_front/main.dart';
 class Category extends StatelessWidget {
   const Category({super.key});
 
@@ -51,7 +51,7 @@ class Category extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Cart()),
+                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
                 );
               },
               child: Container(

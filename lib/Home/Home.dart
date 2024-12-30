@@ -5,66 +5,67 @@ import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
+import 'package:ap_finale_project_front/main.dart';
 class Home extends StatelessWidget{
   const Home({super.key});
   @override
   Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: const Color(0xFFD8EBE4),
-    appBar: AppBar(
-    automaticallyImplyLeading: false, // Removes default back button
-    backgroundColor: const Color(0xFFD8EBE4),
-    title: Row(
-      children: [
-        // Search Bar
-        Expanded(
-          child: Container(
-            height: 35,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFC1D2CC),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'جستجو محصول ...',
-                      border: InputBorder.none,
+      appBar: AppBar(
+        automaticallyImplyLeading: false, // Removes default back button
+        backgroundColor: const Color(0xFFD8EBE4),
+        title: Row(
+          children: [
+            // Search Bar
+            Expanded(
+              child: Container(
+                height: 35,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFC1D2CC),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'جستجو محصول ...',
+                          border: InputBorder.none,
+                        ),
+                        onSubmitted: (value) {
+                          print('Search: $value');
+                        },
+                      ),
                     ),
-                    onSubmitted: (value) {
-                      print('Search: $value');
-                    },
-                  ),
+                    const Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
+                  ],
                 ),
-                const Icon(
-                  Icons.search,
-                  color: Colors.black,
+              ),
+            ),
+            const SizedBox(width: 18),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                );
+              },
+              child: Container(
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Color(0xFF000000),
+                  size: 24.0,
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-        const SizedBox(width: 18),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Cart()),
-            );
-          },
-          child: Container(
-            child: const Icon(
-              Icons.shopping_cart,
-              color: Color(0xFF000000),
-              size: 24.0,
-            ),
-          ),
-        ),
-      ],
-    ),
-  ),
+      ),
     body: SingleChildScrollView(
       child: Column(
         children: [
