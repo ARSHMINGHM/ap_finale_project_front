@@ -10,14 +10,14 @@ final products = [
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
     currentPrice: 16000,
     originalPrice: 20000,
-    image: 'assets/iphone.jpg',
+    image: 'assets/Iphone.jpg',
     stars: 3,
     discount: 20,)
   ,Product(
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
     currentPrice: 16000,
     originalPrice: 20000,
-    image: 'assets/iphone.jpg',
+    image: 'assets/Iphone.jpg',
     stars: 4,
     discount: 2,
   )
@@ -25,7 +25,7 @@ final products = [
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
     currentPrice: 16000,
     originalPrice: 20000,
-    image: 'assets/iphone.jpg',
+    image: 'assets/Iphone.jpg',
     stars: 3,
     discount: 20,
   )
@@ -33,23 +33,23 @@ final products = [
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
     currentPrice: 16000,
     originalPrice: 20000,
-    image: 'assets/iphone.jpg',
-    stars: 3,
+    image: 'assets/Iphone.jpg',
+    stars: 5,
     discount: 20,
   )
   ,Product(
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/iphone.jpg',
-    stars: 3,
+    currentPrice: 1600000,
+    originalPrice: 200000,
+    image: 'assets/Iphone.jpg',
+    stars: 1,
     discount: 20,
   )
   ,Product(
     name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/iphone.jpg',
+    currentPrice: 16000000,
+    originalPrice: 2000000,
+    image: 'assets/Iphone.jpg',
     stars: 3,
     discount: 20,
   )
@@ -57,117 +57,149 @@ final products = [
 class Supreme extends StatelessWidget{
   const Supreme({super.key});
   @override
+  // Inside the Offer class
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFD8EBE4),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD8EBE4),
-        appBar: AppBar(
-          automaticallyImplyLeading: false, // Removes default back button
-          backgroundColor: const Color(0xFFD8EBE4),
-          title: Row(
-            children: [
-              // Search Bar
-              Expanded(
-                child: Container(
-                  height: 35,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFC1D2CC),
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'جستجو محصول ...',
-                            border: InputBorder.none,
-                          ),
-                          onSubmitted: (value) {
-                            print('Search: $value');
-                          },
-                        ),
-                      ),
-                      const Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
+        title: Row(
+          children: [
+            // Search Bar
+            Expanded(
+              child: Container(
+                height: 35,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFC1D2CC),
+                  borderRadius: BorderRadius.circular(100),
                 ),
-              ),
-              const SizedBox(width: 18),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Cart(product: b,)),
-                  );
-                },
-                child: Container(
-                  child: const Icon(
-                    Icons.shopping_cart,
-                    color: Color(0xFF000000),
-                    size: 24.0,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        body:Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.filter_alt),
-                    const Icon(Icons.sort),
+                    Expanded(
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: 'جستجو محصول ...',
+                          border: InputBorder.none,
+                        ),
+                        onSubmitted: (value) {
+                          print('Search: $value');
+                        },
+                      ),
+                    ),
+                    const Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: products.length, // Your products list
-                  itemBuilder: (context, index) {
-                    return ProductCard(product: products[index]);
+            ),
+            const SizedBox(width: 18),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                );
+              },
+              child: const Icon(
+                Icons.shopping_cart,
+                color: Color(0xFF000000),
+                size: 24.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(Icons.filter_alt),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.sort),
+                  onSelected: (value) {
+                    switch (value) {
+                      case 'Name':
+                        products.sort((a, b) => a.name.compareTo(b.name));
+                        break;
+                      case 'Price':
+                        products.sort((a, b) => a.currentPrice.compareTo(b.currentPrice));
+                        break;
+                      case 'Ratings':
+                        products.sort((a, b) => b.stars.compareTo(a.stars));
+                        break;
+                    }
+                    (context as Element).markNeedsBuild(); // Trigger rebuild
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      const PopupMenuItem(
+                        value: 'Name',
+                        child: Text('Sort by Name'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'Price',
+                        child: Text('Sort by Price'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'Ratings',
+                        child: Text('Sort by Ratings'),
+                      ),
+                    ];
                   },
                 ),
-              ),
-            ]
-        ),
-        bottomNavigationBar: ConvexAppBar(
-          color: const Color(0XFF757C84),
-
-          initialActiveIndex: 1,
-          top: -12.0,
-          activeColor: const Color(0XFF000000),
-          backgroundColor: const Color(0XFFDFF2EB),
-          style: TabStyle.textIn,
-          items: const [
-            TabItem(icon: Icons.category_outlined, title: 'Category'),
-            TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(icon: Icons.people, title: 'Profile'),
-          ],
-          onTap: (int i) {
-            if (i == 0) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Category()),
-              );
-            } else if (i == 1) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Home()),
-              );
-            } else if (i == 2) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Profile()),
-              );
-            }
-          },
-        )
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                return ProductCard(product: products[index]);
+              },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: ConvexAppBar(
+        color: const Color(0XFF757C84),
+        top: -12.0,
+        activeColor: const Color(0XFF000000),
+        backgroundColor: const Color(0XFFDFF2EB),
+        style: TabStyle.textIn,
+        initialActiveIndex: 1,
+        items: const [
+          TabItem(icon: Icons.category_outlined, title: 'Category'),
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.people, title: 'Profile'),
+        ],
+        onTap: (int i) {
+          if (i == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Category()),
+            );
+          } else if (i == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
+          } else if (i == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Profile()),
+            );
+          }
+        },
+      ),
     );
   }
 }
