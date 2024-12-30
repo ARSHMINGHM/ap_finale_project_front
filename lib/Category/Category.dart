@@ -4,12 +4,14 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
 class Category extends StatelessWidget {
+  const Category({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDFF2EB),
+      backgroundColor: const Color(0xFFDFF2EB),
       appBar: AppBar(
-        backgroundColor: Color(0xFFD8EBE4),
+        backgroundColor: const Color(0xFFD8EBE4),
         elevation: 0,
         title: Row(
           children: [
@@ -17,12 +19,12 @@ class Category extends StatelessWidget {
             Expanded(
               child: Container(
                 height: 40,
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Color(0xFFC1D2CC),
+                  color: const Color(0xFFC1D2CC),
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: Row(
+                child: const Row(
                   children: [
                     Expanded(
                       child: TextField(
@@ -37,18 +39,19 @@ class Category extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 16),
-            Icon(Icons.shopping_cart, color: Colors.black, size: 24),
+            const SizedBox(width: 16),
+            const Icon(Icons.shopping_cart, color: Colors.black, size: 24),
           ],
         ),
       ),
       bottomNavigationBar: ConvexAppBar(
-        color: Color(0XFF757C84),
+        color: const Color(0XFF757C84),
         top: -12.0,
-        activeColor: Color(0XFF000000),
-        backgroundColor: Color(0XFFDFF2EB),
+        activeColor: const Color(0XFF000000),
+        backgroundColor: const Color(0XFFDFF2EB),
+        initialActiveIndex: 0,
         style: TabStyle.textIn,
-        items: [
+        items: const [
           TabItem(icon: Icons.category_outlined, title: 'Category'),
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.people, title: 'Profile'),
@@ -57,17 +60,17 @@ class Category extends StatelessWidget {
           if (i == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Category()),
+              MaterialPageRoute(builder: (context) => const Category()),
             );
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Home()),
+              MaterialPageRoute(builder: (context) => const Home()),
             );
           } else if (i == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Profile()),
+              MaterialPageRoute(builder: (context) => const Profile()),
             );
           }
         },
@@ -183,16 +186,16 @@ class Category extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Color(0xff777474).withOpacity(0.5),
+              color: const Color(0xff777474).withOpacity(0.5),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -205,10 +208,10 @@ class Category extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: items.map((item) {
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8),
-                  padding: EdgeInsets.all(8),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Color(0xFFEAE4DD),
+                    color: const Color(0xFFEAE4DD),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: item,
@@ -228,14 +231,14 @@ class Category extends StatelessWidget {
     );
   }
   Widget _buildProductCard(String title, String imagePath, double circular) {
-    return Container(
+    return SizedBox(
       width: 110,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(circular),
-            child: Container(
+            child: SizedBox(
               height: 110,
               child: Image.asset(
                 imagePath,
@@ -248,7 +251,7 @@ class Category extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),

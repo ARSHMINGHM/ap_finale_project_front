@@ -1,11 +1,18 @@
+import 'package:ap_finale_project_front/Offer%20and%20Supreme/Offer.dart';
+import 'package:ap_finale_project_front/Offer%20and%20Supreme/Supreme.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 class Home extends StatelessWidget{
+  const Home({super.key});
+  @override
   Widget build(BuildContext context) {
   return Scaffold(
+    backgroundColor: const Color(0xFFD8EBE4),
     appBar: AppBar(
     automaticallyImplyLeading: false, // Removes default back button
-    backgroundColor: Color(0xFFD8EBE4),
+    backgroundColor: const Color(0xFFD8EBE4),
     title: Row(
       children: [
 
@@ -13,16 +20,16 @@ class Home extends StatelessWidget{
         Expanded(
           child: Container(
             height: 35,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
-              color: Color(0xFFC1D2CC),
+              color: const Color(0xFFC1D2CC),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'جستجو محصول ...',
                       border: InputBorder.none,
                     ),
@@ -31,7 +38,7 @@ class Home extends StatelessWidget{
                     },
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.search,
                   color: Colors.black,
                 ),
@@ -39,12 +46,12 @@ class Home extends StatelessWidget{
             ),
           ),
         ),
-        SizedBox(width: 18),
+        const SizedBox(width: 18),
         GestureDetector(
           onTap: () {
           },
           child: Container(
-            child: Icon(
+            child: const Icon(
               Icons.shopping_cart,
               color: Color(0xFF000000),
               size: 24.0,
@@ -58,14 +65,16 @@ class Home extends StatelessWidget{
       child: Column(
         children: [
           _buildProductSection(
+            OfferOrSupreme: 0,
+            parentContext: context,
             Left_img: 'assets/icon.jpg',
             Right_img: 'assets/Offer.jpg',
             title: "تخفیفات شگفت انگیز",
-            backgroundColor: Color.fromRGBO(213, 49, 49, 0.6),
-            Color: Color(0xFFA80404),
+            backgroundColor: const Color.fromRGBO(213, 49, 49, 0.6),
+            color: const Color(0xFFA80404),
             products: List.generate(
               3,
-                  (index) => ProductCard(
+                  (index) => const ProductCard(
                 title: " گوشی موبایل بلک ویو مدل Shark 9",
                 price: "12,500,000",
                 FullPrice: "11,529,000",
@@ -76,14 +85,16 @@ class Home extends StatelessWidget{
             ),
           ),
           _buildProductSection(
+            OfferOrSupreme: 1,
+            parentContext: context,
             Left_img: 'assets/Stars.jpg',
             Right_img: 'assets/Star.jpg',
-            Color: Color(0xFFC07F00),
+            color: const Color(0xFFC07F00),
             title: "محصولات برتر        ",
-            backgroundColor: Color.fromRGBO(255, 176, 0, 0.5),
+            backgroundColor: const Color.fromRGBO(255, 176, 0, 0.5),
             products: List.generate(
               3,
-                  (index) => ProductCard(
+                  (index) => const ProductCard(
                   title: " گوشی موبایل بلک ویو مدل Shark 9",
                   price: "12,500,000",
                   FullPrice: "11,529,000",
@@ -97,30 +108,50 @@ class Home extends StatelessWidget{
       ),
     ),
     bottomNavigationBar: ConvexAppBar(
-      color: Color(0XFF757C84),
+      color: const Color(0XFF757C84),
     top: -12.0,
-    activeColor: Color(0XFF000000),
-    backgroundColor: Color(0XFFDFF2EB),
+    activeColor: const Color(0XFF000000),
+    backgroundColor: const Color(0XFFDFF2EB),
+    initialActiveIndex: 1,
     style: TabStyle.textIn,
-    items: [
+    items: const [
       TabItem(icon: Icons.category_outlined, title: 'Category'),
     TabItem(icon: Icons.home, title: 'Home'),
     TabItem(icon: Icons.people, title: 'Profile'),
     ],
-    onTap: (int i) => print('click index=$i'),
+    onTap: (int i) {
+      if (i == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Category()),
+        );
+      } else if (i == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Home()),
+        );
+      } else if (i == 2) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Profile()),
+        );
+      }
+    },
     )
   );
   }
   Widget _buildProductSection({
+    required BuildContext parentContext,
     required String title,
+    required int OfferOrSupreme,
     required Color backgroundColor,
-    required Color Color,
+    required Color color,
     required List<Widget> products,
     required String Left_img,
     required String Right_img,
   }) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
@@ -134,16 +165,29 @@ class Home extends StatelessWidget{
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color,
+                  color: color,
                 ),
               ),
-              SizedBox(width: 100,),
+              const SizedBox(width: 100,),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (OfferOrSupreme < 1){
+                    Navigator.push(
+                      parentContext,
+                      MaterialPageRoute(builder: (context) => const Offer()),
+                    );
+                  }
+                  else{
+                  Navigator.push(
+                    parentContext,
+                    MaterialPageRoute(builder: (context) => const Supreme()),
+                  );}
+                },
                 child:
+
                     Text(
                       "مشاهده همه",
-                      style: TextStyle(color: Color),
+                      style: TextStyle(color: color),
                     ),
               ),
               Image.asset(
@@ -157,7 +201,7 @@ class Home extends StatelessWidget{
             child: Row(
               children: products.map((product) {
                 return Padding(
-                  padding: EdgeInsets.only(right: 12),
+                  padding: const EdgeInsets.only(right: 12),
                   child: product,
                 );
               }).toList(),
@@ -176,7 +220,7 @@ class ProductCard extends StatelessWidget {
   final Color backgroundColor;
   final String Img;
 
-  const ProductCard({
+  const ProductCard({super.key, 
     required this.title,
     required this.FullPrice,
     required this.price,
@@ -189,7 +233,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 160,
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(16),
@@ -218,7 +262,7 @@ class ProductCard extends StatelessWidget {
                     top: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
@@ -227,9 +271,9 @@ class ProductCard extends StatelessWidget {
                         children: [
                           Text(
                             rating,
-                            style: TextStyle(fontSize: 12),
+                            style: const TextStyle(fontSize: 12),
                           ),
-                          Icon(Icons.star, size: 12, color: Colors.amber),
+                          const Icon(Icons.star, size: 12, color: Colors.amber),
                         ],
                       ),
                     ),
@@ -238,29 +282,29 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // Product Details
           Directionality(textDirection: TextDirection.ltr, child: Column(
             children: [
               Row(
                 children: [
-                  SizedBox(width: 4),
+                  const SizedBox(width: 4),
                   Image.asset(
                     'assets/Toman.png',
                     height: 16,
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     price,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
@@ -269,7 +313,7 @@ class ProductCard extends StatelessWidget {
               ),
               Text(
                 FullPrice,
-                style: TextStyle(
+                style: const TextStyle(
                   decoration: TextDecoration.lineThrough,
                   decorationColor: Colors.grey,
                   fontSize: 12,
