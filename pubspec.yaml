@@ -79,7 +79,6 @@ flutter:
     - assets/Women's Clothing.jpg
     - assets/Iphone.jpg
 
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

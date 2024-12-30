@@ -10,14 +10,14 @@ Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 3,
   discount: 20,)
   ,Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 4,
   discount: 2,
   )
@@ -25,7 +25,7 @@ Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 3,
   discount: 20,
   )
@@ -33,7 +33,7 @@ Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 3,
   discount: 20,
   )
@@ -41,7 +41,7 @@ Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 3,
   discount: 20,
   )
@@ -49,7 +49,7 @@ Product(
   name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
   currentPrice: 16000,
   originalPrice: 20000,
-  image: 'assets/iphone.jpg',
+  image: 'assets/Iphone.jpg',
   stars: 3,
   discount: 20,
   )
