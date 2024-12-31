@@ -19,6 +19,19 @@ class Supreme extends StatefulWidget {
 
 class _SupremeState extends State<Supreme> {
   late List<MainProduct.Product> topProduct;
+  String? selectedCategory;
+
+  final List<String> categories = [
+    'Accessories',
+    'Tablet',
+    'Laptop',
+    "Kid's Clothing",
+    "Women's Clothing",
+    "Men's Clothing",
+    'Cosmetics',
+    'Skincare',
+    'Perfume',
+  ];
 
   @override
   void initState() {
@@ -27,7 +40,64 @@ class _SupremeState extends State<Supreme> {
   }
 
   List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
-    return allProducts.where((product) => product.isTopProduct == true).toList();
+    var filteredList = allProducts.where((product) => product.isAmazingOffer == true).toList();
+
+    if (selectedCategory != null) {
+      filteredList = filteredList.where((product) =>
+      product.category.toLowerCase() == selectedCategory!.toLowerCase()
+      ).toList();
+    }
+
+    return filteredList;
+  }
+
+  void showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Filter by Category'),
+          content: SingleChildScrollView(
+            child: Container(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: const Text('All Categories'),
+                    leading: Radio<String?>(
+                      value: null,
+                      groupValue: selectedCategory,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedCategory = value;
+                          topProduct = getAmazingOffers(products);
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  ...categories.map((category) => ListTile(
+                    title: Text(category),
+                    leading: Radio<String?>(
+                      value: category,
+                      groupValue: selectedCategory,
+                      onChanged: (String? value) {
+                        setState(() {
+                          selectedCategory = value;
+                          topProduct = getAmazingOffers(products);
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                  )).toList(),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void sortProducts(String value) {
@@ -108,7 +178,31 @@ class _SupremeState extends State<Supreme> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(Icons.filter_alt),
+                GestureDetector(
+                  onTap: showFilterDialog,
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: selectedCategory != null ? Colors.blue.withOpacity(0.1) : null,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.filter_alt,
+                          color: selectedCategory != null ? Colors.blue : null,
+                        ),
+                        if (selectedCategory != null) ...[
+                          const SizedBox(width: 4),
+                          Text(
+                            selectedCategory!,
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
                   onSelected: sortProducts,  // Using the new sortProducts method
@@ -132,14 +226,24 @@ class _SupremeState extends State<Supreme> {
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: topProduct.length,
-              itemBuilder: (context, index) {
-                return ProductCard(product: topProduct[index]);
-              },
+          if (topProduct.isEmpty)
+            const Expanded(
+              child: Center(
+                child: Text(
+                  'No products found in this category',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView.builder(
+                itemCount: topProduct.length,
+                itemBuilder: (context, index) {
+                  return ProductCard(product: topProduct[index]);
+                },
+              ),
             ),
-          ),
         ],
       ),
       bottomNavigationBar: ConvexAppBar(

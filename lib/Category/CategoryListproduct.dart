@@ -5,20 +5,20 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
-import 'package:ap_finale_project_front/Product%20details/ProductDetails.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
+
+import '../Product details/ProductDetails.dart';
 final products = fakeProducts;
-class Offer extends StatefulWidget {
-  const Offer({super.key});
+class Supreme extends StatefulWidget {
+  const Supreme({super.key});
 
   @override
-  State<Offer> createState() => _OfferState();
+  State<Supreme> createState() => _SupremeState();
 }
 
-
-class _OfferState extends State<Offer> {
-  late List<MainProduct.Product> amazingOffers;
+class _SupremeState extends State<Supreme> {
+  late List<MainProduct.Product> topProduct;
   String? selectedCategory;
 
   final List<String> categories = [
@@ -36,7 +36,7 @@ class _OfferState extends State<Offer> {
   @override
   void initState() {
     super.initState();
-    amazingOffers = getAmazingOffers(products);
+    topProduct = getAmazingOffers(products);
   }
 
   List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
@@ -71,7 +71,7 @@ class _OfferState extends State<Offer> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          amazingOffers = getAmazingOffers(products);
+                          topProduct = getAmazingOffers(products);
                         });
                         Navigator.pop(context);
                       },
@@ -85,7 +85,7 @@ class _OfferState extends State<Offer> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          amazingOffers = getAmazingOffers(products);
+                          topProduct = getAmazingOffers(products);
                         });
                         Navigator.pop(context);
                       },
@@ -99,17 +99,18 @@ class _OfferState extends State<Offer> {
       },
     );
   }
+
   void sortProducts(String value) {
     setState(() {
       switch (value) {
         case 'Name':
-          amazingOffers.sort((a, b) => a.title.compareTo(b.title));
+          topProduct.sort((a, b) => a.title.compareTo(b.title));
           break;
         case 'Price':
-          amazingOffers.sort((a, b) => a.price.compareTo(b.price));
+          topProduct.sort((a, b) => a.price.compareTo(b.price));
           break;
         case 'Ratings':
-          amazingOffers.sort((a, b) => b.rating.compareTo(a.rating));
+          topProduct.sort((a, b) => b.rating.compareTo(a.rating));
           break;
       }
     });
@@ -225,8 +226,7 @@ class _OfferState extends State<Offer> {
               ],
             ),
           ),
-
-          if (amazingOffers.isEmpty)
+          if (topProduct.isEmpty)
             const Expanded(
               child: Center(
                 child: Text(
@@ -238,9 +238,9 @@ class _OfferState extends State<Offer> {
           else
             Expanded(
               child: ListView.builder(
-                itemCount: amazingOffers.length,
+                itemCount: topProduct.length,
                 itemBuilder: (context, index) {
-                  return ProductCard(product: amazingOffers[index]);
+                  return ProductCard(product: topProduct[index]);
                 },
               ),
             ),
@@ -307,7 +307,7 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFFFE4E6),
+          color: const Color(0xFFF5DE97),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
@@ -320,12 +320,12 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                TextButton(onPressed:(){
-              Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProductDetails(Product: product)),
-              );
-              },child:
+                        TextButton(onPressed:(){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProductDetails(Product: product)),
+                          );
+                        },child:
                         // Image container with discount
                         Stack(
                           children: [
