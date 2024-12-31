@@ -57,8 +57,6 @@ class TechnicalSpecs extends StatelessWidget {
                     const SizedBox(height: 20),
                     buildSpecRow('نوع گوشی موبایل', specs.phoneType),
                     const Divider(color: Colors.black12),
-                    buildSpecRow('دسته بندی', specs.category),
-                    const Divider(color: Colors.black12),
                     buildSpecRow('مدل', specs.model),
                     const Divider(color: Colors.black12),
                     buildSpecRow('زمان معرفی', specs.releaseDate),
