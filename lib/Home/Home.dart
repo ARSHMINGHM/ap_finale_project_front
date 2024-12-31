@@ -11,12 +11,6 @@ import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 List<MainProduct.Product> products = fakeProducts;
 class Home extends StatelessWidget {
-  // final List<MainProduct.Product> products;
-
-  // const Home({
-  //   // required this.products,
-  // });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

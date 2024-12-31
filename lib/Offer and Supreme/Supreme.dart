@@ -8,10 +8,41 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 final products = fakeProducts;
-class Supreme extends StatelessWidget{
+class Supreme extends StatefulWidget {
   const Supreme({super.key});
+
   @override
-  // Inside the Offer class
+  State<Supreme> createState() => _SupremeState();
+}
+
+class _SupremeState extends State<Supreme> {
+  late List<MainProduct.Product> topProduct;
+
+  @override
+  void initState() {
+    super.initState();
+    topProduct = getAmazingOffers(products);
+  }
+
+  List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
+    return allProducts.where((product) => product.isTopProduct == true).toList();
+  }
+
+  void sortProducts(String value) {
+    setState(() {
+      switch (value) {
+        case 'Name':
+          topProduct.sort((a, b) => a.title.compareTo(b.title));
+          break;
+        case 'Price':
+          topProduct.sort((a, b) => a.price.compareTo(b.price));
+          break;
+        case 'Ratings':
+          topProduct.sort((a, b) => b.rating.compareTo(a.rating));
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +53,6 @@ class Supreme extends StatelessWidget{
         backgroundColor: const Color(0xFFD8EBE4),
         title: Row(
           children: [
-            // Search Bar
             Expanded(
               child: Container(
                 height: 35,
@@ -57,7 +87,7 @@ class Supreme extends StatelessWidget{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Cart(product: products,)),
+                  MaterialPageRoute(builder: (context) => Cart(product: products)),
                 );
               },
               child: const Icon(
@@ -79,20 +109,7 @@ class Supreme extends StatelessWidget{
                 const Icon(Icons.filter_alt),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'Name':
-                        products.sort((a, b) => a.title.compareTo(b.title));
-                        break;
-                      case 'Price':
-                        products.sort((a, b) => a.price.compareTo(b.price));
-                        break;
-                      case 'Ratings':
-                        products.sort((a, b) => b.rating.compareTo(a.rating));
-                        break;
-                    }
-                    (context as Element).markNeedsBuild(); // Trigger rebuild
-                  },
+                  onSelected: sortProducts,  // Using the new sortProducts method
                   itemBuilder: (BuildContext context) {
                     return [
                       const PopupMenuItem(
@@ -115,9 +132,9 @@ class Supreme extends StatelessWidget{
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: products.length,
+              itemCount: topProduct.length,
               itemBuilder: (context, index) {
-                return ProductCard(product: products[index]);
+                return ProductCard(product: topProduct[index]);
               },
             ),
           ),

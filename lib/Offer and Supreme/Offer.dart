@@ -8,10 +8,41 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 final products = fakeProducts;
-class Offer extends StatelessWidget{
+class Offer extends StatefulWidget {
   const Offer({super.key});
+
   @override
-  // Inside the Offer class
+  State<Offer> createState() => _OfferState();
+}
+
+class _OfferState extends State<Offer> {
+  late List<MainProduct.Product> amazingOffers;
+
+  @override
+  void initState() {
+    super.initState();
+    amazingOffers = getAmazingOffers(products);
+  }
+
+  List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
+    return allProducts.where((product) => product.isAmazingOffer == true).toList();
+  }
+
+  void sortProducts(String value) {
+    setState(() {
+      switch (value) {
+        case 'Name':
+          amazingOffers.sort((a, b) => a.title.compareTo(b.title));
+          break;
+        case 'Price':
+          amazingOffers.sort((a, b) => a.price.compareTo(b.price));
+          break;
+        case 'Ratings':
+          amazingOffers.sort((a, b) => b.rating.compareTo(a.rating));
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +53,6 @@ class Offer extends StatelessWidget{
         backgroundColor: const Color(0xFFD8EBE4),
         title: Row(
           children: [
-            // Search Bar
             Expanded(
               child: Container(
                 height: 35,
@@ -57,7 +87,7 @@ class Offer extends StatelessWidget{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Cart(product: products,)),
+                  MaterialPageRoute(builder: (context) => Cart(product: products)),
                 );
               },
               child: const Icon(
@@ -79,20 +109,7 @@ class Offer extends StatelessWidget{
                 const Icon(Icons.filter_alt),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'Name':
-                        products.sort((a, b) => a.title.compareTo(b.title));
-                        break;
-                      case 'Price':
-                        products.sort((a, b) => a.price.compareTo(b.price));
-                        break;
-                      case 'Ratings':
-                        products.sort((a, b) => b.rating.compareTo(a.rating));
-                        break;
-                    }
-                    (context as Element).markNeedsBuild(); // Trigger rebuild
-                  },
+                  onSelected: sortProducts,  // Using the new sortProducts method
                   itemBuilder: (BuildContext context) {
                     return [
                       const PopupMenuItem(
@@ -115,9 +132,9 @@ class Offer extends StatelessWidget{
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: products.length,
+              itemCount: amazingOffers.length,
               itemBuilder: (context, index) {
-                return ProductCard(product: products[index]);
+                return ProductCard(product: amazingOffers[index]);
               },
             ),
           ),
@@ -144,7 +161,7 @@ class Offer extends StatelessWidget{
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>  Home()),
+              MaterialPageRoute(builder: (context) => Home()),
             );
           } else if (i == 2) {
             Navigator.push(
