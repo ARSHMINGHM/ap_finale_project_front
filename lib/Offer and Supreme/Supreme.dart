@@ -5,55 +5,9 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
-final products = [
-  Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/Iphone.jpg',
-    stars: 3,
-    discount: 20,)
-  ,Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/Iphone.jpg',
-    stars: 4,
-    discount: 2,
-  )
-  ,Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/Iphone.jpg',
-    stars: 3,
-    discount: 20,
-  )
-  ,Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000,
-    originalPrice: 20000,
-    image: 'assets/Iphone.jpg',
-    stars: 5,
-    discount: 20,
-  )
-  ,Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 1600000,
-    originalPrice: 200000,
-    image: 'assets/Iphone.jpg',
-    stars: 1,
-    discount: 20,
-  )
-  ,Product(
-    name: 'گوشی موبایل اپل مدل ZAA Pro 13 iPhone',
-    currentPrice: 16000000,
-    originalPrice: 2000000,
-    image: 'assets/Iphone.jpg',
-    stars: 3,
-    discount: 20,
-  )
-];
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
+final products = fakeProducts;
 class Supreme extends StatelessWidget{
   const Supreme({super.key});
   @override
@@ -103,7 +57,7 @@ class Supreme extends StatelessWidget{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                  MaterialPageRoute(builder: (context) => Cart(product: products,)),
                 );
               },
               child: const Icon(
@@ -128,13 +82,13 @@ class Supreme extends StatelessWidget{
                   onSelected: (value) {
                     switch (value) {
                       case 'Name':
-                        products.sort((a, b) => a.name.compareTo(b.name));
+                        products.sort((a, b) => a.title.compareTo(b.title));
                         break;
                       case 'Price':
-                        products.sort((a, b) => a.currentPrice.compareTo(b.currentPrice));
+                        products.sort((a, b) => a.price.compareTo(b.price));
                         break;
                       case 'Ratings':
-                        products.sort((a, b) => b.stars.compareTo(a.stars));
+                        products.sort((a, b) => b.rating.compareTo(a.rating));
                         break;
                     }
                     (context as Element).markNeedsBuild(); // Trigger rebuild
@@ -190,7 +144,7 @@ class Supreme extends StatelessWidget{
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Home()),
+              MaterialPageRoute(builder: (context) => Home()),
             );
           } else if (i == 2) {
             Navigator.push(
@@ -221,8 +175,7 @@ class Product {
   });
 }
 class ProductCard extends StatelessWidget {
-  final Product product;
-
+  final MainProduct.Product product;
   const ProductCard({required this.product, Key? key}) : super(key: key);
 
   @override
@@ -256,7 +209,7 @@ class ProductCard extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Image.asset(
-                                  product.image,
+                                  product.img,
                                   width: 100,
                                   height: 100,
                                 ),
@@ -298,7 +251,7 @@ class ProductCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                product.name,
+                                product.title,
                                 softWrap: true,
                                 style: const TextStyle(
                                   fontSize: 16,
@@ -313,11 +266,11 @@ class ProductCard extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        ' ${product.currentPrice.toStringAsFixed(0)} تومان ',
+                                        ' ${product.price} تومان ',
                                         style: const TextStyle(fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        ' ${product.originalPrice.toStringAsFixed(0)} تومان ',
+                                        ' ${product.fullPrice} تومان ',
                                         style: TextStyle(
                                           decoration: TextDecoration.lineThrough,
                                           color: Colors.grey[600],
@@ -336,7 +289,7 @@ class ProductCard extends StatelessWidget {
                       children: List.generate(
                         5,
                             (index) => Icon(
-                          index < product.stars ? Icons.star : Icons.star_border,
+                          index < int.parse(product.rating) ? Icons.star : Icons.star_border,
                           color: Colors.orange,
                           size: 20,
                         ),

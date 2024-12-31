@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
 final cartProducts = [
   CartProduct(
     name: 'گوشی موبایل تایتانیک مدل 2 Phone با سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت',
@@ -23,7 +25,7 @@ final cartProducts = [
   ),
 ];
 class Cart extends StatelessWidget {
-final CartProduct product;
+final List<MainProduct.Product> product;
 const Cart({
 required this.product,
 Key? key,
@@ -56,7 +58,7 @@ Key? key,
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) => Home()),
               );
             } else if (i == 2) {
               Navigator.push(

@@ -1,3 +1,4 @@
+import 'package:ap_finale_project_front/FakeData.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
@@ -51,7 +52,7 @@ class Category extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                  MaterialPageRoute(builder: (context) => Cart(product: fakeProducts,)),
                 );
               },
               child: Container(
@@ -86,7 +87,7 @@ class Category extends StatelessWidget {
           } else if (i == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Home()),
+              MaterialPageRoute(builder: (context) =>  Home()),
             );
           } else if (i == 2) {
             Navigator.push(

@@ -7,12 +7,20 @@ import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
-class Home extends StatelessWidget{
-  const Home({super.key});
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
+List<MainProduct.Product> products = fakeProducts;
+class Home extends StatelessWidget {
+  // final List<MainProduct.Product> products;
+
+  // const Home({
+  //   // required this.products,
+  // });
+
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: const Color(0xFFD8EBE4),
+    return Scaffold(
+      backgroundColor: const Color(0xFFD8EBE4),
       appBar: AppBar(
         automaticallyImplyLeading: false, // Removes default back button
         backgroundColor: const Color(0xFFD8EBE4),
@@ -53,7 +61,9 @@ class Home extends StatelessWidget{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Cart(product: b,)),
+                  MaterialPageRoute(
+                    builder: (context) => Cart(product: products), // Assuming Cart takes the product list
+                  ),
                 );
               },
               child: Container(
@@ -67,85 +77,88 @@ class Home extends StatelessWidget{
           ],
         ),
       ),
-    body: SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildProductSection(
-            OfferOrSupreme: 0,
-            parentContext: context,
-            Left_img: 'assets/icon.jpg',
-            Right_img: 'assets/Offer.jpg',
-            title: "تخفیفات شگفت انگیز",
-            backgroundColor: const Color.fromRGBO(213, 49, 49, 0.6),
-            color: const Color(0xFFA80404),
-            products: List.generate(
-              3,
-                  (index) => const ProductCard(
-                title: " گوشی موبایل بلک ویو مدل Shark 9",
-                price: "12,500,000",
-                FullPrice: "11,529,000",
-                rating: "4.5",
-                backgroundColor: Color.fromRGBO(213, 49, 49, 0.6),
-                Img: 'assets/product.jpg',
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Amazing Offers Section
+            _buildProductSection(
+              OfferOrSupreme: 0,
+              parentContext: context,
+              Left_img: 'assets/icon.jpg',
+              Right_img: 'assets/Offer.jpg',
+              title: "تخفیفات شگفت انگیز",
+              backgroundColor: const Color.fromRGBO(213, 49, 49, 0.6),
+              color: const Color(0xFFA80404),
+              products: products
+                  .where((product) => product.isAmazingOffer)
+                  .map((product) => ProductCard(
+                title: product.title,
+                price: product.price,
+                fullPrice: product.fullPrice,
+                rating: product.rating,
+                backgroundColor: product.backgroundColor,
+                img: product.img,
+              ))
+                  .toList(),
             ),
-          ),
-          _buildProductSection(
-            OfferOrSupreme: 1,
-            parentContext: context,
-            Left_img: 'assets/Stars.jpg',
-            Right_img: 'assets/Star.jpg',
-            color: const Color(0xFFC07F00),
-            title: "محصولات برتر        ",
-            backgroundColor: const Color.fromRGBO(255, 176, 0, 0.5),
-            products: List.generate(
-              3,
-                  (index) => const ProductCard(
-                  title: " گوشی موبایل بلک ویو مدل Shark 9",
-                  price: "12,500,000",
-                  FullPrice: "11,529,000",
-                  rating: "4.5",
-                  backgroundColor: Color.fromRGBO(255, 176, 0, 0.5),
-                  Img: 'assets/product.jpg',
-              ),
+            // Top Products Section
+            _buildProductSection(
+              OfferOrSupreme: 1,
+              parentContext: context,
+              Left_img: 'assets/Stars.jpg',
+              Right_img: 'assets/Star.jpg',
+              color: const Color(0xFFC07F00),
+              title: "محصولات برتر",
+              backgroundColor: const Color.fromRGBO(255, 176, 0, 0.5),
+              products: products
+                  .where((product) => product.isTopProduct)
+                  .map((product) => ProductCard(
+                title: product.title,
+                price: product.price,
+                fullPrice: product.fullPrice,
+                rating: product.rating,
+                backgroundColor: product.backgroundColor,
+                img: product.img,
+              ))
+                  .toList(),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-    bottomNavigationBar: ConvexAppBar(
-      color: const Color(0XFF757C84),
-    top: -12.0,
-    activeColor: const Color(0XFF000000),
-    backgroundColor: const Color(0XFFDFF2EB),
-    initialActiveIndex: 1,
-    style: TabStyle.textIn,
-    items: const [
-      TabItem(icon: Icons.category_outlined, title: 'Category'),
-    TabItem(icon: Icons.home, title: 'Home'),
-    TabItem(icon: Icons.people, title: 'Profile'),
-    ],
-    onTap: (int i) {
-      if (i == 0) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Category()),
-        );
-      } else if (i == 1) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Home()),
-        );
-      } else if (i == 2) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Profile()),
-        );
-      }
-    },
-    )
-  );
+      bottomNavigationBar: ConvexAppBar(
+        color: const Color(0XFF757C84),
+        top: -12.0,
+        activeColor: const Color(0XFF000000),
+        backgroundColor: const Color(0XFFDFF2EB),
+        initialActiveIndex: 1,
+        style: TabStyle.textIn,
+        items: const [
+          TabItem(icon: Icons.category_outlined, title: 'Category'),
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.people, title: 'Profile'),
+        ],
+        onTap: (int i) {
+          if (i == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Category()),
+            );
+          } else if (i == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          } else if (i == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Profile()),
+            );
+          }
+        },
+      ),
+    );
   }
+
   Widget _buildProductSection({
     required BuildContext parentContext,
     required String title,
@@ -174,26 +187,25 @@ class Home extends StatelessWidget{
                   color: color,
                 ),
               ),
-              const SizedBox(width: 100,),
+              const SizedBox(width: 100),
               TextButton(
                 onPressed: () {
-                  if (OfferOrSupreme < 1){
+                  if (OfferOrSupreme < 1) {
                     Navigator.push(
                       parentContext,
                       MaterialPageRoute(builder: (context) => const Offer()),
                     );
+                  } else {
+                    Navigator.push(
+                      parentContext,
+                      MaterialPageRoute(builder: (context) => const Supreme()),
+                    );
                   }
-                  else{
-                  Navigator.push(
-                    parentContext,
-                    MaterialPageRoute(builder: (context) => const Supreme()),
-                  );}
                 },
-                child:
-                    Text(
-                      "مشاهده همه",
-                      style: TextStyle(color: color),
-                    ),
+                child: Text(
+                  "مشاهده همه",
+                  style: TextStyle(color: color),
+                ),
               ),
               Image.asset(
                 Left_img,
@@ -219,19 +231,19 @@ class Home extends StatelessWidget{
 }
 class ProductCard extends StatelessWidget {
   final String title;
-  final String FullPrice;
+  final String fullPrice;
   final String price;
   final String rating;
   final Color backgroundColor;
-  final String Img;
+  final String img;
 
   const ProductCard({super.key,
     required this.title,
-    required this.FullPrice,
+    required this.fullPrice,
     required this.price,
     required this.rating,
     required this.backgroundColor,
-    required this.Img
+    required this.img
   });
 
   @override
@@ -265,7 +277,7 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Center(
                     child: Image.asset(
-                      Img,
+                      img,
                       height: 100,
                     ),
                   ),
@@ -311,35 +323,35 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 8),
           // Product Details
           Directionality(textDirection: TextDirection.ltr, child: Column(
-            children: [
-              Row(
-                children: [
-                  const SizedBox(width: 4),
-                  Image.asset(
-                    'assets/Toman.png',
-                    height: 16,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    price,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(width: 4),
+                    Image.asset(
+                      'assets/Toman.png',
+                      height: 16,
                     ),
-                  ),
-                ],
-              ),
-              Text(
-                FullPrice,
-                style: const TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  decorationColor: Colors.grey,
-                  fontSize: 12,
-                  color: Colors.grey,
+                    const SizedBox(height: 8),
+                    Text(
+                      price,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ]
-            )
+                Text(
+                  fullPrice,
+                  style: const TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    decorationColor: Colors.grey,
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                ),
+              ]
+          )
           )
 
         ],

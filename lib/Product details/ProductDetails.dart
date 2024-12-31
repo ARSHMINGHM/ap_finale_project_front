@@ -7,7 +7,8 @@ import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Product details/TechnicalSpecs.dart';
-
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
 Product myProduct = Product(
   title: "گوشی موبایل اپل مدل iPhone 13 Pro ZAA",
   description: "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت",
@@ -96,7 +97,7 @@ class _ProductdetailsState extends State<ProductDetails> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Cart(
-                        product: b,
+                        product: fakeProducts,
                       )),
                 );
               },
@@ -312,7 +313,7 @@ class _ProductdetailsState extends State<ProductDetails> {
                   } else if (i == 1) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const Home()),
+                      MaterialPageRoute(builder: (context) =>  Home()),
                     );
                   } else if (i == 2) {
                     Navigator.push(

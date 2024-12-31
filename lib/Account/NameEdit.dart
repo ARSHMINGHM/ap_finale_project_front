@@ -50,7 +50,7 @@ class changeName extends State<ChangeName> {
             } else if (i == 1) {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const Home()),
+                MaterialPageRoute(builder: (context) =>  Home()),
               );
             } else if (i == 2) {
               Navigator.push(
