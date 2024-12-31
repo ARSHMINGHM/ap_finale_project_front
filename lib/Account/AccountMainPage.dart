@@ -6,6 +6,7 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 
 import '../Cart/Cart.dart';
+import '../Product details/FavoriteProducts.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
