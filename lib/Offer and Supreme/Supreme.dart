@@ -280,23 +280,6 @@ class _SupremeState extends State<Supreme> {
     );
   }
 }
-class Product {
-  final String name;
-  final double currentPrice;
-  final double originalPrice;
-  final String image;
-  final int stars;
-  final double discount;
-
-  Product({
-    required this.name,
-    required this.currentPrice,
-    required this.originalPrice,
-    required this.image,
-    required this.stars,
-    required this.discount,
-  });
-}
 class ProductCard extends StatelessWidget {
   final MainProduct.Product product;
   const ProductCard({required this.product, Key? key}) : super(key: key);

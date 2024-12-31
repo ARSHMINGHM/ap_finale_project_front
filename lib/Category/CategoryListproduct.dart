@@ -9,17 +9,24 @@ import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 
 import '../Product details/ProductDetails.dart';
+
 final products = fakeProducts;
-class Supreme extends StatefulWidget {
-  const Supreme({super.key});
+
+class Categorylistproduct extends StatefulWidget {
+  final String category;
+  const Categorylistproduct({
+    super.key,
+    required this.category,
+  });
 
   @override
-  State<Supreme> createState() => _SupremeState();
+  State<Categorylistproduct> createState() => _CategorylistproductState(category: category);
 }
 
-class _SupremeState extends State<Supreme> {
-  late List<MainProduct.Product> topProduct;
+class _CategorylistproductState extends State<Categorylistproduct> {
+  final String category;
   String? selectedCategory;
+  List<MainProduct.Product> filteredProducts = [];
 
   final List<String> categories = [
     'Accessories',
@@ -33,22 +40,24 @@ class _SupremeState extends State<Supreme> {
     'Perfume',
   ];
 
+  _CategorylistproductState({required this.category});
+
   @override
   void initState() {
     super.initState();
-    topProduct = getAmazingOffers(products);
+    // Set the initial category filter
+    selectedCategory = category;
+    // Initialize filtered products
+    filteredProducts = getFilteredProducts(products);
   }
 
-  List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
-    var filteredList = allProducts.where((product) => product.isAmazingOffer == true).toList();
-
+  List<MainProduct.Product> getFilteredProducts(List<MainProduct.Product> allProducts) {
     if (selectedCategory != null) {
-      filteredList = filteredList.where((product) =>
+      return allProducts.where((product) =>
       product.category.toLowerCase() == selectedCategory!.toLowerCase()
       ).toList();
     }
-
-    return filteredList;
+    return allProducts;
   }
 
   void showFilterDialog() {
@@ -71,7 +80,7 @@ class _SupremeState extends State<Supreme> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          topProduct = getAmazingOffers(products);
+                          filteredProducts = getFilteredProducts(products);
                         });
                         Navigator.pop(context);
                       },
@@ -85,7 +94,7 @@ class _SupremeState extends State<Supreme> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          topProduct = getAmazingOffers(products);
+                          filteredProducts = getFilteredProducts(products);
                         });
                         Navigator.pop(context);
                       },
@@ -104,13 +113,13 @@ class _SupremeState extends State<Supreme> {
     setState(() {
       switch (value) {
         case 'Name':
-          topProduct.sort((a, b) => a.title.compareTo(b.title));
+          filteredProducts.sort((a, b) => a.title.compareTo(b.title));
           break;
         case 'Price':
-          topProduct.sort((a, b) => a.price.compareTo(b.price));
+          filteredProducts.sort((a, b) => a.price.compareTo(b.price));
           break;
         case 'Ratings':
-          topProduct.sort((a, b) => b.rating.compareTo(a.rating));
+          filteredProducts.sort((a, b) => b.rating.compareTo(a.rating));
           break;
       }
     });
@@ -205,7 +214,7 @@ class _SupremeState extends State<Supreme> {
                 ),
                 PopupMenuButton<String>(
                   icon: const Icon(Icons.sort),
-                  onSelected: sortProducts,  // Using the new sortProducts method
+                  onSelected: sortProducts,
                   itemBuilder: (BuildContext context) {
                     return [
                       const PopupMenuItem(
@@ -226,7 +235,7 @@ class _SupremeState extends State<Supreme> {
               ],
             ),
           ),
-          if (topProduct.isEmpty)
+          if (filteredProducts.isEmpty)
             const Expanded(
               child: Center(
                 child: Text(
@@ -238,9 +247,9 @@ class _SupremeState extends State<Supreme> {
           else
             Expanded(
               child: ListView.builder(
-                itemCount: topProduct.length,
+                itemCount: filteredProducts.length,
                 itemBuilder: (context, index) {
-                  return ProductCard(product: topProduct[index]);
+                  return ProductCard(product: filteredProducts[index]);
                 },
               ),
             ),
@@ -280,23 +289,6 @@ class _SupremeState extends State<Supreme> {
     );
   }
 }
-class Product {
-  final String name;
-  final double currentPrice;
-  final double originalPrice;
-  final String image;
-  final int stars;
-  final double discount;
-
-  Product({
-    required this.name,
-    required this.currentPrice,
-    required this.originalPrice,
-    required this.image,
-    required this.stars,
-    required this.discount,
-  });
-}
 class ProductCard extends StatelessWidget {
   final MainProduct.Product product;
   const ProductCard({required this.product, Key? key}) : super(key: key);
@@ -307,7 +299,7 @@ class ProductCard extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFFF5DE97),
+          color: product.backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(

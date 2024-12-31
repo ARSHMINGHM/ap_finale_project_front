@@ -5,6 +5,7 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Category/CategoryListproduct.dart';
 class Category extends StatelessWidget {
   const Category({super.key});
 
@@ -104,28 +105,28 @@ class Category extends StatelessWidget {
             items: [
               _buildSelectableProductCard("لوازم جانبی", 'assets/mobile-accessories.jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Accessories")),
+                      );
                   print("لوازم جانبی انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("تبلت", 'assets/a950a328b44888bacbf40e3ab4a1fb49e8dc4a22_1669727482.jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Tablet")),
+                      );
                   print("تبلت انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("لپ‌تاپ", 'assets/Laptops.jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Laptop")),
+                      );
                   print("لپ‌تاپ انتخاب شد");
                 },
               ),
@@ -136,28 +137,28 @@ class Category extends StatelessWidget {
             items: [
               _buildSelectableProductCard("پوشاک مردانه", 'assets/thumb_16457792563144_index.jpg', 60,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Men's Clothing")),
+                      );
                   print("پوشاک مردانه انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("پوشاک زنانه", 'assets/images (4).jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Women's Clothing")),
+                      );
                   print("پوشاک زنانه انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("بچکانه", 'assets/1425382_772.jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Kid's Clothing")),
+                      );
                   print("بچکانه انتخاب شد");
                 },
               ),
@@ -168,28 +169,28 @@ class Category extends StatelessWidget {
             items: [
               _buildSelectableProductCard("لوازم آرایشی", 'assets/cosmetic2.jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Cosmetics")),
+                      );
                   print("لوازم آرایشی انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("مراقبت پوست", 'assets/images (6).jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Skincare")),
+                      );
                   print("مراقبت پوست انتخاب شد");
                 },
               ),
               _buildSelectableProductCard("عطر و ادکلن", 'assets/images (5).jpg', 12,
                     () {
-                      /*Navigator.push(
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ....()),  // Replace with actual page
-                      );*/
+                        MaterialPageRoute(builder: (context) => Categorylistproduct(category: "Perfume")),
+                      );
 
                   print("عطر و ادکلن انتخاب شد");
                 },
