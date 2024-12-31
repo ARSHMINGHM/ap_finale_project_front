@@ -1,5 +1,6 @@
 import 'package:ap_finale_project_front/Payment/Payment.dart';
 import 'package:flutter/material.dart';
+import 'package:ap_finale_project_front/main.dart';
 
 class Address extends StatefulWidget {
   final int total;
@@ -16,7 +17,6 @@ class Address extends StatefulWidget {
 }
 
 class _AddressState extends State<Address> {
-  List<String> addresses = ['تهران .......', 'تهران .......'];
   int? selectedAddressIndex;
   final TextEditingController newAddressController = TextEditingController();
 
@@ -42,8 +42,8 @@ class _AddressState extends State<Address> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    for (int i = 0; i < addresses.length; i++)
-                      _buildAddressItem(addresses[i], i),
+                    for (int i = 0; i < a.addresses!.length; i++)
+                      _buildAddressItem(a.addresses![i], i),
                     _buildNewAddressInput(),
                   ],
                 ),
@@ -107,7 +107,7 @@ class _AddressState extends State<Address> {
             onPressed: () {
               if (newAddressController.text.isNotEmpty) {
                 setState(() {
-                  addresses.add(newAddressController.text);
+                  a.addresses?.add(newAddressController.text);
                   newAddressController.clear();
                 });
               }
@@ -161,7 +161,7 @@ class _AddressState extends State<Address> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('آدرس تایید شد: ${addresses[selectedAddressIndex!]}'),
+                      content: Text('آدرس تایید شد: ${a.addresses?[selectedAddressIndex!]}'),
                     ),
                   );
                   Navigator.push(
