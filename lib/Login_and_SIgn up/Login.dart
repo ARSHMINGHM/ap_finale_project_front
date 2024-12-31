@@ -41,7 +41,7 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
       Future.delayed(Duration(seconds: 1), () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => home()),
+          MaterialPageRoute(builder: (context) => Home()),
         );
       });
     } else {
