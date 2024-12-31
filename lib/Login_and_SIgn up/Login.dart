@@ -17,6 +17,43 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   String errorMessage="";
+  void validateUser(String username, String password, List<User> users, BuildContext context) {
+    // تعریف متغیر کاربر معتبر
+
+
+    // جستجو برای یافتن کاربر
+    for (User user in users) {
+      if (user.userName == username && user.password == password) {
+        a = user;
+        break;
+      }
+    }
+
+    if (a != null) {
+      // اگر کاربر معتبر پیدا شد
+      showNotification(
+        "ورود موفقیت‌آمیز بود!",
+        Color(0xFF3E7B27),
+        Icons.check_circle_outline,
+      );
+
+      // انتقال به صفحه اصلی بعد از یک ثانیه
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => home()),
+        );
+      });
+    } else {
+      // اگر کاربر معتبر پیدا نشد
+      showNotification(
+        "نام کاربری یا رمزعبور اشتباه است.",
+        Color(0xFFE82561),
+        Icons.error_outline,
+      );
+    }
+  }
+
 
   void showNotification(String message, Color backgroundColor, IconData icon) {
     final overlay = Overlay.of(context);
@@ -182,28 +219,27 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
                   ElevatedButton.icon(
                     onPressed: () {
                       setState(() {
-                        String usename = usernameController.text;
+                        String username = usernameController.text;
                         String password = passController.text;
-                        if (usename.isEmpty && password.isEmpty) {
+                        if (username.isEmpty && password.isEmpty) {
                           errorMessage = "نام کاربری و رمزعبور خود را وارد کنید";
                           showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        } else if (usename.isEmpty) {
+                        } else if (username.isEmpty) {
                           errorMessage = "نام کاربری  خود را وارد کنید";
                           showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
                         } else if (password.isEmpty) {
                           errorMessage = "رمزعبور خود را وارد کنید";
                           showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        } else if (usename != a.userName || password != a.password) {
-                          errorMessage = "نام کاربری یا رمزعبور اشتباه است.";
-                          showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        } else {
-                          errorMessage = "";
+                        }else {
+                          validateUser(username, password, users, context);
+                        }
+                          /*errorMessage = "";
                           showNotification("ورود موفقیت‌آمیز بود!",Color(0xFF3E7B27), Icons.check_circle_outline);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Home()),
+                            MaterialPageRoute(builder: (context) => home()),
                           );
-                        }
+                        }*/
                       });
                     },
                     label: Text('LOGIN', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
