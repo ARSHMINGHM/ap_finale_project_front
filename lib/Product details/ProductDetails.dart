@@ -40,7 +40,7 @@ class ProductDetails extends StatefulWidget {
 class _ProductdetailsState extends State<ProductDetails> {
   final TextEditingController _reviewController = TextEditingController();
   final List<String> _reviews = [];
-
+  bool _isLiked = false;
   void _addReview() {
     if (_reviewController.text.isNotEmpty) {
       setState(() {
@@ -120,9 +120,32 @@ class _ProductdetailsState extends State<ProductDetails> {
                 width: double.infinity,
                 height: 300,
                 color: Colors.white,
-                child: Image.asset(
-                  myProduct.imagePath,
-                  fit: BoxFit.contain,
+                child: Stack(
+                  children: [
+                    // Product Image
+                    Positioned.fill(
+                      child: Image.asset(
+                        myProduct.imagePath,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    // Like Button
+          Positioned(
+            bottom: 20,
+            left: 20,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isLiked = !_isLiked; // Toggle the like state
+                });
+              },
+              child: Icon(
+                Icons.favorite,
+                size: 40,
+                color: _isLiked ? Colors.red : Colors.grey, // Change color based on state
+              ),
+            ),),
+                  ],
                 ),
               ),
               // Product Title and Description
