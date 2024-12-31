@@ -267,7 +267,7 @@ class _ProductdetailsState extends State<ProductDetails> {
         height: MediaQuery.of(context).size.height * 0.15, // Adjust percentage as needed
         child: Column(
           children: [
-            PriceCard(),
+            PriceCard(Product: Product),
             Expanded(
               child: ConvexAppBar(
                 color: const Color(0XFF757C84),
@@ -364,6 +364,9 @@ class _ProductdetailsState extends State<ProductDetails> {
 }
 
 class PriceCard extends StatelessWidget {
+  final MainProduct.Product Product ;
+  PriceCard({super.key,
+    required this.Product,}): super();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -377,7 +380,8 @@ class PriceCard extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () {
-              // Handle Add to Cart
+              a.shoppingCart.add(Product);
+              print("added");
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

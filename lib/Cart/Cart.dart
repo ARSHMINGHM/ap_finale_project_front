@@ -8,22 +8,9 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
-final cartProducts = [
-  CartProduct(
-    name: 'گوشی موبایل تایتانیک مدل 2 Phone با سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت',
-    price: 11250000,
-    image: 'assets/Iphone.jpg',
-    capacity: '512 گیگابایت',
-    color: 'مشکی',
-  ),
-  CartProduct(
-    name: 'گوشی موبایل تایتانیک مدل 2 Phone با سیم کارت ظرفیت 512 گیگابایت و رم 12 گیگابایت',
-    price: 11250000,
-    image: 'assets/Iphone.jpg',
-    capacity: '512 گیگابایت',
-    color: 'مشکی',
-  ),
-];
+import 'package:ap_finale_project_front/main.dart';
+
+import '../Product.dart';
 class Cart extends StatelessWidget {
 final List<MainProduct.Product> product;
 const Cart({
@@ -35,7 +22,7 @@ Key? key,
     return Scaffold(
         backgroundColor: const Color(0xFFD8EBE4),
         body:CartView(
-          products: cartProducts,
+          products: a.shoppingCart,
         ),
         bottomNavigationBar: ConvexAppBar(
           color: const Color(0XFF757C84),
@@ -71,26 +58,10 @@ Key? key,
     );
   }
 }
-class CartProduct {
-  final String name;
-  final int price;
-  final String image;
-  final String capacity;
-  final String color;
-  int quantity;
 
-  CartProduct({
-    required this.name,
-    required this.price,
-    required this.image,
-    required this.capacity,
-    required this.color,
-    this.quantity = 1,
-  });
-}
 
 class CartView extends StatefulWidget {
-  final List<CartProduct> products;
+  final List<MainProduct.Product> products;
 
   const CartView({required this.products, Key? key}) : super(key: key);
 
@@ -101,12 +72,15 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   int _calculateTotal() {
     int total = 0;
-    for (CartProduct product in widget.products) {
-      total += product.price * product.quantity;
+    for (MainProduct.Product product in widget.products) {
+      try {
+        total += (int.parse(product.price)) * product.quantity;
+      } catch (e) {
+        debugPrint("Error parsing price: ${product.price}");
+      }
     }
     return total;
   }
-
   void _deleteProduct(int index) {
     setState(() {
       widget.products.removeAt(index);
@@ -115,11 +89,14 @@ class _CartViewState extends State<CartView> {
 
   void _updateQuantity(int index, int newQuantity) {
     setState(() {
-      if (newQuantity > 0) {
+      if (newQuantity > 0) { // Ensure quantity is positive
         widget.products[index].quantity = newQuantity;
+      } else {
+        widget.products[index].quantity = 1; // Prevent zero or negative values
       }
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -225,7 +202,7 @@ class _CartViewState extends State<CartView> {
 }
 
 class CartCard extends StatelessWidget {
-  final CartProduct product;
+  final MainProduct.Product product;
   final VoidCallback onDelete;
   final ValueChanged<int> onQuantityChange;
 
@@ -255,7 +232,7 @@ class CartCard extends StatelessWidget {
             ),
             child: Center(
               child: Image.asset(
-                product.image,
+                product.img,
                 width: 80,
                 height: 80,
               ),
@@ -270,7 +247,7 @@ class CartCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  product.name,
+                  product.title,
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 4),
@@ -285,11 +262,9 @@ class CartCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(product.color),
+                    Text(product.strcolor),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Text(product.capacity),
               ],
             ),
           ),
@@ -308,15 +283,20 @@ class CartCard extends StatelessWidget {
                     icon: const Icon(Icons.add_circle_outline),
                     onPressed: () => onQuantityChange(product.quantity + 1),
                   ),
-                  Text('${product.quantity}'),
+                  Text('${product.quantity}', style: const TextStyle(fontSize: 14)),
                   IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
-                    onPressed: () => onQuantityChange(product.quantity - 1),
+                    onPressed: () {
+                      if (product.quantity > 1) { // Prevent decrementing below 1
+                        onQuantityChange(product.quantity - 1);
+                      }
+                    },
                   ),
                 ],
               ),
+
               Text(
-                '${(product.price * product.quantity).toStringAsFixed(0)} تومان',
+                '${(int.parse(product.price) * product.quantity)} تومان',
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
