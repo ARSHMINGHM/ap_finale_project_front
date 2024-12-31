@@ -140,7 +140,13 @@ Widget build(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FavoriteProducts(user: a,)),
+                    );
+
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.favorite, color: Colors.redAccent),
