@@ -1,4 +1,4 @@
-import 'package:ap_finale_project_front/Account/Product.dart';
+import 'package:ap_finale_project_front/Product.dart';
 class User {
   String?userName;
   String? fname;

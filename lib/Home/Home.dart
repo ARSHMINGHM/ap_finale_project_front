@@ -1,5 +1,6 @@
 import 'package:ap_finale_project_front/Offer%20and%20Supreme/Offer.dart';
 import 'package:ap_finale_project_front/Offer%20and%20Supreme/Supreme.dart';
+import 'package:ap_finale_project_front/Product%20details/ProductDetails.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
@@ -224,7 +225,7 @@ class ProductCard extends StatelessWidget {
   final Color backgroundColor;
   final String Img;
 
-  const ProductCard({super.key, 
+  const ProductCard({super.key,
     required this.title,
     required this.FullPrice,
     required this.price,
@@ -246,6 +247,12 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Product Image
+          TextButton(onPressed:(){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductDetails()),
+            );
+          }, child:
           Center(
             child: Container(
               height: 100,
@@ -286,13 +293,20 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
+          ),
           const SizedBox(height: 8),
-          Text(
+          TextButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProductDetails()),
+            );
+          }, child:Text(
             title,
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
+          ),
           ),
           const SizedBox(height: 8),
           // Product Details

@@ -13,6 +13,7 @@ class Product {
   final int soldCount; // تعداد فروش محصول
   final double productScore; // امتیاز محصول
   final bool isLiked; // آیا محصول لایک شده است؟
+  final String category;
 
   // کانستراکتور اصلی
   const Product({
@@ -28,6 +29,7 @@ class Product {
     required this.soldCount,
     required this.productScore,
     required this.isLiked,
+    required this.category,
   });
 
   // کانستراکتور ساده برای محصولات پایه
@@ -44,6 +46,7 @@ class Product {
     this.soldCount = 0,
     this.productScore = 0.0,
     this.isLiked = false,
+    this.category ="Others"
   });
 
   // کانستراکتور برای محصولات تخفیف شگفت‌انگیز
@@ -60,5 +63,6 @@ class Product {
     this.soldCount = 0,
     this.productScore = 0.0,
     this.isLiked = false,
+    this.category = "Others"
   });
 }
