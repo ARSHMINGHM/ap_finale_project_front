@@ -137,6 +137,8 @@ flutter:
     - assets/user-profile-computer-icons-login-database-github-thumbnail.jpg
     - assets/Women's Clothing.jpg
     - assets/لپ-تاپ-ایسوس-مدل-G614JI-300x300.jpg
+    - assets/login.jpg
+    - assets/sign up.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
