@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Product.dart';
 
 class Product {
   final String title; // عنوان محصول
