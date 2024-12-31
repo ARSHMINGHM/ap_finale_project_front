@@ -7,7 +7,8 @@ class User {
   String? phoneNumber;
   String? password;
   String? sub = "معمولی";
-  List<Product> p = [];
+  List<Product>? FavoriteProducts = [];
+  List<Product>? shoppingCart = [];
 
 
 
