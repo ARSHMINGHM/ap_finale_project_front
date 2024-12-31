@@ -9,39 +9,22 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Product details/TechnicalSpecs.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
-Product myProduct = Product(
-  title: "گوشی موبایل اپل مدل iPhone 13 Pro ZAA",
-  description: "دو سیم کارت ظرفیت ۱۲۸ گیگابایت و رم ۶ گیگابایت",
-  price: 1200.00,
-  stock: 26,
-  seller: "دیجی کالا",
-  rating: 4.5,
-  features: [
-    "نسخه سیستم عامل: iOS 15",
-    "اندازه: ۶.۱ اینچ",
-    "رزولوشن دوربین اصلی: ۱۲ مگاپیکسل",
-    "فناوری صفحه نمایش: Super Retina XDR OLED",
-  ],
-  imagePath: 'assets/Iphone.jpg',
-);
-final specs = ProductSpecs(
-  phoneType: 'iOS سیستم عامل',
-  category: 'پرچمدار',
-  model: 'iPhone 13 Pro ZAA',
-  releaseDate: '۱۴ سپتامبر ۲۰۲۱',
-  dimensions: '۱۴۶.۷×۷۱.5×۷.۷ میلی‌متر',
-);
 class ProductDetails extends StatefulWidget {
-  const ProductDetails({super.key});
-
+  final MainProduct.Product Product;
+  const ProductDetails({
+    required this.Product,
+});
   @override
-  State<ProductDetails> createState() => _ProductdetailsState();
+  State<ProductDetails> createState() => _ProductdetailsState(Product: Product);
 }
 
 class _ProductdetailsState extends State<ProductDetails> {
+  final MainProduct.Product Product;
   final TextEditingController _reviewController = TextEditingController();
   final List<String> _reviews = [];
   bool _isLiked = false;
+
+  _ProductdetailsState({required this.Product});
   void _addReview() {
     if (_reviewController.text.isNotEmpty) {
       setState(() {
@@ -126,7 +109,7 @@ class _ProductdetailsState extends State<ProductDetails> {
                     // Product Image
                     Positioned.fill(
                       child: Image.asset(
-                        myProduct.imagePath,
+                        Product.img,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -157,17 +140,10 @@ class _ProductdetailsState extends State<ProductDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start, // RTL start is right
                   children: [
                     Text(
-                      myProduct.title,
+                      Product.title,
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      myProduct.description,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -229,7 +205,7 @@ class _ProductdetailsState extends State<ProductDetails> {
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => TechnicalSpecs(product:myProduct, specs: specs,)),);
+                              MaterialPageRoute(builder: (context) => TechnicalSpecs(product:Product,)),);
                         },
                         child: const Text(
                           "مشاهده همه ویژگی ها",
@@ -453,41 +429,4 @@ class PriceCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class Product {
-  final String title;
-  final String description;
-  final double price;
-  final int stock;
-  final String seller;
-  final double rating;
-  final List<String> features;
-  final String imagePath;
-
-  Product({
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.stock,
-    required this.seller,
-    required this.rating,
-    required this.features,
-    required this.imagePath,
-  });
-}
-class ProductSpecs {
-  final String phoneType;
-  final String category;
-  final String model;
-  final String releaseDate;
-  final String dimensions;
-
-  ProductSpecs({
-    required this.phoneType,
-    required this.category,
-    required this.model,
-    required this.releaseDate,
-    required this.dimensions,
-  });
 }

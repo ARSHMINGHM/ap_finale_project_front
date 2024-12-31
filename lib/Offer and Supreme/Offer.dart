@@ -5,6 +5,7 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Product%20details/ProductDetails.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 final products = fakeProducts;
@@ -214,6 +215,12 @@ class ProductCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
+                TextButton(onPressed:(){
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProductDetails(Product: product)),
+              );
+              },child:
                         // Image container with discount
                         Stack(
                           children: [
@@ -258,8 +265,7 @@ class ProductCard extends StatelessWidget {
                                 ),
                               ),
                           ],
-                        ),
-
+                        ),),
                         const SizedBox(width: 8), // Space between the image and the text
 
                         // Text column

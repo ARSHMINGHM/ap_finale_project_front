@@ -1,20 +1,19 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ap_finale_project_front/Product details/ProductDetails.dart';
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
 
 class TechnicalSpecs extends StatelessWidget {
-  final Product product;
-  final ProductSpecs specs;
-
+  final MainProduct.Product product;
   const TechnicalSpecs({
     super.key,
     required this.product,
-    required this.specs,
   });
 
   @override
   Widget build(BuildContext context) {
+    MainProduct.ProductSpecs specs = product.specs;
     return Scaffold(
       backgroundColor: const Color(0xFFD8EBE4),
       body: Directionality(

@@ -86,12 +86,14 @@ class Home extends StatelessWidget {
               products: products
                   .where((product) => product.isAmazingOffer)
                   .map((product) => ProductCard(
+                product: product,
                 title: product.title,
                 price: product.price,
                 fullPrice: product.fullPrice,
                 rating: product.rating,
                 backgroundColor: product.backgroundColor,
                 img: product.img,
+
               ))
                   .toList(),
             ),
@@ -107,6 +109,7 @@ class Home extends StatelessWidget {
               products: products
                   .where((product) => product.isTopProduct)
                   .map((product) => ProductCard(
+                product: product,
                 title: product.title,
                 price: product.price,
                 fullPrice: product.fullPrice,
@@ -224,6 +227,7 @@ class Home extends StatelessWidget {
   }
 }
 class ProductCard extends StatelessWidget {
+  final MainProduct.Product product;
   final String title;
   final String fullPrice;
   final String price;
@@ -232,6 +236,7 @@ class ProductCard extends StatelessWidget {
   final String img;
 
   const ProductCard({super.key,
+    required this.product,
     required this.title,
     required this.fullPrice,
     required this.price,
@@ -256,7 +261,7 @@ class ProductCard extends StatelessWidget {
           TextButton(onPressed:(){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProductDetails()),
+              MaterialPageRoute(builder: (context) => ProductDetails(Product: product)),
             );
           }, child:
           Center(
@@ -304,7 +309,7 @@ class ProductCard extends StatelessWidget {
           TextButton(onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProductDetails()),
+              MaterialPageRoute(builder: (context) => ProductDetails(Product: product)),
             );
           }, child:Text(
             title,
