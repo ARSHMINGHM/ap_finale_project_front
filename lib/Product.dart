@@ -18,9 +18,10 @@ class Product {
   final String category; // دسته‌بندی محصول
   final ProductSpecs specs; // مشخصات محصول
   final int discount;
+  late int quantity;
 
   // کانستراکتور اصلی
-  const Product({
+   Product({
     required this.title,
     required this.fullPrice,
     required this.price,
@@ -38,10 +39,11 @@ class Product {
     required this.isLiked,
     required this.category,
     required this.specs,
+     required this.quantity,
   });
 
   // کانستراکتور ساده برای محصولات پایه
-  const Product.basic({
+   Product.basic({
     required this.title,
     required this.price,
     required this.img,
@@ -58,11 +60,12 @@ class Product {
     this.productScore = 0.0,
     this.isLiked = false,
     this.category = "Others",
+     this.quantity = 0,
     this.specs = const ProductSpecs(phoneType: "", model: "", releaseDate: "", dimensions: "",features: [""]),
   });
 
   // کانستراکتور برای محصولات تخفیف شگفت‌انگیز
-  const Product.amazingOffer({
+   Product.amazingOffer({
     required this.title,
     required this.fullPrice,
     required this.price,
@@ -77,6 +80,7 @@ class Product {
     this.stock = 10,
     this.soldCount = 0,
     this.productScore = 0.0,
+     this.quantity = 0,
     this.isLiked = false,
     this.category = "Others",
     this.specs = const ProductSpecs(phoneType: "", model: "", releaseDate: "", dimensions: "", features: [""]),

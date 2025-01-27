@@ -9,7 +9,7 @@ import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
 import 'package:ap_finale_project_front/FakeData.dart';
 import 'package:ap_finale_project_front/Product.dart';
 List<Product> b = fakeProducts;
-User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234");
+User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234",addresses: ["tehran"],shoppingCart: [fakeProducts[0]]);
 void main() {
   runApp(const MyApp());
 }
