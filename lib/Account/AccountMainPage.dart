@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/Product%20details/FavoriteProducts.dart';
 
 import '../Cart/Cart.dart';
-import '../Product details/FavoriteProducts.dart';
 class Profile extends StatelessWidget {
   const Profile({super.key});
 
 Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFDFF2EB), // رنگ پس‌زمینه
+      backgroundColor: Color(0xFFDFF2EB),
       appBar: AppBar(
-        backgroundColor: Color(0xFFDFF2EB), // هم‌رنگ با پس‌زمینه
+        backgroundColor: Color(0xFFDFF2EB),
         elevation: 0, // حذف سایه
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Home()), // جایگزین صفحه مقصد
+              MaterialPageRoute(builder: (context) => Home()),
             );
           },
         ),
@@ -29,7 +30,7 @@ Widget build(BuildContext context) {
         // آیکون لوگو
         actions: [
           IconButton(
-            icon: Icon(Icons.settings, color: Colors.black), // آیکون تنظیمات
+            icon: Icon(Icons.settings, color: Colors.black),
             onPressed: () {},
           ),
         ],
@@ -43,15 +44,16 @@ Widget build(BuildContext context) {
               backgroundImage: AssetImage('assets/images (8).jpg'),
             ),
             SizedBox(height: 10),
-            // نام و شماره تلفن کاربر
+
             Text(
-              '${a.userName}',
+              '${clientSocket.instance.userName}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             SizedBox(height: 5),
             Text(
-              '${a.phoneNumber}',
+              '${clientSocket.instance.phoneNumber}',
               style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+              textDirection: TextDirection.ltr,
             ),
             SizedBox(height: 20),
 
@@ -123,12 +125,12 @@ Widget build(BuildContext context) {
                 children: [
                   Text('اطلاعات کاربری', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Divider(color: Colors.grey),
-                  buildInfoRow('نام و نام خانوادگی', '${a.fname} ${a.lname}'),
-                  buildInfoRow('تلفن همراه', '${a.phoneNumber}'),
+                  buildInfoRow('نام و نام خانوادگی', '${clientSocket.instance.fname} ${clientSocket.instance.lname}'),
+                  buildInfoRow('تلفن همراه', '${clientSocket.instance.phoneNumber}'),
                   /*buildInfoRow('کد ملی', '${a.nationalID}'),*/
-                  buildInfoRow('ایمیل', '${a.email}'),
-                  buildInfoRow('رمز عبور', '*' * (a.password?.length ?? 0)),
-                  buildInfoRow('اشتراک', '${a.sub}'),
+                  buildInfoRow('ایمیل', '${clientSocket.instance.email}'),
+                  buildInfoRow('رمز عبور', '*' * (clientSocket.instance.password?.length ?? 0)),
+                  buildInfoRow('اشتراک', '${clientSocket.instance.sub}'),
                 ],
 
               ),
@@ -151,8 +153,8 @@ Widget build(BuildContext context) {
                   child: Row(
                     children: [
                       Icon(Icons.favorite, color: Colors.redAccent),
-                      // آیکون لیست علاقه مندی ها
-                      SizedBox(width: 5),  // فاصله بین آیکون و متن
+
+                      SizedBox(width: 5),
                       Text(
                         'لیست علاقه مندی ها',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFFC30E59)),
@@ -161,8 +163,8 @@ Widget build(BuildContext context) {
                   ),
                 ),
                 Container(
-                  height: 20, // ارتفاع خط
-                  width: 1, // عرض خط
+                  height: 20,
+                  width: 1,
 
                 ),
                 GestureDetector(
@@ -175,7 +177,7 @@ Widget build(BuildContext context) {
                   child: Row(
                     children: [
                       Icon(Icons.shopping_cart_outlined, color: Colors.blue[700]),  // آیکون سبد خرید
-                      SizedBox(width: 5),  // فاصله بین آیکون و متن
+                      SizedBox(width: 5),
                       TextButton(onPressed: (){
                         Navigator.push(
                           context,
@@ -239,7 +241,6 @@ Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
-
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: TextStyle(fontSize: 14, color: Colors.grey[700])),

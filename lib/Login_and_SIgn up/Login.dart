@@ -1,3 +1,4 @@
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -307,8 +308,11 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
                             });
                           } else if (state == 500) {
                             showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
-                          } else if (state == 401) {
+                          } else if (state == 404) {
                             showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
+                          }
+                          else {
+                            showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
                           }
                         });
                       }

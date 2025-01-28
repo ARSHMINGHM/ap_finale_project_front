@@ -6,10 +6,19 @@ import 'package:ap_finale_project_front/Address/Address.dart' as MyAppAddress;
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
+import 'package:ap_finale_project_front/Product.dart';
+
 
 class clientSocket {
+  String? userName;
+  String? fname;
+  String? lname;
+  String? email;
+  String? phoneNumber;
+  String? password;
+  String? sub = "معمولی";
+  List<Product> FavoriteProducts = [];
+  List<Product>? shoppingCart = [];
   static final clientSocket _instance = clientSocket._internal();
   static clientSocket get instance => _instance;
 
@@ -17,8 +26,6 @@ class clientSocket {
   final int port = 8080;
   Socket? _socket;
   final StreamController<String> _streamController = StreamController<String>.broadcast();
-  //final StreamController<String> _streamController = StreamController<String>();
-
 
   bool get isConnected => _socket != null;
 
@@ -51,27 +58,38 @@ class clientSocket {
   }
 
   Future<int> sendLoginCommand(String username, String password) async {
+    // Ensure the connection is established
     if (!isConnected) {
       try {
         await connect();
         if (!isConnected) return 500;
       } catch (e) {
-        return 500;
+        print("Error while connecting: $e");
+        return 500; // Connection error
       }
     }
 
-    String loginRequest = "login $username $password\n";
+    // Send the login request
+    final String loginRequest = "login $username $password\n";
     _socket?.write(loginRequest);
 
     try {
-      String response = await _streamController.stream.first;
-      if (response == "Login successful") {
+      // Wait for the response from the server
+      final String response = await _streamController.stream.first;
+
+      if (response.startsWith("{") && response.endsWith("}")) {
+        // Parse JSON if applicable
+        final Map<String, dynamic> jsonData = json.decode(response);
+        _updateFieldsFromJson(jsonData);
         return 200; // Login successful
+      } else if (response == "not found") {
+        return 404; // User not found
       } else {
-        return 401;
+        return 501; // Unexpected response
       }
     } catch (e) {
-      print(e);
+      // Handle errors while reading response
+      print("Error while reading response: $e");
       return 500;
     }
   }
@@ -93,14 +111,43 @@ class clientSocket {
 
     try {
       String response = await _streamController.stream.first;
-      if (response == "sign up successful") {
+      print("response : ${response}");
+
+
+      if (response.startsWith("{") && response.endsWith("}")) {
+        Map<String, dynamic> jsonData = json.decode(response);
+        _updateFieldsFromJson(jsonData);
         return 200; // Sign up successful
-      } else if (response == "404") {
-        return 404; // Username not valid
-      } /*else if (response == "405") {
-        return 405; // Password not valid
-      }*/ else if (response == "406") {
-        return 406; // Email not valid
+      } else if (response.contains("this member was exist")) {
+        return 400; // Username already exists
+      } else {
+        return 500; // General failure
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+
+  Future<int> sendEditNameCommand(String username, String firstName, String lastName) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editNameRequest = "editName $username $firstName $lastName\n";
+    _socket?.write(editNameRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+      // بررسی پاسخ JSON
+      if (response == "Edit name successful") {
+        this.fname = firstName;
+        this.lname = lastName;
+
+        return 200; // Edit successful
+      } else if (response.contains("Edit name failed or user not found")) {
+        return 404; // Username not found
       } else {
         return 400; // General failure
       }
@@ -108,56 +155,134 @@ class clientSocket {
       return 500; // Error occurred
     }
   }
+  Future<int> sendEditEmailCommand(String username, String email) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editEmailRequest = "editEmail $username $email\n";
+    _socket?.write(editEmailRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit email successful") {
+        this.email = email;
+
+        return 200; // Edit successful
+      } else if (response == "user not found") {
+        return 404; // Username not found
+      } else {
+        return 400; // General failure
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditPhoneCommand(String username, String phone) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editPhoneRequest = "editPhone $username $phone\n";
+    _socket?.write(editPhoneRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit phone successful") {
+        this.phoneNumber = phone;
+
+        return 200; // Edit successful
+      } else if (response == '400') {
+        return 400; // phone for another account
+      } else if(response == "user not found"){
+        return 404; // General failure
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditPasswordCommand(String username, String pass) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editPasswordRequest = "editPassword $username $pass\n";
+    _socket?.write(editPasswordRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit password successful") {
+        this.password = pass;
+
+        return 200; // Edit successful
+      } else if (response == 'password was found') {
+        return 400;
+      } else if(response == "user not found"){
+        return 404;
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditSubscriptionCommand(String username, String sub) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editSubRequest = "editSubscription $username $sub\n";
+    _socket?.write(editSubRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit Subscription successful") {
+        this.sub = sub;
+        return 200; // Edit successful
+      }  else if(response == "not valid"){
+        return 404;
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+
+  void _updateFieldsFromJson(Map<String, dynamic> jsonData) {
+    userName = jsonData['username'];
+    fname = jsonData['firstName'];
+    lname = jsonData['lastName'];
+    email = jsonData['email'];
+    password =jsonData['pass'];
+    phoneNumber = jsonData['phone'];
+    sub = jsonData['sub'];
+    print("Fields updated from JSON: $jsonData");
+  }
 
   void closeConnection() {
     _socket?.close();
     _socket = null;
     print("Connection closed.");
   }
-
-/*  void _showNotification(BuildContext context, String message, Color color, IconData icon) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 50,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: color,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                const BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Icon(icon, color: Colors.white),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    message,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay?.insert(overlayEntry);
-
-    Future.delayed(const Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }*/
 }
+
+
+

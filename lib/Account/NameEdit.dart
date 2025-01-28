@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
@@ -84,7 +85,7 @@ class changeName extends State<ChangeName> {
                     controller: firstNameController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: '${a.fname}',
+                      hintText: '${clientSocket.instance.fname}',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -98,7 +99,7 @@ class changeName extends State<ChangeName> {
                     controller: lastNameController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: ' ${a.lname}',
+                      hintText: ' ${clientSocket.instance.lname}',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -123,20 +124,43 @@ class changeName extends State<ChangeName> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                setState(() {
-                  if(firstNameController.text.isNotEmpty){
-                    a.fname = firstNameController.text;
-                  }
-                  if(lastNameController.text.isNotEmpty){
-                    a.lname = lastNameController.text;
-                  }
+              onPressed: () async{
+                String fname= '';
+                String lname = '';
+                if(firstNameController.text.isNotEmpty){
+                  fname = firstNameController.text;
 
-                });
-                Navigator.push(
+                  a.fname = firstNameController.text;
+                }
+                if(lastNameController.text.isNotEmpty){
+                  lname = lastNameController.text;
+                  a.lname = lastNameController.text;
+                }
+                try{
+                  int state = await clientSocket.instance.sendEditNameCommand(clientSocket.instance.userName ?? '', fname, lname);
+
+                  setState(() {
+                    if (state == 200) {
+                      showNotification("نام و نام خانوادگی تغییر کرد", Color(0xFF25E884), Icons.check_circle_outline);
+                      Future.delayed(const Duration(milliseconds: 100), () {
+                        Navigator.pushReplacementNamed(context, '/profile');
+                      });
+                    }
+                    else if (state == 404) {
+                      showNotification("کاربر با این اطلاعات وجود دارد", Color(0xFFE82561), Icons.error_outline);
+                    } else {
+                      showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
+                    }
+
+
+                  });
+                }catch(e){
+                  print(e);
+                }
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Account()),
-                );
+                );*/
               },
               child: const Text(
                 'تایید اطلاعات',
@@ -149,4 +173,51 @@ class changeName extends State<ChangeName> {
       ),
     );
   }
+  void showNotification(String message, Color backgroundColor, IconData icon) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay?.insert(overlayEntry);
+
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
+
 }

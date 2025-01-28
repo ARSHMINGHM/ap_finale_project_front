@@ -8,14 +8,15 @@ import 'package:ap_finale_project_front/Login_and_SIgn up/SignUp.dart';
 import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
 import 'package:ap_finale_project_front/FakeData.dart';
 import 'package:ap_finale_project_front/Product.dart';
-import 'dart:convert';
-import 'dart:async';
+import 'package:ap_finale_project_front/clientSocket.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:mysql1/mysql1.dart';
+import 'package:flutter/material.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
 List<Product> b = fakeProducts;
-User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234",addresses: ["tehran"],shoppingCart: []);
+User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234", addresses: [], shoppingCart: []);
 void main() async{
   final settings = ConnectionSettings(
     host: '10.0.2.2',
@@ -58,7 +59,10 @@ class MyApp extends StatelessWidget {
       home: login(),
       routes: {
         '/home': (context) => Home(),
+        '/profile':(context) => Profile(),
       },
     );
   }
 }
+
+

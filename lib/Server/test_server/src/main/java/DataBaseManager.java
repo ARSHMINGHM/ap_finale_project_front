@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class DataBaseManager {
-    static String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
+    static String filePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
     static int lastId = 1;
 
     static boolean isUserExist(String username) throws IOException {
@@ -56,7 +56,7 @@ public class DataBaseManager {
         if (status == -1) {
             lastId++;
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-                bw.write(lastId + "-" + username + "-" + firstName + "-" + lastName + "-" + email + "-" + "09********" + "-" + password +"normal"+ "\n");
+                bw.write(lastId + "-" + username + "-" + firstName + "-" + lastName + "-" + email + "-" + "09********" + "-" + password +"-" +"normal"+ "\n");
                 bw.flush();
             }
             return 200;

@@ -5,7 +5,7 @@ import com.google.gson.*;
 
 public class stest {
 
-    static String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
+    static String filePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(8080)) {

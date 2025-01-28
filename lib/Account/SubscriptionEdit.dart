@@ -5,8 +5,8 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
-
 import 'EditInfo.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 
 class changeSubscription extends StatefulWidget {
   const changeSubscription({super.key});
@@ -97,11 +97,11 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
               ),
               child: Column(
                 children: [
-                  _buildRadioOption('اشتراک پایه', 'پایه'),
+                  _buildRadioOption('اشتراک پایه', 'normal'),
                   const SizedBox(height: 15),
-                  _buildRadioOption('اشتراک استاندارد', 'استاندارد'),
+                  _buildRadioOption('اشتراک استاندارد', 'standard'),
                   const SizedBox(height: 15),
-                  _buildRadioOption('اشتراک پریمیوم', 'پریمیوم'),
+                  _buildRadioOption('اشتراک پریمیوم', 'Premium'),
                 ],
               ),
             ),
@@ -139,12 +139,11 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
                   // Update the subscription
                   a.sub = selectedOption;
 
-                  // Navigate to Account page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Account()),
-                  );
-                }
+                print('اشتراک انتخاب شده: ${clientSocket.instance.sub}');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Account()),
+                );
               },
               child: const Text(
                 'تایید اطلاعات',
@@ -173,6 +172,7 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
           onChanged: (String? newValue) {
             setState(() {
               selectedOption = newValue!;
+              clientSocket.instance.sendEditSubscriptionCommand(clientSocket.instance.userName??'', newValue);
             });
           },
           activeColor: Colors.blue,

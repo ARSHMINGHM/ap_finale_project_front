@@ -6,8 +6,6 @@ import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Account/users.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
-
-
 class signUp extends StatefulWidget {
   @override
   SignUp  createState() => SignUp ();
@@ -34,7 +32,7 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
 
   bool isValidPassword(String password, String username) {
 
-    if (password.length < 8) {
+    if (password.length < 5) {
       return false;
     }
     RegExp uppercase = RegExp(r'[A-Z]');
@@ -146,7 +144,6 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    //clientSocket.instance.connect();
     if(!clientSocket.instance.isConnected){
       clientSocket.instance.connect();
     }
