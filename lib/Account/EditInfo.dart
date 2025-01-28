@@ -4,12 +4,12 @@ import 'NameEdit.dart';
 import 'NumberEdit.dart';
 import 'PassEdit.dart';
 import 'SubscriptionEdit.dart';
-import 'package:untitled/Account/AccountMainPage.dart';
-import 'package:untitled/Home/Home.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/Category/Category.dart';
-import 'package:untitled/clientSocket.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 
 
 class Account extends StatelessWidget {

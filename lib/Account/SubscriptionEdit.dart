@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Account/EditInfo.dart';
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:untitled/clientSocket.dart';
-import 'package:untitled/Account/EditInfo.dart';
-import 'package:untitled/clientSocket.dart';
-
-import 'package:untitled/main.dart';
-import 'package:untitled/Home/Home.dart';
-import 'package:untitled/Account/AccountMainPage.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
 class changeSubscription extends StatefulWidget {
   const changeSubscription({super.key});

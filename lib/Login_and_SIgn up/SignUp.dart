@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:untitled/Account/EditInfo.dart';
-import 'package:untitled/Home/Home.dart';
-import 'package:untitled/Login_and_SIgn up/Login.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/Account/users.dart';
-import 'package:untitled/clientSocket.dart';
-
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 class signUp extends StatefulWidget {
   @override
   SignUp  createState() => SignUp ();
@@ -85,7 +84,9 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
           lname: lname,
           email: email,
           phoneNumber: "",
-          password: pass,);
+          password: pass,
+          addresses: [],
+        shoppingCart: [],);
       addUser(newUser);
       a = newUser;
       return true;

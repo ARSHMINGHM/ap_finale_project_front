@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:untitled/Account/EditInfo.dart';
-import 'package:untitled/Home/Home.dart';
-import 'package:untitled/clientSocket.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/Category/Category.dart';
-import 'package:untitled/Product%20details/FavoriteProducts.dart';
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/Product%20details/FavoriteProducts.dart';
 
 import '../Cart/Cart.dart';
 class Profile extends StatelessWidget {
