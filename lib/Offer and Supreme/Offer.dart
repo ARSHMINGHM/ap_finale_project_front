@@ -8,6 +8,8 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product%20details/ProductDetails.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
+
+import '../Category/CategoryListProduct.dart';
 final products = fakeProducts;
 class Offer extends StatefulWidget {
   const Offer({super.key});
@@ -16,10 +18,10 @@ class Offer extends StatefulWidget {
   State<Offer> createState() => _OfferState();
 }
 
-
 class _OfferState extends State<Offer> {
   late List<MainProduct.Product> amazingOffers;
   String? selectedCategory;
+  final TextEditingController searchController = TextEditingController();
 
   final List<String> categories = [
     'Accessories',
@@ -39,18 +41,52 @@ class _OfferState extends State<Offer> {
     amazingOffers = getAmazingOffers(products);
   }
 
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
     var filteredList = allProducts.where((product) => product.isAmazingOffer == true).toList();
 
+    // Apply category filter if selected
     if (selectedCategory != null) {
       filteredList = filteredList.where((product) =>
       product.category.toLowerCase() == selectedCategory!.toLowerCase()
       ).toList();
     }
 
+    // Apply search filter if search query is not empty
+    if (searchController.text.isNotEmpty) {
+      filteredList = filteredList.where((product) =>
+      product.title.toLowerCase().contains(searchController.text.toLowerCase()) ||
+          product.category.toLowerCase().contains(searchController.text.toLowerCase())
+      ).toList();
+    }
+
     return filteredList;
   }
 
+  void performSearch() {
+    setState(() {
+      amazingOffers = getAmazingOffers(products);
+    });
+  }
+
+  void navigateToSearch(BuildContext context) {
+    if (searchController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Categorylistproduct(
+            category: '', // Empty category to show all products
+            initialSearchQuery: searchController.text, // Pass the search query
+          ),
+        ),
+      );
+    }
+  }
   void showFilterDialog() {
     showDialog(
       context: context,
@@ -136,18 +172,22 @@ class _OfferState extends State<Offer> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
-                        onSubmitted: (value) {
-                          print('Search: $value');
-                        },
+                        onSubmitted: (_) => navigateToSearch(context),
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => navigateToSearch(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),

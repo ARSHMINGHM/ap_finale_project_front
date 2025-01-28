@@ -6,380 +6,497 @@ import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Account/users.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
-class signUp extends StatefulWidget {
-  @override
-  SignUp  createState() => SignUp ();
-}
 
-class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController fnameController = TextEditingController();
-  TextEditingController lnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController repeatedPassController = TextEditingController();
-
-  late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
-  String errorMessage="";
-  bool isValidEmail(String email) {
-
-    RegExp emailRegExp = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
-    );
-    return emailRegExp.hasMatch(email);
-  }
-  bool isValidPassword(String PreviousPassword, String newPassword, String repeatNewPassword) {
-    if (clientSocket.instance.password != PreviousPassword) {
-      showNotification("رمز فعلی اشتباه وارد شده", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (newPassword != repeatNewPassword) {
-
-      showNotification("رمز تکرار شده اشتباه است", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }else if(PreviousPassword == newPassword){
-      showNotification("رمز یکبار استفاده شده است", Color(0xFFE82561), Icons.error_outline);
-      return false;
-
-    }
-    return true;
-  }
-  bool isValidPass(String password, String username) {
-
-    if (password.length < 5) {
-      showNotification("رمز عبور باید شامل حداقل 6 کاراکتر باشد", Color(0xFFE82561), Icons.error_outline);
-
-      return false;
-    }
-    RegExp uppercase = RegExp(r'[A-Z]');
-    RegExp lowercase = RegExp(r'[a-z]');
-    RegExp digit = RegExp(r'[0-9]');
-
-    if (!uppercase.hasMatch(password) ||
-        !lowercase.hasMatch(password) ||
-        !digit.hasMatch(password)) {
-      showNotification("رمز عبور باید شامل حروف بزرگ و کوچک و اعداد باشد", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    if (password.contains(username)) {
-      showNotification("رمز عبور نباید شامل نام کاربری باشد", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    return true;
-  }
-
-
-  void addUser(User u) {
-    users.add(u);
-  }
-
-  bool checkSignUp(String username,String fname , String lname, String email,String pass,String repass){
-    if (email.isEmpty || pass.isEmpty || fname.isEmpty|| lname.isEmpty || repass.isEmpty) {
-      errorMessage = "اطلاعات زیر را به صورت کامل پر کنید.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (!isValidEmail(email)) {
-      errorMessage = ".ایمیل معتبر نیست";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (pass.isEmpty) {
-      errorMessage = "رمزعبور خود را وارد کنید";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    else if (pass != repass) {
-      errorMessage = "تکرار رمز عبور نادرست است.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }else if(!isValidPass(pass, username)){
-      errorMessage = ".رمزعبور معتبر نیست.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-
-    }
-    else {
-      errorMessage = "";
-      User newUser = new User(userName: username,
-          fname: fname,
-          lname: lname,
-          email: email,
-          phoneNumber: "",
-          password: pass,);
-      addUser(newUser);
-      a = newUser;
-      return true;
-    }
-
-  }
-  void showNotification(String message, Color backgroundColor, IconData icon) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 50,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Icon(icon, color: Colors.white),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    message,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay?.insert(overlayEntry);
-
-    Future.delayed(Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    if(!clientSocket.instance.isConnected){
-      clientSocket.instance.connect();
-    }
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 1200),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 1),
-      end: Offset(0, 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
+class Account extends StatelessWidget {
+  const Account({super.key});
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFDFF2EB),
       appBar: AppBar(
+        title: Text('ویرایش اطلاعات'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Profile()),
+            );
+          },
+        ),
         backgroundColor: Color(0xFFDFF2EB),
-        elevation: 0,
       ),
-      body: SlideTransition(
-        position: _slideAnimation,
-      child: SingleChildScrollView(
+      body: Center(
+        child: Container(
+          width: 350,
+          height: 700,
+          alignment: Alignment.center, // Center the inner child
+          decoration: BoxDecoration(
+            color: Color(0xFFD9D9D9), // Move color here
+            borderRadius: BorderRadius.circular(20),
+          ),
           child: Column(
             children: [
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.grey.withOpacity(0.5),
-                backgroundImage: AssetImage('assets/images (8).jpg'),
-              ),
-              SizedBox(height: 20),
-              Image.asset(
-                'assets/sign up.jpg',
-                height: 40,
-                width: 150,
+              SizedBox(height: 10),
+              Align(
                 alignment: Alignment.center,
-                fit: BoxFit.fill,
-              ),
-              SizedBox(height: 30),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 350,
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: userNameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام کاربری',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: fnameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: lnameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام خانوادگی',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: emailController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'ایمیل',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: passController,
-                          obscureText: true,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'رمز عبور',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: repeatedPassController,
-                          obscureText: true,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: ' تکرار رمز عبود',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                      ],
-                    ),
-                  ),
-
-
-
-
-                  SizedBox(height: 70),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      String userName = userNameController.text;
-                      String firstName = fnameController.text;
-                      String lastName = lnameController.text;
-                      String Email = emailController.text;
-                      String Password = passController.text;
-                      String repass = repeatedPassController.text;
-
-                      bool valid = checkSignUp(userName, firstName, lastName, Email, Password, repass);
-
-                      if (valid) {
-                        try {
-                          int state = await clientSocket.instance.sendSignUpCommand(userName, firstName, lastName, Email, Password);
-
-                          setState(() {
-                            if (state == 200) {
-                              showNotification("ثبت نام با موفقیت انجام شد", Color(0xFF25E884), Icons.check_circle_outline);
-                              Future.delayed(const Duration(milliseconds: 300), () {
-                                Navigator.pushReplacementNamed(context, '/home');
-                              });
-                            } else if (state == 500) {
-                              showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
-                            }/* else if (state == 401) {
-                              showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
-                            }*/ else if (state == 400) {
-                              showNotification("نام کاربری تکراری است", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 401) {
-                              showNotification("ایمیل تکراری است.", Color(0xFFE82561), Icons.error_outline);
-                            }  else {
-                              showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
-                            }
-                          });
-                        } catch (e) {
-                          print("Error: $e");
-                          showNotification("خطا در اتصال به سرور", Color(0xFFE82561), Icons.error_outline);
-                        }
-                      }
-                    },
-
-                    label: Text('SIGN UP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[200],
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      minimumSize: Size(250, 50),
-                    ),
-                  ),
-                ],
+                child: Text(
+                  'ویرایش اطلاعات',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(height: 20),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.all(15),
+                width: 300,
+                height: 600,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child : Column(
+                  children: [
+                    /////////////////////////////////////////name
+                    SizedBox(height: 15,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'نام و نام خانوادگی',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "${clientSocket.instance.fname} ${clientSocket.instance.lname}",
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChangeName()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
+                      ),
+                    ),
+                    ////////////////////////////////////////phone
+                    SizedBox(height: 15,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'تلفن همراه',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+
+
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              (clientSocket.instance.phoneNumber?.isEmpty ?? true) ? '09**********' : clientSocket.instance.phoneNumber!,
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changePhone()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+
+
+                    SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
+                      ),
+                    ),
+
+                    ///////////////////////////////////////// national id
+              /*      SizedBox(height: 15,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'کد ملی',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+
+                    ),
+
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${a.nationalID ?? 'کد ملی وارد نشده'}',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+
+                            child: GestureDetector(
+                              onTap: () {
+
+                                // هدایت به صفحه جدید
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changeID()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back, // آیکون فلش
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+
+
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
+                      ),
+                    ),*/
+                    //////////////////////////////////email
+                    SizedBox(height: 15,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'ایمیل',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${clientSocket.instance.email}',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changeEmail()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(  
+                        color: Color(0xFF787474),  
+                        thickness: 1, 
+                      ),
+                    ),
+                    /////////////////////////////////////////////////pass
+                    SizedBox(height: 13,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'رمز عبور',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+
+                    ),
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              clientSocket.instance.password != null
+                                  ? '*' * clientSocket.instance.password!.length
+                                  : '',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changePassword()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back, // آیکون فلش
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    /*SizedBox(height: 0),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+
+                                GestureDetector(
+                                  onTap: () {
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => changePassword()),
+                                    );
+                                  },
+
+                                  child: Icon(
+                                    Icons.arrow_back,
+                                    color: Colors.black,
+                                    size: 16,
+
+                                  ),
+                                ),
+                                // فیلد پسورد
+                                SizedBox(height: 10,),
+                                Expanded(
+                                  child: TextField(
+                                    readOnly: true,
+                                    obscureText: true,
+                                    controller: TextEditingController(text: clientSocket.instance.password),
+                                    textAlign: TextAlign.right,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none, // حذف حاشیه
+                                      hintText: '**************',
+                                      contentPadding: EdgeInsets.only(top: 10),
+                                    ),
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+*/
+
+                    //SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(  // خط افقی
+                        color: Color(0xFF787474),  // رنگ خط
+                        thickness: 1,
+                        height: 10,// ضخامت خط
+                      ),
+                    ),
+                    //////////////////////////////////////////
+                    SizedBox(height: 15,),
+                    Container(
+                      width: 250,
+                      child : Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          'اشتراک',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ,color: Color(0xFF787474)),
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '${clientSocket.instance.sub}',
+
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changeSubscription()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 7,),
+                    Container(
+                      width: 250,
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
+        ),
       ),
-
-      ),
-
-
+        bottomNavigationBar: ConvexAppBar(
+          color: Color(0XFF757C84),
+          initialActiveIndex: 2,
+          top: -12.0,
+          activeColor: Color(0XFF000000),
+          backgroundColor: Color(0XFFDFF2EB),
+          style: TabStyle.textIn,
+          items: [
+            TabItem(icon: Icons.category_outlined, title: 'Category'),
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.people, title: 'Profile'),
+          ],
+          onTap: (int i) {
+            if (i == 0) {
+              Navigator.push(
+             context,
+            MaterialPageRoute(builder: (context) => Category()),
+            );
+            } else if (i == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Home()),
+              );
+            } else if (i == 2) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profile()),
+              );
+            }
+          },
+        )
     );
   }
 }
+
