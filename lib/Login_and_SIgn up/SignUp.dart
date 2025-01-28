@@ -86,7 +86,9 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
           lname: lname,
           email: email,
           phoneNumber: "",
-          password: pass,);
+          password: pass,
+          addresses: [],
+          shoppingCart: [],);
       addUser(newUser);
       a = newUser;
       return true;
