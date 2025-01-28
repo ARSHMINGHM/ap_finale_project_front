@@ -21,7 +21,7 @@ class clientSocket {
   static final clientSocket _instance = clientSocket._internal();
   static clientSocket get instance => _instance;
 
-  final String host = '192.168.81.61';
+  final String host = '10.0.2.2';
   final int port = 8080;
   Socket? _socket;
   final StreamController<String> _streamController = StreamController<String>.broadcast();
