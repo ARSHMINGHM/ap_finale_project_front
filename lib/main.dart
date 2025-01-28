@@ -15,7 +15,7 @@ import 'dart:convert';
 import 'package:mysql1/mysql1.dart';
 
 List<Product> b = fakeProducts;
-User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234",addresses: ["tehran"],shoppingCart: [fakeProducts[0]]);
+User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234",addresses: ["tehran"],shoppingCart: []);
 void main() async{
   final settings = ConnectionSettings(
     host: '10.0.2.2',

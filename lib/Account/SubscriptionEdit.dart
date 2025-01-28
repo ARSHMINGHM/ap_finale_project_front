@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+
+import 'EditInfo.dart';
 
 class changeSubscription extends StatefulWidget {
   const changeSubscription({super.key});
@@ -11,11 +14,21 @@ class changeSubscription extends StatefulWidget {
   @override
   _ChangeSubscriptionState createState() => _ChangeSubscriptionState();
 }
-
 class _ChangeSubscriptionState extends State<changeSubscription> {
-  String? selectedOption = a.sub;
+  String? selectedOption = a.sub ?? 'پایه'; // Provide a default if a.sub is null
 
-  @override
+  // Create a premium subscription product using the .basic constructor
+  MainProduct.Product _createPremiumSubscriptionProduct() {
+    return MainProduct.Product.basic(
+      title: 'اشتراک پریمیوم',
+      price: '500000',
+      img: 'assets/premium_subscription.png',
+      discount: 33,
+      category: 'Subscription',
+      quantity: 1,
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -102,12 +115,36 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
                 ),
               ),
               onPressed: () {
+                // Debug prints
+                print('Current Subscription: ${a.sub}');
+                print('Selected Subscription: $selectedOption');
 
-                print('اشتراک انتخاب شده: ${a.sub}');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const Account()),
-                );
+                // If selected option is premium and current subscription is not premium
+                if (selectedOption == 'پریمیوم' && (a.sub == null || a.sub != 'پریمیوم')) {
+                  // Clear previous cart and add premium subscription
+                  a.shoppingCart.clear();
+
+                  // Create and add premium subscription product
+                  MainProduct.Product premiumProduct = _createPremiumSubscriptionProduct();
+                  a.shoppingCart.add(premiumProduct);
+
+                  // Navigate to cart
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Cart(product: a.shoppingCart),
+                    ),
+                  );
+                } else {
+                  // Update the subscription
+                  a.sub = selectedOption;
+
+                  // Navigate to Account page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Account()),
+                  );
+                }
               },
               child: const Text(
                 'تایید اطلاعات',
@@ -117,10 +154,9 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
             const SizedBox(height: 20),
           ],
         ),
-      ),
+    ),
     );
   }
-
 
   Widget _buildRadioOption(String text, String value) {
     return Row(
@@ -137,7 +173,6 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
           onChanged: (String? newValue) {
             setState(() {
               selectedOption = newValue!;
-              a.sub = selectedOption;
             });
           },
           activeColor: Colors.blue,
