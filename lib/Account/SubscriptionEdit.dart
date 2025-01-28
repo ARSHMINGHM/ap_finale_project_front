@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:untitled/Account/EditInfo.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
-import 'package:ap_finale_project_front/Home/Home.dart';
-import 'package:ap_finale_project_front/main.dart';
+import 'package:untitled/clientSocket.dart';
+import 'package:untitled/Account/EditInfo.dart';
+import 'package:untitled/clientSocket.dart';
+
+import 'package:untitled/main.dart';
+import 'package:untitled/Home/Home.dart';
+import 'package:untitled/Account/AccountMainPage.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class changeSubscription extends StatefulWidget {
   const changeSubscription({super.key});
@@ -84,11 +89,11 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
               ),
               child: Column(
                 children: [
-                  _buildRadioOption('اشتراک پایه', 'پایه'),
+                  _buildRadioOption('اشتراک پایه', 'normal'),
                   const SizedBox(height: 15),
-                  _buildRadioOption('اشتراک استاندارد', 'استاندارد'),
+                  _buildRadioOption('اشتراک استاندارد', 'standard'),
                   const SizedBox(height: 15),
-                  _buildRadioOption('اشتراک پریمیوم', 'پریمیوم'),
+                  _buildRadioOption('اشتراک پریمیوم', 'Premium'),
                 ],
               ),
             ),
@@ -103,7 +108,7 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
               ),
               onPressed: () {
 
-                print('اشتراک انتخاب شده: ${a.sub}');
+                print('اشتراک انتخاب شده: ${clientSocket.instance.sub}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Account()),
@@ -137,7 +142,7 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
           onChanged: (String? newValue) {
             setState(() {
               selectedOption = newValue!;
-              a.sub = selectedOption;
+              clientSocket.instance.sendEditSubscriptionCommand(clientSocket.instance.userName??'', newValue);
             });
           },
           activeColor: Colors.blue,

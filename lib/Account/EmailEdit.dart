@@ -1,8 +1,9 @@
-import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:untitled/Account/EditInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:ap_finale_project_front/main.dart';
-import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
-import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:untitled/clientSocket.dart';
+import 'package:untitled/main.dart';
+import 'package:untitled/Account/AccountMainPage.dart';
+import 'package:untitled/Home/Home.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class changeEmail extends StatefulWidget {
@@ -125,8 +126,42 @@ class ChangeEmail extends State<changeEmail> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                setState(() {
+              onPressed: () async {
+                if(emailcontroller.text.isNotEmpty){
+                  String email = emailcontroller.text;
+                  if (!isValidEmail(email)) {
+                    errorMessage = '(gmail , yahoo) . ایمیل معتبر نیست';
+                  } else {
+                    try{
+                      int state = await clientSocket.instance.sendEditEmailCommand(clientSocket.instance.userName ?? '', email);
+                      setState(() {
+                        if (state == 200) {
+                          showNotification("تغییرات ایمیل اعمال شد", Color(0xFF25E884), Icons.check_circle_outline);
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            Navigator.pushReplacementNamed(context, '/profile');
+                          });
+                        }
+                        else if (state == 404) {
+                          showNotification("کاربر با این اطلاعات وجود دارد", Color(0xFFE82561), Icons.error_outline);
+                        }else if(state == 400) {
+                          showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
+
+                        }
+                        else if(state == 500){
+                          showNotification("connection loss.", Color(0xFFE82561), Icons.error_outline);
+
+                        }
+
+
+                      });
+                    }catch(e){
+                      print(e);
+                    }
+
+                  }
+                }
+
+                /*setState(() {
                   if(emailcontroller.text.isNotEmpty){
                     String email = emailcontroller.text;
                     if (!isValidEmail(email)) {
@@ -140,7 +175,7 @@ class ChangeEmail extends State<changeEmail> {
                       );
                     }
                   }
-                });
+                });*/
               },
               child: const Text(
                 'تایید اطلاعات',
@@ -152,5 +187,51 @@ class ChangeEmail extends State<changeEmail> {
         ),
       ),
     );
+  }
+  void showNotification(String message, Color backgroundColor, IconData icon) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay?.insert(overlayEntry);
+
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
   }
 }

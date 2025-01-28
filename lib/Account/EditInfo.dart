@@ -4,11 +4,12 @@ import 'NameEdit.dart';
 import 'NumberEdit.dart';
 import 'PassEdit.dart';
 import 'SubscriptionEdit.dart';
-import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
-import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:untitled/Account/AccountMainPage.dart';
+import 'package:untitled/Home/Home.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:ap_finale_project_front/main.dart';
-import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:untitled/main.dart';
+import 'package:untitled/Category/Category.dart';
+import 'package:untitled/clientSocket.dart';
 
 
 class Account extends StatelessWidget {
@@ -80,26 +81,26 @@ class Account extends StatelessWidget {
                       child: Stack(
                         children: [
                           Align(
-                            alignment: Alignment.centerRight, // متن به سمت راست قرار می‌گیرد
+                            alignment: Alignment.centerRight,
                             child: Text(
-                              "${a.fname} ${a.lname}",
+                              "${clientSocket.instance.fname} ${clientSocket.instance.lname}",
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
                           ),
                           Positioned(
-                            left: 0, // قرار دادن آیکون در سمت راست
+                            left: 0,
                             top: 0,
                             child: GestureDetector(
                               onTap: () {
-                                // هدایت به صفحه جدید
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => ChangeName()),
                                 );
                               },
                               child: Icon(
-                                Icons.arrow_back, // آیکون فلش
+                                Icons.arrow_back,
                                 color: Colors.black,
                                 size: 16,
                               ),
@@ -111,9 +112,9 @@ class Account extends StatelessWidget {
                     SizedBox(height: 7,),
                     Container(
                       width: 250,
-                      child :Divider(  // خط افقی
-                        color: Color(0xFF787474),  // رنگ خط
-                        thickness: 1,  // ضخامت خط
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
                       ),
                     ),
                     ////////////////////////////////////////phone
@@ -139,7 +140,7 @@ class Account extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              (a.phoneNumber?.isEmpty ?? true) ? '09**********' : a.phoneNumber!,
+                              (clientSocket.instance.phoneNumber?.isEmpty ?? true) ? '09**********' : clientSocket.instance.phoneNumber!,
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
@@ -260,7 +261,7 @@ class Account extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${a.email}',
+                              '${clientSocket.instance.email}',
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
@@ -341,7 +342,7 @@ class Account extends StatelessWidget {
                                   child: TextField(
                                     readOnly: true,
                                     obscureText: true,
-                                    controller: TextEditingController(text: a.password),
+                                    controller: TextEditingController(text: clientSocket.instance.password),
                                     textAlign: TextAlign.right,
                                     decoration: InputDecoration(
                                       border: InputBorder.none, // حذف حاشیه
@@ -390,7 +391,7 @@ class Account extends StatelessWidget {
                           Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              '${a.sub}',
+                              '${clientSocket.instance.sub}',
 
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
@@ -425,8 +426,6 @@ class Account extends StatelessWidget {
                         thickness: 1,
                       ),
                     ),
-
-
                   ],
                 ),
               ),

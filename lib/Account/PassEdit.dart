@@ -1,9 +1,11 @@
-import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:untitled/Account/EditInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:ap_finale_project_front/main.dart';
-import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:untitled/clientSocket.dart';
+import 'package:untitled/main.dart';
+import 'package:untitled/Home/Home.dart';
+import 'package:untitled/Account/AccountMainPage.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:untitled/Account/AccountMainPage.dart';
 
 class changePassword extends StatefulWidget {
   const changePassword({super.key});
@@ -19,18 +21,41 @@ class ChangePassword extends State<changePassword> {
   String errorMessage = '';
 
   bool isValidPassword(String PreviousPassword, String newPassword, String repeatNewPassword) {
-    if (a.password != PreviousPassword) {
-      errorMessage = 'رمز فعلی اشتباه وارد شده';
+    if (clientSocket.instance.password != PreviousPassword) {
+      showNotification("رمز فعلی اشتباه وارد شده", Color(0xFFE82561), Icons.error_outline);
       return false;
     } else if (newPassword != repeatNewPassword) {
-      errorMessage = 'رمز تکرار شده اشتباه است';
+
+      showNotification("رمز تکرار شده اشتباه است", Color(0xFFE82561), Icons.error_outline);
       return false;
     }else if(PreviousPassword == newPassword){
-      errorMessage = 'رمز یکبار استفاده شده است';
+      showNotification("رمز یکبار استفاده شده است", Color(0xFFE82561), Icons.error_outline);
       return false;
 
     }
+    return true;
+  }
+  bool isValidPass(String password, String username) {
 
+    if (password.length < 5) {
+      showNotification("رمز عبور باید شامل حداقل 6 کاراکتر باشد", Color(0xFFE82561), Icons.error_outline);
+
+      return false;
+    }
+    RegExp uppercase = RegExp(r'[A-Z]');
+    RegExp lowercase = RegExp(r'[a-z]');
+    RegExp digit = RegExp(r'[0-9]');
+
+    if (!uppercase.hasMatch(password) ||
+        !lowercase.hasMatch(password) ||
+        !digit.hasMatch(password)) {
+      showNotification("رمز عبور باید شامل حروف بزرگ و کوچک و اعداد باشد", Color(0xFFE82561), Icons.error_outline);
+      return false;
+    }
+    if (password.contains(username)) {
+      showNotification("رمز عبور نباید شامل نام کاربری باشد", Color(0xFFE82561), Icons.error_outline);
+      return false;
+    }
     return true;
   }
 
@@ -165,20 +190,46 @@ class ChangePassword extends State<changePassword> {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              onPressed: () {
-                setState(() {
-                  String prePass = PreviousPassword.text;
-                  String newPass = newPassword.text;
-                  String repNewPass = repeatNewPassword.text;
-                  bool valid = isValidPassword(prePass, newPass, repNewPass);
-                  if (valid) {
-                    a.password = newPass;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Account()),
-                    );
+              onPressed: () async{
+                String prePass = PreviousPassword.text;
+                String newPass = newPassword.text;
+                String repNewPass = repeatNewPassword.text;
+                bool valid = isValidPassword(prePass, newPass, repNewPass);
+                if (valid) {
+                  if(isValidPass(newPass, clientSocket.instance.userName??'')){
+                    try{
+                      int state = await clientSocket.instance.sendEditPasswordCommand(clientSocket.instance.userName ?? '', newPass);
+                      setState(() {
+                        if (state == 200) {
+                          showNotification("تغییرات رمز عبور اعمال شد", Color(0xFF25E884), Icons.check_circle_outline);
+                          Future.delayed(const Duration(milliseconds: 100), () {
+                            Navigator.pushReplacementNamed(context, '/profile');
+                          });
+                        }
+                        else if (state == 404) {
+                          showNotification("رمز عبور نامعتبر است", Color(0xFFE82561), Icons.error_outline);
+                        }else if(state == 400) {
+                          showNotification("رمزعبور یکبار استفاده شده است", Color(0xFFE82561), Icons.error_outline);
+
+                        }
+                        else if(state == 501) {
+                          showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
+
+                        }
+                        else if(state == 500){
+                          showNotification("connection loss.", Color(0xFFE82561), Icons.error_outline);
+
+                        }
+
+                      });
+                    }catch(e){
+                      print(e);
+                    }
                   }
-                });
+
+
+                }
+
               },
               child: const Text(
                 'تایید اطلاعات',
@@ -191,5 +242,51 @@ class ChangePassword extends State<changePassword> {
       ),
 
     );
+  }
+  void showNotification(String message, Color backgroundColor, IconData icon) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50,
+        left: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Icon(icon, color: Colors.white),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    message,
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay?.insert(overlayEntry);
+
+    Future.delayed(Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
   }
 }
