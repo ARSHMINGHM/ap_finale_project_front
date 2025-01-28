@@ -11,7 +11,6 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
 
-
 class Account extends StatelessWidget {
   const Account({super.key});
 @override
@@ -278,7 +277,7 @@ class Account extends StatelessWidget {
                                 );
                               },
                               child: Icon(
-                                Icons.arrow_back, // آیکون فلش
+                                Icons.arrow_back,
                                 color: Colors.black,
                                 size: 16,
                               ),
@@ -290,9 +289,9 @@ class Account extends StatelessWidget {
                     SizedBox(height: 7,),
                     Container(
                       width: 250,
-                      child :Divider(  // خط افقی
-                        color: Color(0xFF787474),  // رنگ خط
-                        thickness: 1,  // ضخامت خط
+                      child :Divider(  
+                        color: Color(0xFF787474),  
+                        thickness: 1, 
                       ),
                     ),
                     /////////////////////////////////////////////////pass
@@ -504,3 +503,5 @@ class Account extends StatelessWidget {
     );
   }
 }
+
+
