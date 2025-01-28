@@ -9,18 +9,42 @@ import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
+import 'package:ap_finale_project_front/Category/CategoryListProduct.dart';
 List<MainProduct.Product> products = fakeProducts;
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final TextEditingController searchController = TextEditingController();
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void navigateToSearch(BuildContext context) {
+    if (searchController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Categorylistproduct(
+            category: '', // Empty category to show all products
+            initialSearchQuery: searchController.text, // Pass the search query
+          ),
+        ),
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFD8EBE4),
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes default back button
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD8EBE4),
         title: Row(
           children: [
-            // Search Bar
             Expanded(
               child: Container(
                 height: 35,
@@ -33,18 +57,22 @@ class Home extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
-                        onSubmitted: (value) {
-                          print('Search: $value');
-                        },
+                        onSubmitted: (_) => navigateToSearch(context),
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => navigateToSearch(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),
@@ -56,16 +84,14 @@ class Home extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Cart(product: products), // Assuming Cart takes the product list
+                    builder: (context) => Cart(product: products),
                   ),
                 );
               },
-              child: Container(
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: Color(0xFF000000),
-                  size: 24.0,
-                ),
+              child: const Icon(
+                Icons.shopping_cart,
+                color: Color(0xFF000000),
+                size: 24.0,
               ),
             ),
           ],

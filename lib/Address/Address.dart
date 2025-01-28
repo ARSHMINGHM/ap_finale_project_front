@@ -8,7 +8,7 @@ class Address extends StatefulWidget {
 
   const Address({
     required this.total,
-    this.deliveryFee = 112500,
+    this.deliveryFee = 112500, // Default delivery fee
     Key? key,
   }) : super(key: key);
 
@@ -20,8 +20,31 @@ class _AddressState extends State<Address> {
   int? selectedAddressIndex;
   final TextEditingController newAddressController = TextEditingController();
 
+  // Method to check if user has premium subscription
+  bool _hasPremiumSubscription() {
+    return a.sub == 'پریمیوم';
+  }
+
+  // Method to check if cart contains a premium subscription
+  bool _hasPremiumSubscriptionInCart() {
+    return a.shoppingCart.any((product) =>
+    product.category == 'Subscription' &&
+        product.title == 'اشتراک پریمیوم');
+  }
+
+  // Calculate delivery fee based on subscription status
+  int _calculateDeliveryFee() {
+    if (_hasPremiumSubscription() || _hasPremiumSubscriptionInCart()) {
+      return 0; // Free shipping for premium subscribers
+    }
+    return widget.deliveryFee; // Default delivery fee
+  }
+
   @override
   Widget build(BuildContext context) {
+    final int deliveryFee = _calculateDeliveryFee();
+    final int totalAmount = widget.total + deliveryFee;
+
     return Scaffold(
       backgroundColor: const Color(0xFFD8EBE4),
       appBar: AppBar(
@@ -48,7 +71,9 @@ class _AddressState extends State<Address> {
                   ],
                 ),
               ),
-              _buildPriceSummary(),
+
+              // Modified price summary
+              _buildPriceSummary(widget.total, deliveryFee, totalAmount),
             ],
           ),
         ],
@@ -56,6 +81,97 @@ class _AddressState extends State<Address> {
     );
   }
 
+  // Modified price summary widget to show free shipping if applicable
+  Widget _buildPriceSummary(int total, int deliveryFee, int totalAmount) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Column(
+        children: [
+          _buildPriceRow('قیمت کل کالا', total),
+          const SizedBox(height: 8),
+          _buildPriceRow(
+              'هزینه ارسال',
+              deliveryFee,
+              additionalWidget: deliveryFee == 0
+                  ? Text(
+                'ارسال رایگان',
+                style: TextStyle(color: Colors.green[700], fontWeight: FontWeight.bold),
+              )
+                  : null
+          ),
+          const SizedBox(height: 8),
+          _buildPriceRow('قابل پرداخت', totalAmount, isBold: true),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFFF4646),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                if (selectedAddressIndex == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('لطفاً یک آدرس را انتخاب کنید')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('آدرس تایید شد: ${a.addresses?[selectedAddressIndex!]}'),
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Payment(total: totalAmount),
+                    ),
+                  );
+                }
+              },
+              child: const Text(
+                'تایید آدرس',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Modified price row to support additional widget
+  Widget _buildPriceRow(String title, int amount, {bool isBold = false, Widget? additionalWidget}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title),
+        Row(
+          children: [
+            Text(
+              '${amount.toStringAsFixed(0)} تومان',
+              style: TextStyle(
+                fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              ),
+            ),
+            if (additionalWidget != null) ...[
+              const SizedBox(width: 8),
+              additionalWidget,
+            ],
+          ],
+        ),
+      ],
+    );
+  }
   Widget _buildAddressItem(String address, int index) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -122,76 +238,6 @@ class _AddressState extends State<Address> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPriceSummary() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      child: Column(
-        children: [
-          _buildPriceRow('قیمت کل کالا', widget.total),
-          const SizedBox(height: 8),
-          _buildPriceRow('هزینه ارسال', widget.deliveryFee),
-          const SizedBox(height: 8),
-          _buildPriceRow('قابل پرداخت', widget.total + widget.deliveryFee, isBold: true),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF4646),
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: () {
-                if (selectedAddressIndex == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('لطفاً یک آدرس را انتخاب کنید')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('آدرس تایید شد: ${a.addresses?[selectedAddressIndex!]}'),
-                    ),
-                  );
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Payment(total: widget.total)),);
-                }
-              },
-              child: const Text(
-                'تایید آدرس',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPriceRow(String title, int amount, {bool isBold = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title),
-        Text(
-          '${amount.toStringAsFixed(0)} تومان',
-          style: TextStyle(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ],
     );
   }
 }

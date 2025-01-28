@@ -8,6 +8,7 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
 
+import '../Category/CategoryListProduct.dart';
 import '../Product details/ProductDetails.dart';
 final products = fakeProducts;
 class Supreme extends StatefulWidget {
@@ -20,6 +21,7 @@ class Supreme extends StatefulWidget {
 class _SupremeState extends State<Supreme> {
   late List<MainProduct.Product> topProduct;
   String? selectedCategory;
+  final TextEditingController searchController = TextEditingController();
 
   final List<String> categories = [
     'Accessories',
@@ -36,21 +38,55 @@ class _SupremeState extends State<Supreme> {
   @override
   void initState() {
     super.initState();
-    topProduct = getAmazingOffers(products);
+    topProduct = getTopProducts(products);
   }
 
-  List<MainProduct.Product> getAmazingOffers(List<MainProduct.Product> allProducts) {
-    var filteredList = allProducts.where((product) => product.isAmazingOffer == true).toList();
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
+  List<MainProduct.Product> getTopProducts(List<MainProduct.Product> allProducts) {
+    var filteredList = allProducts.where((product) => product.isTopProduct == true).toList();
+
+    // Apply category filter if selected
     if (selectedCategory != null) {
       filteredList = filteredList.where((product) =>
       product.category.toLowerCase() == selectedCategory!.toLowerCase()
       ).toList();
     }
 
+    // Apply search filter if search query is not empty
+    if (searchController.text.isNotEmpty) {
+      filteredList = filteredList.where((product) =>
+      product.title.toLowerCase().contains(searchController.text.toLowerCase()) ||
+          product.category.toLowerCase().contains(searchController.text.toLowerCase())
+      ).toList();
+    }
+
     return filteredList;
   }
 
+  void performSearch() {
+    setState(() {
+      topProduct = getTopProducts(products);
+    });
+  }
+
+  void navigateToSearch(BuildContext context) {
+    if (searchController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Categorylistproduct(
+            category: '', // Empty category to show all products
+            initialSearchQuery: searchController.text, // Pass the search query
+          ),
+        ),
+      );
+    }
+  }
   void showFilterDialog() {
     showDialog(
       context: context,
@@ -71,7 +107,7 @@ class _SupremeState extends State<Supreme> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          topProduct = getAmazingOffers(products);
+                          topProduct = getTopProducts(products);
                         });
                         Navigator.pop(context);
                       },
@@ -85,7 +121,7 @@ class _SupremeState extends State<Supreme> {
                       onChanged: (String? value) {
                         setState(() {
                           selectedCategory = value;
-                          topProduct = getAmazingOffers(products);
+                          topProduct = getTopProducts(products);
                         });
                         Navigator.pop(context);
                       },
@@ -137,18 +173,22 @@ class _SupremeState extends State<Supreme> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
-                        onSubmitted: (value) {
-                          print('Search: $value');
-                        },
+                        onSubmitted: (_) => navigateToSearch(context),
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => navigateToSearch(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),

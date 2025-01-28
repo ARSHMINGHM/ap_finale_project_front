@@ -1,19 +1,22 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
-import 'package:ap_finale_project_front/FakeData.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
 
 class TechnicalSpecs extends StatelessWidget {
   final MainProduct.Product product;
+
   const TechnicalSpecs({
-    super.key,
+    Key? key,
     required this.product,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     MainProduct.ProductSpecs specs = product.specs;
+
     return Scaffold(
       backgroundColor: const Color(0xFFD8EBE4),
       body: Directionality(
@@ -35,14 +38,16 @@ class TechnicalSpecs extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(onPressed: () {
-                          Navigator.pop(context);
-                        }, child:
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 16,
-                          color: Colors.black54,
-                        ),),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
                         const Text(
                           'مشخصات فنی',
                           style: TextStyle(
@@ -54,14 +59,35 @@ class TechnicalSpecs extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    buildSpecRow('نوع گوشی موبایل', specs.phoneType),
+
+                    // Basic Specs
+                    buildSpecRow('نوع محصول', specs.phoneType),
                     const Divider(color: Colors.black12),
                     buildSpecRow('مدل', specs.model),
                     const Divider(color: Colors.black12),
-                    buildSpecRow('زمان معرفی', specs.releaseDate),
+                    buildSpecRow('تاریخ انتشار', specs.releaseDate),
                     const Divider(color: Colors.black12),
                     buildSpecRow('ابعاد', specs.dimensions),
-                    const SizedBox(height: 200),
+                    const Divider(color: Colors.black12),
+
+                    // Dynamic Features
+                    const Text(
+                      'ویژگی‌های محصول',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ...specs.features.map((feature) => Column(
+                      children: [
+                        buildSpecRow(feature, ''),
+                        const Divider(color: Colors.black12),
+                      ],
+                    )).toList(),
+
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -69,7 +95,7 @@ class TechnicalSpecs extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar:ConvexAppBar(
+      bottomNavigationBar: ConvexAppBar(
         color: const Color(0XFF757C84),
         activeColor: const Color(0XFF000000),
         backgroundColor: const Color(0XFFDFF2EB),
@@ -81,7 +107,22 @@ class TechnicalSpecs extends StatelessWidget {
           TabItem(icon: Icons.people, title: 'Profile'),
         ],
         onTap: (int i) {
-          // Handle navigation
+          if (i == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Category()),
+            );
+          } else if (i == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            );
+          } else if (i == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const Profile()),
+            );
+          }
         },
       ),
     );
@@ -93,20 +134,24 @@ class TechnicalSpecs extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black87,
+          Expanded(
+            child: Text(
+              value.isNotEmpty ? value : label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black87,
+              ),
+              textAlign: value.isNotEmpty ? TextAlign.left : TextAlign.right,
             ),
           ),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.black54,
+          if (value.isNotEmpty)
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: Colors.black54,
+              ),
             ),
-          ),
         ],
       ),
     );

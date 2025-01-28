@@ -6,8 +6,34 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/CategoryListproduct.dart';
-class Category extends StatelessWidget {
+class Category extends StatefulWidget {
   const Category({super.key});
+
+  @override
+  State<Category> createState() => _CategoryState();
+}
+
+class _CategoryState extends State<Category> {
+  final TextEditingController searchController = TextEditingController();
+
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void navigateToSearch(BuildContext context) {
+    if (searchController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Categorylistproduct(
+            category: '', // Empty category to show all products
+            initialSearchQuery: searchController.text, // Pass the search query
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,18 +57,22 @@ class Category extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
-                        onSubmitted: (value) {
-                          print('Search: $value');
-                        },
+                        onSubmitted: (_) => navigateToSearch(context),
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => navigateToSearch(context),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),
@@ -56,12 +86,10 @@ class Category extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => Cart(product: fakeProducts,)),
                 );
               },
-              child: Container(
-                child: const Icon(
-                  Icons.shopping_cart,
-                  color: Color(0xFF000000),
-                  size: 24.0,
-                ),
+              child: const Icon(
+                Icons.shopping_cart,
+                color: Color(0xFF000000),
+                size: 24.0,
               ),
             ),
           ],
