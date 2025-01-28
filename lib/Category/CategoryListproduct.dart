@@ -7,26 +7,34 @@ import 'package:ap_finale_project_front/Cart/Cart.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
-
 import '../Product details/ProductDetails.dart';
 
 final products = fakeProducts;
 
 class Categorylistproduct extends StatefulWidget {
   final String category;
+  final String? initialSearchQuery; // Add this parameter
+
   const Categorylistproduct({
     super.key,
     required this.category,
+    this.initialSearchQuery, // Add this parameter
   });
 
   @override
-  State<Categorylistproduct> createState() => _CategorylistproductState(category: category);
+  State<Categorylistproduct> createState() => _CategorylistproductState(
+    category: category,
+    initialSearchQuery: initialSearchQuery,
+  );
 }
 
 class _CategorylistproductState extends State<Categorylistproduct> {
   final String category;
+  final String? initialSearchQuery;
   String? selectedCategory;
   List<MainProduct.Product> filteredProducts = [];
+  TextEditingController searchController = TextEditingController();
+  String searchQuery = '';
 
   final List<String> categories = [
     'Accessories',
@@ -40,24 +48,50 @@ class _CategorylistproductState extends State<Categorylistproduct> {
     'Perfume',
   ];
 
-  _CategorylistproductState({required this.category});
+  _CategorylistproductState({
+    required this.category,
+    this.initialSearchQuery,
+  });
 
   @override
   void initState() {
     super.initState();
-    // Set the initial category filter
     selectedCategory = category;
-    // Initialize filtered products
+    if (initialSearchQuery != null && initialSearchQuery!.isNotEmpty) {
+      searchController.text = initialSearchQuery!;
+      searchQuery = initialSearchQuery!;
+    }
     filteredProducts = getFilteredProducts(products);
   }
 
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   List<MainProduct.Product> getFilteredProducts(List<MainProduct.Product> allProducts) {
-    if (selectedCategory != null) {
-      return allProducts.where((product) =>
-      product.category.toLowerCase() == selectedCategory!.toLowerCase()
-      ).toList();
+    var categoryFiltered = selectedCategory != null && selectedCategory!.isNotEmpty
+        ? allProducts.where((product) =>
+    product.category.toLowerCase() == selectedCategory!.toLowerCase())
+        .toList()
+        : allProducts;
+
+    if (searchQuery.isEmpty) {
+      return categoryFiltered;
     }
-    return allProducts;
+
+    return categoryFiltered.where((product) =>
+    product.title.toLowerCase().contains(searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().contains(searchQuery.toLowerCase())
+    ).toList();
+  }
+
+  void performSearch() {
+    setState(() {
+      searchQuery = searchController.text;
+      filteredProducts = getFilteredProducts(products);
+    });
   }
 
   void showFilterDialog() {
@@ -75,7 +109,7 @@ class _CategorylistproductState extends State<Categorylistproduct> {
                   ListTile(
                     title: const Text('All Categories'),
                     leading: Radio<String?>(
-                      value: null,
+                      value: '',
                       groupValue: selectedCategory,
                       onChanged: (String? value) {
                         setState(() {
@@ -146,18 +180,24 @@ class _CategorylistproductState extends State<Categorylistproduct> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
                         onSubmitted: (value) {
-                          print('Search: $value');
+                          performSearch();
                         },
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: performSearch,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),
@@ -192,16 +232,20 @@ class _CategorylistproductState extends State<Categorylistproduct> {
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: selectedCategory != null ? Colors.blue.withOpacity(0.1) : null,
+                      color: selectedCategory != null && selectedCategory!.isNotEmpty
+                          ? Colors.blue.withOpacity(0.1)
+                          : null,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           Icons.filter_alt,
-                          color: selectedCategory != null ? Colors.blue : null,
+                          color: selectedCategory != null && selectedCategory!.isNotEmpty
+                              ? Colors.blue
+                              : null,
                         ),
-                        if (selectedCategory != null) ...[
+                        if (selectedCategory != null && selectedCategory!.isNotEmpty) ...[
                           const SizedBox(width: 4),
                           Text(
                             selectedCategory!,
@@ -239,7 +283,7 @@ class _CategorylistproductState extends State<Categorylistproduct> {
             const Expanded(
               child: Center(
                 child: Text(
-                  'No products found in this category',
+                  'No products found',
                   style: TextStyle(fontSize: 16),
                 ),
               ),

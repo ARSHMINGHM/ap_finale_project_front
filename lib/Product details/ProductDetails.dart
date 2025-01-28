@@ -9,11 +9,14 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Product details/TechnicalSpecs.dart';
 import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'package:ap_finale_project_front/FakeData.dart';
+
+import '../Category/CategoryListProduct.dart';
 class ProductDetails extends StatefulWidget {
   final MainProduct.Product Product;
   const ProductDetails({
     required this.Product,
-});
+  });
+
   @override
   State<ProductDetails> createState() => _ProductdetailsState(Product: Product);
 }
@@ -21,10 +24,32 @@ class ProductDetails extends StatefulWidget {
 class _ProductdetailsState extends State<ProductDetails> {
   final MainProduct.Product Product;
   final TextEditingController _reviewController = TextEditingController();
+  final TextEditingController searchController = TextEditingController(); // New search controller
   final List<String> _reviews = [];
   bool _isLiked = false;
 
   _ProductdetailsState({required this.Product});
+
+  @override
+  void dispose() {
+    searchController.dispose(); // Dispose search controller
+    _reviewController.dispose();
+    super.dispose();
+  }
+
+  void navigateToSearch(BuildContext context) {
+    if (searchController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Categorylistproduct(
+            category: '', // Empty category to show all products
+            initialSearchQuery: searchController.text, // Pass the search query
+          ),
+        ),
+      );
+    }
+  }
   void _addReview() {
     if (_reviewController.text.isNotEmpty) {
       setState(() {
@@ -39,11 +64,10 @@ class _ProductdetailsState extends State<ProductDetails> {
     return Scaffold(
       backgroundColor: const Color(0xFFD8EBE4),
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Removes default back button
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFD8EBE4),
         title: Row(
           children: [
-            // Search Bar
             Expanded(
               child: Container(
                 height: 35,
@@ -56,18 +80,22 @@ class _ProductdetailsState extends State<ProductDetails> {
                   children: [
                     Expanded(
                       child: TextField(
+                        controller: searchController, // Add controller
                         decoration: const InputDecoration(
                           hintText: 'جستجو محصول ...',
                           border: InputBorder.none,
                         ),
-                        onSubmitted: (value) {
-                          print('Search: $value');
-                        },
+                        onSubmitted: (_) => navigateToSearch(context), // Add navigation on submit
                       ),
                     ),
-                    const Icon(
-                      Icons.search,
-                      color: Colors.black,
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.black,
+                      ),
+                      onPressed: () => navigateToSearch(context), // Add navigation on search icon tap
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                     ),
                   ],
                 ),
