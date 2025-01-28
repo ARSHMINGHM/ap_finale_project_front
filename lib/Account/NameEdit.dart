@@ -5,6 +5,8 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Account/EditInfo.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/material.dart';
+
 
 class ChangeName extends StatefulWidget {
   const ChangeName({super.key});
@@ -85,7 +87,7 @@ class changeName extends State<ChangeName> {
                     controller: firstNameController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: '${clientSocket.instance.fname}',
+                      hintText: 'نام',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -99,7 +101,7 @@ class changeName extends State<ChangeName> {
                     controller: lastNameController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: ' ${clientSocket.instance.lname}',
+                      hintText: 'نام خانوادگی',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

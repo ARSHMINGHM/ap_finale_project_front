@@ -26,8 +26,6 @@ Widget build(BuildContext context) {
             );
           },
         ),
-
-        // آیکون لوگو
         actions: [
           IconButton(
             icon: Icon(Icons.settings, color: Colors.black),
@@ -56,7 +54,6 @@ Widget build(BuildContext context) {
               textDirection: TextDirection.ltr,
             ),
             SizedBox(height: 20),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -64,8 +61,8 @@ Widget build(BuildContext context) {
                   onPressed: () {},
                   icon: ClipOval(
                     child: Container(
-                      width: 30,  // عرض دایره
-                      height: 30, // ارتفاع دایره
+                      width: 30,
+                      height: 30,
                       child: Image.asset(
                         'assets/images (18).png',
                         fit: BoxFit.cover,
@@ -87,8 +84,8 @@ Widget build(BuildContext context) {
                   },
                   icon: ClipOval(
                     child: Container(
-                      width: 30,  // عرض دایره
-                      height: 30, // ارتفاع دایره
+                      width: 30,
+                      height: 30,
                       child: Image.asset(
                         'assets/images (9).jpg',
                         fit: BoxFit.cover,
@@ -250,6 +247,7 @@ Widget build(BuildContext context) {
     );
   }
 }
+
 
 
 

@@ -5,6 +5,9 @@ import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:flutter/material.dart';
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+
 
 class changePhone extends StatefulWidget {
   const changePhone({super.key});
@@ -83,7 +86,7 @@ class ChangePhone extends State<changePhone> {
                     controller: phoneController,
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                      hintText: '${clientSocket.instance.phoneNumber}',
+                      hintText: '*********09',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),

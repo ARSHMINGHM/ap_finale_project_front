@@ -6,6 +6,7 @@ import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
+
 class changeEmail extends StatefulWidget {
   const changeEmail({super.key});
 
@@ -93,7 +94,7 @@ class ChangeEmail extends State<changeEmail> {
                   TextField(
                     controller: emailcontroller,
                     textAlign: TextAlign.right,
-                    decoration: InputDecoration(
+                    decoration: InputDecoration(hintTextDirection:TextDirection.ltr,
                       hintText: '******************@gmail.com',
                       labelStyle: const TextStyle(fontSize: 14),
                       border: OutlineInputBorder(

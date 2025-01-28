@@ -10,6 +10,9 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Category/Category.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
+import 'package:flutter/material.dart';
+
+
 
 class Account extends StatelessWidget {
   const Account({super.key});
@@ -141,6 +144,7 @@ class Account extends StatelessWidget {
                             child: Text(
                               (clientSocket.instance.phoneNumber?.isEmpty ?? true) ? '09**********' : clientSocket.instance.phoneNumber!,
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textDirection: TextDirection.ltr,
                               textAlign: TextAlign.right,
                             ),
                           ),
@@ -289,9 +293,9 @@ class Account extends StatelessWidget {
                     SizedBox(height: 7,),
                     Container(
                       width: 250,
-                      child :Divider(  
-                        color: Color(0xFF787474),  
-                        thickness: 1, 
+                      child :Divider(
+                        color: Color(0xFF787474),
+                        thickness: 1,
                       ),
                     ),
                     /////////////////////////////////////////////////pass
@@ -317,8 +321,8 @@ class Account extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: Text(
                               clientSocket.instance.password != null
-                                  ? '*' * clientSocket.instance.password!.length
-                                  : '',
+                                  ? '*' * clientSocket.instance.password!.length : '',
+
                               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                               textAlign: TextAlign.right,
                             ),
@@ -397,12 +401,12 @@ class Account extends StatelessWidget {
 */
 
                     //SizedBox(height: 7,),
+                    SizedBox(height: 7,),
                     Container(
                       width: 250,
-                      child :Divider(  // خط افقی
-                        color: Color(0xFF787474),  // رنگ خط
+                      child :Divider(
+                        color: Color(0xFF787474),
                         thickness: 1,
-                        height: 10,// ضخامت خط
                       ),
                     ),
                     //////////////////////////////////////////
@@ -503,5 +507,4 @@ class Account extends StatelessWidget {
     );
   }
 }
-
 
