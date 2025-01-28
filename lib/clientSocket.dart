@@ -57,33 +57,38 @@ class clientSocket {
   }
 
   Future<int> sendLoginCommand(String username, String password) async {
+    // Ensure the connection is established
     if (!isConnected) {
       try {
         await connect();
         if (!isConnected) return 500;
       } catch (e) {
-        return 500;
+        print("Error while connecting: $e");
+        return 500; // Connection error
       }
     }
 
-    String loginRequest = "login $username $password\n";
+    // Send the login request
+    final String loginRequest = "login $username $password\n";
     _socket?.write(loginRequest);
 
     try {
-      String response = await _streamController.stream.first;
+      // Wait for the response from the server
+      final String response = await _streamController.stream.first;
 
-      // بررسی پاسخ JSON
       if (response.startsWith("{") && response.endsWith("}")) {
-        Map<String, dynamic> jsonData = json.decode(response);
+        // Parse JSON if applicable
+        final Map<String, dynamic> jsonData = json.decode(response);
         _updateFieldsFromJson(jsonData);
         return 200; // Login successful
-      } /*else if (response.contains("Invalid credentials")) {
-        return 401; // Login failed
-      } */else {
-        return 400; // Unknown response
+      } else if (response == "not found") {
+        return 404; // User not found
+      } else {
+        return 501; // Unexpected response
       }
     } catch (e) {
-      print(e);
+      // Handle errors while reading response
+      print("Error while reading response: $e");
       return 500;
     }
   }

@@ -1,13 +1,14 @@
+
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:untitled/Account/EditInfo.dart';
-import 'package:untitled/Home/Home.dart';
-import 'package:untitled/Login_and_SIgn up/SignUp.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/Account/users.dart';
-import 'package:untitled/clientSocket.dart';
-import 'dart:io';
-import 'dart:convert';
+import 'package:ap_finale_project_front/Account/EditInfo.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Login_and_SIgn up/SignUp.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
+
 
 class login extends StatefulWidget {
   @override
@@ -308,8 +309,11 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
                             });
                           } else if (state == 500) {
                             showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
-                          } else if (state == 401) {
+                          } else if (state == 404) {
                             showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
+                          }
+                          else {
+                            showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
                           }
                         });
                       }
