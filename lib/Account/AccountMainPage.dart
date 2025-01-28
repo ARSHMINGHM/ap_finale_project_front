@@ -244,10 +244,12 @@ Widget build(BuildContext context) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
-          Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          Text(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold) ,textDirection: TextDirection.ltr,),
         ],
       ),
     );
   }
 }
+
+
 

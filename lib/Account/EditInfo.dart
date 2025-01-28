@@ -150,14 +150,14 @@ class Account extends StatelessWidget {
                             top: 0,
                             child: GestureDetector(
                               onTap: () {
-                                // هدایت به صفحه جدید
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => changePhone()),
                                 );
                               },
                               child: Icon(
-                                Icons.arrow_back, // آیکون فلش
+                                Icons.arrow_back,
                                 color: Colors.black,
                                 size: 16,
                               ),
@@ -267,11 +267,11 @@ class Account extends StatelessWidget {
                             ),
                           ),
                           Positioned(
-                            left: 0, // قرار دادن آیکون در سمت راست
+                            left: 0,
                             top: 0,
                             child: GestureDetector(
                               onTap: () {
-                                // هدایت به صفحه جدید
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(builder: (context) => changeEmail()),
@@ -307,9 +307,46 @@ class Account extends StatelessWidget {
                           textAlign: TextAlign.right,
                         ),
                       ),
+
+                    ),
+                    SizedBox(height: 13),
+                    Container(
+                      width: 250,
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              clientSocket.instance.password != null
+                                  ? '*' * clientSocket.instance.password!.length
+                                  : '',
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                          ),
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => changePassword()),
+                                );
+                              },
+                              child: Icon(
+                                Icons.arrow_back, // آیکون فلش
+                                color: Colors.black,
+                                size: 16,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
-                    SizedBox(height: 0),
+                    /*SizedBox(height: 0),
                     Container(
                       width: 250,
                       child: Stack(
@@ -330,7 +367,7 @@ class Account extends StatelessWidget {
                                   },
 
                                   child: Icon(
-                                    Icons.arrow_back, // آیکون فلش
+                                    Icons.arrow_back,
                                     color: Colors.black,
                                     size: 16,
 
@@ -358,7 +395,7 @@ class Account extends StatelessWidget {
                         ],
                       ),
                     ),
-
+*/
 
                     //SizedBox(height: 7,),
                     Container(

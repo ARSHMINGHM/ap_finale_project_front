@@ -29,10 +29,26 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
     );
     return emailRegExp.hasMatch(email);
   }
+  bool isValidPassword(String PreviousPassword, String newPassword, String repeatNewPassword) {
+    if (clientSocket.instance.password != PreviousPassword) {
+      showNotification("رمز فعلی اشتباه وارد شده", Color(0xFFE82561), Icons.error_outline);
+      return false;
+    } else if (newPassword != repeatNewPassword) {
 
-  bool isValidPassword(String password, String username) {
+      showNotification("رمز تکرار شده اشتباه است", Color(0xFFE82561), Icons.error_outline);
+      return false;
+    }else if(PreviousPassword == newPassword){
+      showNotification("رمز یکبار استفاده شده است", Color(0xFFE82561), Icons.error_outline);
+      return false;
+
+    }
+    return true;
+  }
+  bool isValidPass(String password, String username) {
 
     if (password.length < 5) {
+      showNotification("رمز عبور باید شامل حداقل 6 کاراکتر باشد", Color(0xFFE82561), Icons.error_outline);
+
       return false;
     }
     RegExp uppercase = RegExp(r'[A-Z]');
@@ -42,13 +58,16 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
     if (!uppercase.hasMatch(password) ||
         !lowercase.hasMatch(password) ||
         !digit.hasMatch(password)) {
+      showNotification("رمز عبور باید شامل حروف بزرگ و کوچک و اعداد باشد", Color(0xFFE82561), Icons.error_outline);
       return false;
     }
     if (password.contains(username)) {
+      showNotification("رمز عبور نباید شامل نام کاربری باشد", Color(0xFFE82561), Icons.error_outline);
       return false;
     }
     return true;
   }
+
 
   void addUser(User u) {
     users.add(u);
@@ -64,29 +83,28 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
       showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
       return false;
     } else if (pass.isEmpty) {
-      errorMessage = ".رمزعبور خود را وارد کنید";
+      errorMessage = "رمزعبور خود را وارد کنید";
       showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
       return false;
-    }else if(isValidPassword(pass, username)){
-      errorMessage = ".رمزعبور معتبر نیست.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-
     }
     else if (pass != repass) {
       errorMessage = "تکرار رمز عبور نادرست است.";
       showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
       return false;
-    } else {
+    }else if(!isValidPass(pass, username)){
+      errorMessage = ".رمزعبور معتبر نیست.";
+      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
+      return false;
+
+    }
+    else {
       errorMessage = "";
       User newUser = new User(userName: username,
           fname: fname,
           lname: lname,
           email: email,
           phoneNumber: "",
-          password: pass,
-          addresses: [],
-        shoppingCart: [],);
+          password: pass,);
       addUser(newUser);
       a = newUser;
       return true;
@@ -303,7 +321,7 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
                   SizedBox(height: 70),
                   ElevatedButton.icon(
                     onPressed: () async {
-                      String userName = fnameController.text;
+                      String userName = userNameController.text;
                       String firstName = fnameController.text;
                       String lastName = lnameController.text;
                       String Email = emailController.text;
@@ -324,15 +342,13 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
                               });
                             } else if (state == 500) {
                               showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 401) {
+                            }/* else if (state == 401) {
                               showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 404) {
+                            }*/ else if (state == 400) {
                               showNotification("نام کاربری تکراری است", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 406) {
+                            } else if (state == 401) {
                               showNotification("ایمیل تکراری است.", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 400) {
-                              showNotification("کاربر با این اطلاعات وجود دارد", Color(0xFFE82561), Icons.error_outline);
-                            } else {
+                            }  else {
                               showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
                             }
                           });

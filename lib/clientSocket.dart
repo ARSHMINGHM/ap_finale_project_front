@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:ap_finale_project_front/Product.dart';
 
-
 class clientSocket {
   String? userName;
   String? fname;
@@ -118,10 +117,13 @@ class clientSocket {
         Map<String, dynamic> jsonData = json.decode(response);
         _updateFieldsFromJson(jsonData);
         return 200; // Sign up successful
-      } else if (response.contains("this member was exist")) {
+      } else if (response.contains("This user name already exists")) {
         return 400; // Username already exists
-      } else {
-        return 500; // General failure
+      }else if (response.contains("This email already exists")) {
+        return 401; // Username already exists
+      }
+      else {
+        return 501; // General failure
       }
     } catch (e) {
       return 500; // Error occurred
@@ -283,6 +285,8 @@ class clientSocket {
     print("Connection closed.");
   }
 }
+
+
 
 
 
