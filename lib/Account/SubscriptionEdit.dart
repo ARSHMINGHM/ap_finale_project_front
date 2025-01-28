@@ -137,14 +137,13 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
                   );
                 } else {
                   // Update the subscription
-                  a.sub = selectedOption;
-
+                  a.sub = selectedOption;}
                 print('اشتراک انتخاب شده: ${clientSocket.instance.sub}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Account()),
                 );
-              },
+                },
               child: const Text(
                 'تایید اطلاعات',
                 style: TextStyle(fontSize: 16, color: Colors.white),
