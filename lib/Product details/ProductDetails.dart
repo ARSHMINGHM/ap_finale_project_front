@@ -114,21 +114,24 @@ class _ProductdetailsState extends State<ProductDetails> {
                       ),
                     ),
                     // Like Button
-          Positioned(
-            bottom: 20,
-            left: 20,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _isLiked = !_isLiked; // Toggle the like state
-                });
-              },
-              child: Icon(
-                Icons.favorite,
-                size: 40,
-                color: _isLiked ? Colors.red : Colors.grey, // Change color based on state
-              ),
-            ),),
+  Positioned(
+                      bottom: 20,
+                      left: 20,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isLiked = !_isLiked;
+                            if(_isLiked){
+                              a.FavoriteProducts.add(Product);
+                            }
+                          });
+                        },
+                        child: Icon(
+                          Icons.favorite,
+                          size: 40,
+                          color: _isLiked ? Colors.red : Colors.grey, // Change color based on state
+                        ),
+                      ),),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Login_and_SIgn up/SignUp.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 
 class login extends StatefulWidget {
   @override
@@ -17,11 +18,12 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   String errorMessage="";
+  late Socket socket;
+  bool _isConnect = false;
+
+
   void validateUser(String username, String password, List<User> users, BuildContext context) {
-    // تعریف متغیر کاربر معتبر
 
-
-    // جستجو برای یافتن کاربر
     for (User user in users) {
       if (user.userName == username && user.password == password) {
         a = user;
@@ -30,14 +32,14 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
     }
 
     if (a != null) {
-      // اگر کاربر معتبر پیدا شد
+
       showNotification(
         "ورود موفقیت‌آمیز بود!",
         Color(0xFF3E7B27),
         Icons.check_circle_outline,
       );
 
-      // انتقال به صفحه اصلی بعد از یک ثانیه
+
       Future.delayed(Duration(seconds: 1), () {
         Navigator.push(
           context,
@@ -45,7 +47,7 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
         );
       });
     } else {
-      // اگر کاربر معتبر پیدا نشد
+
       showNotification(
         "نام کاربری یا رمزعبور اشتباه است.",
         Color(0xFFE82561),
@@ -53,6 +55,7 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
       );
     }
   }
+
 
 
   void showNotification(String message, Color backgroundColor, IconData icon) {
@@ -106,8 +109,12 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    if(!clientSocket.instance.isConnected){
+      clientSocket.instance.connect();
+    }
 
-    // تنظیمات انیمیشن
+
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1200),
@@ -118,17 +125,73 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
       end: Offset(0, 0),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOut, // منحنی انیمیشن
+      curve: Curves.easeOut,
     ));
 
-    // شروع انیمیشن
     _animationController.forward();
+
   }
+/*  Future<void> connectToServer() async {
+    while (true) {
+      try {
+        socket = await Socket.connect('192.168.82.61', 8080);
+        _isConnect = true;
+        print("Connected to the server");
+        break; // اگر اتصال موفقیت‌آمیز بود، از حلقه خارج شود
+      } catch (e) {
+        _isConnect = false;
+        showNotification("خطا در اتصال به سرور.", Colors.red, Icons.error_outline);
+        print("Failed to connect. Retrying in 5 seconds...");
+        await Future.delayed(Duration(seconds: 5)); // 5 ثانیه صبر قبل از تلاش مجدد
+      }
+    }
+  }
+
+
+  Future<void> getCommand(String username, String password) async {
+    connectToServer();
+    if (!_isConnect) {
+      showNotification("در حال حاضر اتصال به سرور برقرار نیست.", Colors.red, Icons.error_outline);
+      return;
+    }
+
+    String loginRequest = "login $username $password\n";
+    socket?.write(loginRequest);
+
+    // گوش دادن به پاسخ سرور
+    socket?.listen((List<int> event) {
+      String response = utf8.decode(event).trim();
+      print("Server Response: $response");
+
+      if (response == "Login successful") {
+        showNotification("ورود موفقیت‌آمیز بود!", Colors.green, Icons.check_circle_outline);
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pushReplacementNamed(context, '/home');
+        });
+      } else {
+        showNotification("نام کاربری یا رمز عبور اشتباه است.", Colors.red, Icons.error_outline);
+      }
+    }, onError: (error) {
+      showNotification("خطا در ارتباط با سرور.", Colors.red, Icons.error_outline);
+      closeConnection();
+    }, onDone: () {
+      closeConnection();
+    });
+  }
+
+  void closeConnection() {
+    if (socket != null) {
+      socket?.close();
+      print("Connection closed");
+    }
+  }*/
 
   @override
   void dispose() {
     _animationController.dispose();
+    //closeConnection();
     super.dispose();
+
   }
 
   @override
@@ -217,30 +280,37 @@ class Login extends State<login> with SingleTickerProviderStateMixin {
                   ),
                   SizedBox(height: 40),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        String username = usernameController.text;
-                        String password = passController.text;
-                        if (username.isEmpty && password.isEmpty) {
-                          errorMessage = "نام کاربری و رمزعبور خود را وارد کنید";
-                          showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        } else if (username.isEmpty) {
-                          errorMessage = "نام کاربری  خود را وارد کنید";
-                          showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        } else if (password.isEmpty) {
-                          errorMessage = "رمزعبور خود را وارد کنید";
-                          showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-                        }else {
-                          validateUser(username, password, users, context);
-                        }
-                          /*errorMessage = "";
-                          showNotification("ورود موفقیت‌آمیز بود!",Color(0xFF3E7B27), Icons.check_circle_outline);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => home()),
-                          );
-                        }*/
-                      });
+                    onPressed: () async {
+                      String username = usernameController.text;
+                      String password = passController.text;
+
+                      if (username.isEmpty && password.isEmpty) {
+                        errorMessage = "نام کاربری و رمزعبور خود را وارد کنید";
+                        showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
+                      } else if (username.isEmpty) {
+                        errorMessage = "نام کاربری خود را وارد کنید";
+                        showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
+                      } else if (password.isEmpty) {
+                        errorMessage = "رمزعبور خود را وارد کنید";
+                        showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
+                      } else {
+                        // انجام عملیات غیرهمزمان قبل از setState
+                        int state = await clientSocket.instance.sendLoginCommand(username, password);
+                        print("state : ${state}");
+
+                        setState(() {
+                          if (state == 200) {
+                            showNotification("ورود موفقیت‌آمیز بود", Color(0xFF25E884), Icons.check_circle_outline);
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              Navigator.pushReplacementNamed(context, '/home');
+                            });
+                          } else if (state == 500) {
+                            showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
+                          } else if (state == 401) {
+                            showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
+                          }
+                        });
+                      }
                     },
                     label: Text('LOGIN', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(

@@ -1,15 +1,15 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled/Account/users.dart';
-import 'package:untitled/Category/Category.dart';
-import 'package:untitled/Account/AccountMainPage.dart';
-import 'package:untitled/Cart/Cart.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/Home/Home.dart';
-import 'package:untitled/Product details/TechnicalSpecs.dart';
-import 'package:untitled/Product.dart' as MainProduct;
-import 'package:untitled/FakeData.dart';
+import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/Category/Category.dart';
+import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/Home/Home.dart';
+import 'package:ap_finale_project_front/Product details/TechnicalSpecs.dart';
+import 'package:ap_finale_project_front/Product.dart' as MainProduct;
+import 'package:ap_finale_project_front/FakeData.dart';
 
 import 'package:flutter/material.dart';
 

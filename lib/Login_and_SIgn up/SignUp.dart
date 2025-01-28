@@ -5,6 +5,7 @@ import 'package:ap_finale_project_front/Home/Home.dart';
 import 'package:ap_finale_project_front/Login_and_SIgn up/Login.dart';
 import 'package:ap_finale_project_front/main.dart';
 import 'package:ap_finale_project_front/Account/users.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 
 
 class signUp extends StatefulWidget {
@@ -32,7 +33,7 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
   }
 
   bool isValidPassword(String password, String username) {
-    // بررسی طول رمز عبور
+
     if (password.length < 8) {
       return false;
     }
@@ -85,12 +86,9 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
           lname: lname,
           email: email,
           phoneNumber: "",
-          addresses: [],
-          shoppingCart: [],
           password: pass,);
       addUser(newUser);
       a = newUser;
-      showNotification("ثبت نام موفقیت‌آمیز بود!", Color(0xFF3E7B27), Icons.check_circle_outline);
       return true;
     }
 
@@ -146,8 +144,11 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    //clientSocket.instance.connect();
+    if(!clientSocket.instance.isConnected){
+      clientSocket.instance.connect();
+    }
 
-    // تنظیمات انیمیشن
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1200),
@@ -158,10 +159,9 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
       end: Offset(0, 0),
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOut, // منحنی انیمیشن
+      curve: Curves.easeOut,
     ));
 
-    // شروع انیمیشن
     _animationController.forward();
   }
 
@@ -303,24 +303,47 @@ class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
 
                   SizedBox(height: 70),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        String userName = fnameController.text;
-                        String firstName = fnameController.text;
-                        String lastName = lnameController.text;
-                        String Email = emailController.text;
-                        String Password = passController.text;
-                        String repass = repeatedPassController.text;
-                        bool valid = checkSignUp(userName,firstName, lastName, Email, Password, repass);
-                        if(valid){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
+                    onPressed: () async {
+                      String userName = fnameController.text;
+                      String firstName = fnameController.text;
+                      String lastName = lnameController.text;
+                      String Email = emailController.text;
+                      String Password = passController.text;
+                      String repass = repeatedPassController.text;
+
+                      bool valid = checkSignUp(userName, firstName, lastName, Email, Password, repass);
+
+                      if (valid) {
+                        try {
+                          int state = await clientSocket.instance.sendSignUpCommand(userName, firstName, lastName, Email, Password);
+
+                          setState(() {
+                            if (state == 200) {
+                              showNotification("ثبت نام با موفقیت انجام شد", Color(0xFF25E884), Icons.check_circle_outline);
+                              Future.delayed(const Duration(milliseconds: 300), () {
+                                Navigator.pushReplacementNamed(context, '/home');
+                              });
+                            } else if (state == 500) {
+                              showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
+                            } else if (state == 401) {
+                              showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
+                            } else if (state == 404) {
+                              showNotification("نام کاربری تکراری است", Color(0xFFE82561), Icons.error_outline);
+                            } else if (state == 406) {
+                              showNotification("ایمیل تکراری است.", Color(0xFFE82561), Icons.error_outline);
+                            } else if (state == 400) {
+                              showNotification("کاربر با این اطلاعات وجود دارد", Color(0xFFE82561), Icons.error_outline);
+                            } else {
+                              showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
+                            }
+                          });
+                        } catch (e) {
+                          print("Error: $e");
+                          showNotification("خطا در اتصال به سرور", Color(0xFFE82561), Icons.error_outline);
                         }
                       }
+                    },
 
-                      );},
                     label: Text('SIGN UP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue[200],
