@@ -8,27 +8,18 @@ import 'package:ap_finale_project_front/Product.dart' as MainProduct;
 import 'EditInfo.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
 
+
 class changeSubscription extends StatefulWidget {
   const changeSubscription({super.key});
 
   @override
   _ChangeSubscriptionState createState() => _ChangeSubscriptionState();
 }
+
 class _ChangeSubscriptionState extends State<changeSubscription> {
-  String? selectedOption = a.sub ?? 'پایه'; // Provide a default if a.sub is null
+  String? selectedOption = clientSocket.instance.sub;
 
-  // Create a premium subscription product using the .basic constructor
-  MainProduct.Product _createPremiumSubscriptionProduct() {
-    return MainProduct.Product.basic(
-      title: 'اشتراک پریمیوم',
-      price: '500000',
-      img: 'assets/premium_subscription.png',
-      discount: 33,
-      category: 'Subscription',
-      quantity: 1,
-    );
-  }
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -115,35 +106,13 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
                 ),
               ),
               onPressed: () {
-                // Debug prints
-                print('Current Subscription: ${a.sub}');
-                print('Selected Subscription: $selectedOption');
 
-                // If selected option is premium and current subscription is not premium
-                if (selectedOption == 'پریمیوم' && (a.sub == null || a.sub != 'پریمیوم')) {
-                  // Clear previous cart and add premium subscription
-                  a.shoppingCart.clear();
-
-                  // Create and add premium subscription product
-                  MainProduct.Product premiumProduct = _createPremiumSubscriptionProduct();
-                  a.shoppingCart.add(premiumProduct);
-
-                  // Navigate to cart
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Cart(product: a.shoppingCart),
-                    ),
-                  );
-                } else {
-                  // Update the subscription
-                  a.sub = selectedOption;}
                 print('اشتراک انتخاب شده: ${clientSocket.instance.sub}');
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const Account()),
                 );
-                },
+              },
               child: const Text(
                 'تایید اطلاعات',
                 style: TextStyle(fontSize: 16, color: Colors.white),
@@ -152,9 +121,10 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
             const SizedBox(height: 20),
           ],
         ),
-    ),
+      ),
     );
   }
+
 
   Widget _buildRadioOption(String text, String value) {
     return Row(
@@ -171,7 +141,7 @@ class _ChangeSubscriptionState extends State<changeSubscription> {
           onChanged: (String? newValue) {
             setState(() {
               selectedOption = newValue!;
-              clientSocket.instance.sendEditSubscriptionCommand(clientSocket.instance.userName??'', newValue);
+              clientSocket.instance.sendEditSubscriptionCommand(clientSocket.instance.userName??'', selectedOption!);
             });
           },
           activeColor: Colors.blue,

@@ -1,6 +1,12 @@
 import 'package:ap_finale_project_front/Payment/Payment.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/main.dart';
+import 'package:untitled/Payment/Payment.dart';
+import 'package:flutter/material.dart';
+import 'package:untitled/Cart/Cart.dart';
+import 'package:untitled/clientSocket.dart';
+import 'package:untitled/main.dart';
+import 'package:untitled/clientSocket.dart';
 
 class Address extends StatefulWidget {
   final int total;
@@ -65,8 +71,8 @@ class _AddressState extends State<Address> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
-                    for (int i = 0; i < a.addresses!.length; i++)
-                      _buildAddressItem(a.addresses![i], i),
+                    for (int i = 0; i < clientSocket.instance.addresses!.length; i++)
+                      _buildAddressItem(clientSocket.instance.addresses![i], i),
                     _buildNewAddressInput(),
                   ],
                 ),
@@ -127,7 +133,7 @@ class _AddressState extends State<Address> {
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('آدرس تایید شد: ${a.addresses?[selectedAddressIndex!]}'),
+                      content: Text('آدرس تایید شد: ${clientSocket.instance.addresses?[selectedAddressIndex!]}'),
                     ),
                   );
                   Navigator.push(
@@ -220,10 +226,23 @@ class _AddressState extends State<Address> {
           ),
           const SizedBox(height: 8),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async{
               if (newAddressController.text.isNotEmpty) {
+                String address = newAddressController.text;
+                int status = await clientSocket.instance.sendAddAddressCommand(clientSocket.instance.userName??'', address);
                 setState(() {
-                  a.addresses?.add(newAddressController.text);
+                  if(status == 200){
+                    print("address added successful");
+                  }else if(status == 400){
+                    print("address duplicate");
+                  }
+                  else if(status == 404){
+                    print("address not found");
+                  }
+                  else{
+                    print("error");
+                  }
+                  //a.addresses?.add(newAddressController.text);
                   newAddressController.clear();
                 });
               }

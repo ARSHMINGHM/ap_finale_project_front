@@ -2,10 +2,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import com.google.gson.*;
+import java.util.*;
 
 public class stest {
 
     static String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
+    static final String AddressFilePath = "E:\\AP_java\\test_server\\src\\userAddress.txt";
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(8080)) {
@@ -38,9 +40,6 @@ public class stest {
                         String userInfoJson = getUserInfoAsJson(username);
                         dout.writeBytes(userInfoJson + "\n");
                     } else {
-                        /*JsonObject errorResponse = new JsonObject();
-                        errorResponse.addProperty("status", "error");
-                        errorResponse.addProperty("message", "Invalid credentials");*/
                         dout.writeBytes("not found\n");
                     }
                 } else if (str1.startsWith("signUp")) {
@@ -60,14 +59,16 @@ public class stest {
 
                     int status = DataBaseManager.signUp(username, fname, lname, email, password);
                     if (status == 200) {
-                        /*Gson gson = new Gson();
-                        User user = new User(username, fname, lname, email, "09********", password);*/
+
                         String userInfoJson = getUserInfoAsJson(username);
-                       // return gson.toJson(user);
+
                         dout.writeBytes(userInfoJson+"\n");
                     } else if (status == 400) {
-                        dout.writeBytes("This member already exists\n");
-                    } else {
+                        dout.writeBytes("This user name already exists\n");
+                    }else if (status == 401) {
+                        dout.writeBytes("This email already exists\n");
+                    }
+                    else {
                         dout.writeBytes("Invalid credentials\n");
                     }
                 } else if (str1.startsWith("editName")) {
@@ -93,8 +94,7 @@ public class stest {
                         dout.writeBytes("user not found\n");
                     }
                     else{
-                        dout.writeBytes("400\n");
-
+                        dout.writeBytes("\n");
                     }
                 }
                 else if (str1.startsWith("editEmail")) {
@@ -108,9 +108,9 @@ public class stest {
                     } else if(state == 404){
                         dout.writeBytes("user not found\n");
                     }
+
                     else{
                         dout.writeBytes("400\n");
-
                     }
                 }
 
@@ -150,6 +150,26 @@ public class stest {
 
                     }
                 }
+                else if (str1.startsWith("AddAddress")) {
+                    String[] parts = str1.split(" ");
+                    String username = parts[1];
+                    String address = parts[2];
+
+                    int state = DataBaseManager.addAddress(username, address);
+                    if (state == 200) {
+                        dout.writeBytes("Add Address successful\n");
+                    }
+                    else if(state == 400){
+                        dout.writeBytes("The address is duplicate\n");
+                    }
+                    else if(state == 404){
+                        dout.writeBytes("user not found\n");
+                    }
+                    else{
+                        dout.writeBytes("error\n");
+
+                    }
+                }
 
             }
 
@@ -162,12 +182,18 @@ public class stest {
     static String getUserInfoAsJson(String username) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line = br.readLine();
+            List<String> addresses = new ArrayList<>();
             while (line != null) {
                 String[] info = line.split("-");
-                if (info.length == 8 && info[1].equals(username)) {
-
+                if (info.length == 9 && info[1].equals(username)) {
+                    addresses = Arrays.asList(info[8].split(","));
                     Gson gson = new Gson();
-                    User user = new User(info[1], info[2], info[3], info[4], info[5], info[6],info[7]);
+                    User user = new User(info[1], info[2], info[3], info[4], info[5], info[6],info[7],addresses);
+                    return gson.toJson(user);
+                }
+                else if(info.length == 8 && info[1].equals(username)){
+                    Gson gson = new Gson();
+                    User user = new User(info[1], info[2], info[3], info[4], info[5], info[6],info[7],addresses);
                     return gson.toJson(user);
                 }
                 line = br.readLine();
@@ -186,8 +212,9 @@ public class stest {
         String phone;
         String pass;
         String sub;
+        List<String> addresses;
 
-        User(String username, String firstName, String lastName, String email, String phone,String pass,String sub) {
+        User(String username, String firstName, String lastName, String email, String phone,String pass,String sub,List<String> addresses) {
             //this.id = id;
             this.username = username;
             this.firstName = firstName;
@@ -196,6 +223,19 @@ public class stest {
             this.phone = phone;
             this.pass = pass;
             this.sub = sub;
+            this.addresses = addresses;
         }
     }
-}
+    static class UserAddress {
+        String username;
+        String phone;
+        List<String> addresses;
+        String sub;
+
+        UserAddress(String username, String phone, String sub, List<String> addresses) {
+            this.username = username;
+            this.phone = phone;
+            this.addresses = addresses;
+            this.sub = sub;
+        }
+}}

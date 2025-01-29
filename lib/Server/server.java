@@ -13,7 +13,7 @@ public class server {
         System.out.println("Server starting...");
         while (true) {
             pool.execute(new ClientHandler(serverSocket.accept()));
-            new ClientHandler(serverSocket.accept()).start();
+            //new ClientHandler(serverSocket.accept()).start();
         }
 
     }

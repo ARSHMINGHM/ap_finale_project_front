@@ -8,384 +8,342 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:ap_finale_project_front/Product.dart';
 
-class signUp extends StatefulWidget {
-  @override
-  SignUp  createState() => SignUp ();
+class clientSocket {
+  String? userName;
+  String? fname;
+  String? lname;
+  String? email;
+  String? phoneNumber;
+  String? password;
+  String? sub = "معمولی";
+  List<Product> FavoriteProducts = [];
+  List<Product>? shoppingCart = [];
+  List<String> addresses = [];
+  static final clientSocket _instance = clientSocket._internal();
+  static clientSocket get instance => _instance;
+
+  final String host = '192.168.81.61';
+  final int port = 8080;
+  Socket? _socket;
+  final StreamController<String> _streamController = StreamController<String>.broadcast();
+
+  bool get isConnected => _socket != null;
+
+  clientSocket._internal();
+
+  Future<void> connect() async {
+    if (isConnected) return;
+    try {
+      _socket = await Socket.connect(host, port);
+      print("Connected to server: ${_socket!.remoteAddress.address}:${_socket!.remotePort}");
+
+      _socket!.listen(
+            (List<int> event) {
+          String response = utf8.decode(event).trim();
+          print("Server Response: $response");
+          _streamController.add(response);
+        },
+        onError: (error) {
+          print("Connection Error: $error");
+          closeConnection();
+        },
+        onDone: () {
+          print("Server closed the connection.");
+          closeConnection();
+        },
+      );
+    } catch (e) {
+      print("Failed to connect to server: $e");
+    }
+  }
+
+  Future<int> sendLoginCommand(String username, String password) async {
+    // Ensure the connection is established
+    if (!isConnected) {
+      try {
+        await connect();
+        if (!isConnected) return 500;
+      } catch (e) {
+        print("Error while connecting: $e");
+        return 500; // Connection error
+      }
+    }
+
+    // Send the login request
+    final String loginRequest = "login $username $password\n";
+    _socket?.write(loginRequest);
+
+    try {
+      // Wait for the response from the server
+      final String response = await _streamController.stream.first;
+
+      if (response.startsWith("{") && response.endsWith("}")) {
+        // Parse JSON if applicable
+        final Map<String, dynamic> jsonData = json.decode(response);
+        _updateFieldsFromJson(jsonData);
+        return 200; // Login successful
+      } else if (response == "not found") {
+        return 404; // User not found
+      } else {
+        return 501; // Unexpected response
+      }
+    } catch (e) {
+      // Handle errors while reading response
+      print("Error while reading response: $e");
+      return 500;
+    }
+  }
+
+  Future<int> sendSignUpCommand(
+      String username,
+      String firstName,
+      String lastName,
+      String email,
+      String password,
+      ) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String signUpRequest = "signUp $username $firstName $lastName $email $password\n";
+    _socket?.write(signUpRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+      print("response : ${response}");
+
+
+      if (response.startsWith("{") && response.endsWith("}")) {
+        Map<String, dynamic> jsonData = json.decode(response);
+        _updateFieldsFromJson(jsonData);
+        return 200; // Sign up successful
+      } else if (response.contains("This user name already exists")) {
+        return 400; // Username already exists
+      }else if (response.contains("This email already exists")) {
+        return 401; // Username already exists
+      }
+      else {
+        return 501; // General failure
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+
+  Future<int> sendEditNameCommand(String username, String firstName, String lastName) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editNameRequest = "editName $username $firstName $lastName\n";
+    _socket?.write(editNameRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+      // بررسی پاسخ JSON
+      if (response == "Edit name successful") {
+        this.fname = firstName;
+        this.lname = lastName;
+
+        return 200; // Edit successful
+      } else if (response.contains("Edit name failed or user not found")) {
+        return 404; // Username not found
+      } else {
+        return 400; // General failure
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditEmailCommand(String username, String email) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editEmailRequest = "editEmail $username $email\n";
+    _socket?.write(editEmailRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit email successful") {
+        this.email = email;
+
+        return 200; // Edit successful
+      } else if (response == "user not found") {
+        return 404; // Username not found
+      } else {
+        return 400; // General failure
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditPhoneCommand(String username, String phone) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editPhoneRequest = "editPhone $username $phone\n";
+    _socket?.write(editPhoneRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit phone successful") {
+        this.phoneNumber = phone;
+
+        return 200; // Edit successful
+      } else if (response == '400') {
+        return 400; // phone for another account
+      } else if(response == "user not found"){
+        return 404; // General failure
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditPasswordCommand(String username, String pass) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editPasswordRequest = "editPassword $username $pass\n";
+    _socket?.write(editPasswordRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit password successful") {
+        this.password = pass;
+
+        return 200; // Edit successful
+      } else if (response == 'password was found') {
+        return 400;
+      } else if(response == "user not found"){
+        return 404;
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendEditSubscriptionCommand(String username, String sub) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String editSubRequest = "editSubscription $username $sub\n";
+    _socket?.write(editSubRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Edit Subscription successful") {
+        this.sub = sub;
+        return 200; // Edit successful
+      }  else if(response == "not valid"){
+        return 404;
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+
+  Future<int> sendAddAddressCommand(String username, String address) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500; // Server not reachable
+    }
+
+    String addAddressRequest = "AddAddress $username $address\n";
+    _socket?.write(addAddressRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Add Address successful") {
+        addresses.add(address);
+        return 200; // Edit successful
+      }  else if(response == "The address is duplicate"){
+        return 400;
+      } else if(response == "user not found"){
+        return 404;
+      } else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  Future<int> sendDeleteAddressCommand(String username, String address) async {
+    if (!isConnected) {
+      await connect();
+      if (!isConnected) return 500;
+    }
+
+    String addAddressRequest = "DeleteAddress $username $address\n";
+    _socket?.write(addAddressRequest);
+
+    try {
+      String response = await _streamController.stream.first;
+
+
+      if (response == "Delete Address successful") {
+        addresses.remove(address);
+        return 200; // Edit successful
+      }  else if(response == "this address not found"){
+        return 404;
+      }
+      else{
+        return 501;
+      }
+    } catch (e) {
+      return 500; // Error occurred
+    }
+  }
+  void _updateFieldsFromJson(Map<String, dynamic> jsonData) {
+    userName = jsonData['username'];
+    fname = jsonData['firstName'];
+    lname = jsonData['lastName'];
+    email = jsonData['email'];
+    password =jsonData['pass'];
+    phoneNumber = jsonData['phone'];
+    sub = jsonData['sub'];
+    if (jsonData['addresses'] is List) {
+      addresses = List<String>.from(jsonData['addresses']);
+    } else {
+      addresses = [];
+    }
+    print("Fields updated from JSON: $jsonData");
+  }
+
+  void closeConnection() {
+    _socket?.close();
+    _socket = null;
+    print("Connection closed.");
+  }
 }
 
-class SignUp extends State<signUp> with SingleTickerProviderStateMixin {
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController fnameController = TextEditingController();
-  TextEditingController lnameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController repeatedPassController = TextEditingController();
-
-  late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
-  String errorMessage="";
-  bool isValidEmail(String email) {
-
-    RegExp emailRegExp = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$',
-    );
-    return emailRegExp.hasMatch(email);
-  }
-  bool isValidPassword(String PreviousPassword, String newPassword, String repeatNewPassword) {
-    if (clientSocket.instance.password != PreviousPassword) {
-      showNotification("رمز فعلی اشتباه وارد شده", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (newPassword != repeatNewPassword) {
-
-      showNotification("رمز تکرار شده اشتباه است", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }else if(PreviousPassword == newPassword){
-      showNotification("رمز یکبار استفاده شده است", Color(0xFFE82561), Icons.error_outline);
-      return false;
-
-    }
-    return true;
-  }
-  bool isValidPass(String password, String username) {
-
-    if (password.length < 5) {
-      showNotification("رمز عبور باید شامل حداقل 6 کاراکتر باشد", Color(0xFFE82561), Icons.error_outline);
-
-      return false;
-    }
-    RegExp uppercase = RegExp(r'[A-Z]');
-    RegExp lowercase = RegExp(r'[a-z]');
-    RegExp digit = RegExp(r'[0-9]');
-
-    if (!uppercase.hasMatch(password) ||
-        !lowercase.hasMatch(password) ||
-        !digit.hasMatch(password)) {
-      showNotification("رمز عبور باید شامل حروف بزرگ و کوچک و اعداد باشد", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    if (password.contains(username)) {
-      showNotification("رمز عبور نباید شامل نام کاربری باشد", Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    return true;
-  }
-
-
-  void addUser(User u) {
-    users.add(u);
-  }
-
-  bool checkSignUp(String username,String fname , String lname, String email,String pass,String repass){
-    if (email.isEmpty || pass.isEmpty || fname.isEmpty|| lname.isEmpty || repass.isEmpty) {
-      errorMessage = "اطلاعات زیر را به صورت کامل پر کنید.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (!isValidEmail(email)) {
-      errorMessage = ".ایمیل معتبر نیست";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    } else if (pass.isEmpty) {
-      errorMessage = "رمزعبور خود را وارد کنید";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }
-    else if (pass != repass) {
-      errorMessage = "تکرار رمز عبور نادرست است.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-    }else if(!isValidPass(pass, username)){
-      errorMessage = ".رمزعبور معتبر نیست.";
-      showNotification(errorMessage, Color(0xFFE82561), Icons.error_outline);
-      return false;
-
-    }
-    else {
-      errorMessage = "";
-      User newUser = new User(userName: username,
-          fname: fname,
-          lname: lname,
-          email: email,
-          phoneNumber: "",
-          password: pass,
-          addresses: [],
-          shoppingCart: [],);
-      addUser(newUser);
-      a = newUser;
-      return true;
-    }
-
-  }
-  void showNotification(String message, Color backgroundColor, IconData icon) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 50,
-        left: 20,
-        right: 20,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Icon(icon, color: Colors.white),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    message,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    overlay?.insert(overlayEntry);
-
-    Future.delayed(Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    if(!clientSocket.instance.isConnected){
-      clientSocket.instance.connect();
-    }
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 1200),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: Offset(0, 1),
-      end: Offset(0, 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFDFF2EB),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFDFF2EB),
-        elevation: 0,
-      ),
-      body: SlideTransition(
-        position: _slideAnimation,
-      child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 80,
-                backgroundColor: Colors.grey.withOpacity(0.5),
-                backgroundImage: AssetImage('assets/images (8).jpg'),
-              ),
-              SizedBox(height: 20),
-              Image.asset(
-                'assets/sign up.jpg',
-                height: 40,
-                width: 150,
-                alignment: Alignment.center,
-                fit: BoxFit.fill,
-              ),
-              SizedBox(height: 30),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 350,
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: userNameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام کاربری',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: fnameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: lnameController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'نام خانوادگی',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: emailController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'ایمیل',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: passController,
-                          obscureText: true,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'رمز عبور',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: repeatedPassController,
-                          obscureText: true,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: ' تکرار رمز عبود',
-                            labelStyle: TextStyle(fontSize: 14),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFFD9D9D9),
-                          ),
-
-                        ),
-                      ],
-                    ),
-                  ),
-
-
-
-
-                  SizedBox(height: 70),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      String userName = userNameController.text;
-                      String firstName = fnameController.text;
-                      String lastName = lnameController.text;
-                      String Email = emailController.text;
-                      String Password = passController.text;
-                      String repass = repeatedPassController.text;
-
-                      bool valid = checkSignUp(userName, firstName, lastName, Email, Password, repass);
-
-                      if (valid) {
-                        try {
-                          int state = await clientSocket.instance.sendSignUpCommand(userName, firstName, lastName, Email, Password);
-
-                          setState(() {
-                            if (state == 200) {
-                              showNotification("ثبت نام با موفقیت انجام شد", Color(0xFF25E884), Icons.check_circle_outline);
-                              Future.delayed(const Duration(milliseconds: 300), () {
-                                Navigator.pushReplacementNamed(context, '/home');
-                              });
-                            } else if (state == 500) {
-                              showNotification("connection loss", Color(0xFFE82561), Icons.error_outline);
-                            }/* else if (state == 401) {
-                              showNotification("نام کاربری یا رمز عبور اشتباه است.", Color(0xFFE82561), Icons.error_outline);
-                            }*/ else if (state == 400) {
-                              showNotification("نام کاربری تکراری است", Color(0xFFE82561), Icons.error_outline);
-                            } else if (state == 401) {
-                              showNotification("ایمیل تکراری است.", Color(0xFFE82561), Icons.error_outline);
-                            }  else {
-                              showNotification("خطای ناشناخته، لطفاً دوباره امتحان کنید.", Color(0xFFE82561), Icons.error_outline);
-                            }
-                          });
-                        } catch (e) {
-                          print("Error: $e");
-                          showNotification("خطا در اتصال به سرور", Color(0xFFE82561), Icons.error_outline);
-                        }
-                      }
-                    },
-
-                    label: Text('SIGN UP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[200],
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      minimumSize: Size(250, 50),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                padding: EdgeInsets.all(15),
-              ),
-            ],
-          ),
-      ),
-
-      ),
-
-
-    );
-  }
-}
 
 
