@@ -11,35 +11,13 @@ import 'package:ap_finale_project_front/Product.dart';
 import 'package:ap_finale_project_front/clientSocket.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:mysql1/mysql1.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/Account/AccountMainPage.dart';
 
 List<Product> b = fakeProducts;
 User a = User(userName: "alisa",fname: "علی",lname:"صائمی",email: "alisaemi0005@gmail.com",phoneNumber: "0932565255",password: "1234", addresses: [], shoppingCart: []);
 void main() async{
-  final settings = ConnectionSettings(
-    host: '10.0.2.2',
-    port: 3306,
-    user: 'root',
-    password: 'admin1234',
-    db: 'Products',
-  );
-
-
-  // Establish the connection
-  try {
-    final conn = await MySqlConnection.connect(settings);
-    print('Connected to the database successfully!');
-
-    // Close the connection
-    await conn.close();
-  } catch (e) {
-    print('Failed to connect to the database: $e');
-  }
-  //clientSocket.instance.connect();
   runApp(const MyApp());
-
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
