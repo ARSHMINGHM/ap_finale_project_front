@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Product {
+  final int id;
   final String title; // عنوان محصول
   final String fullPrice; // قیمت کامل
   final String price; // قیمت با تخفیف
@@ -18,11 +19,11 @@ class Product {
   final String category; // دسته‌بندی محصول
   final int discount;
   late int quantity;
-  final int specsId;
-  final int id;
+  final ProductSpecs specs; // مشخصات محصول
   // کانستراکتور اصلی
    Product({
     required this.title,
+     required this.id,
     required this.fullPrice,
     required this.price,
     required this.rating,
@@ -39,8 +40,7 @@ class Product {
     required this.isLiked,
     required this.category,
      required this.quantity,
-     required this.specsId,
-     required this.id,
+     required this.specs,
   });
 
   // کانستراکتور ساده برای محصولات پایه
@@ -48,9 +48,9 @@ class Product {
     required this.title,
     required this.price,
     required this.img,
-    required this.discount,
-     required this.specsId,
      required this.id,
+    required this.discount,
+     required this.specs,
     this.fullPrice = '',
     this.rating = '0',
     this.backgroundColor = const Color(0xFFFFFFFF),
@@ -72,10 +72,10 @@ class Product {
     required this.title,
     required this.fullPrice,
     required this.price,
+     required this.id,
     required this.img,
     required this.discount,
-     required this.specsId,
-     required this.id,
+     required this.specs,
     this.rating = '0',
     this.backgroundColor = const Color(0xFFFFE0B2),
     this.color = const Color(0xFFFFFFFF),

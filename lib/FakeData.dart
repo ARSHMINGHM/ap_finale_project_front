@@ -3,6 +3,7 @@ import 'package:ap_finale_project_front/Product.dart';
 
 List<Product> fakeProducts = [
   Product(
+    id: 0,
     title: 'Smartphone X1',
     fullPrice: '1000',
     price: '800',
@@ -29,6 +30,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 1,
     title: 'Wireless Earbuds Z2',
     fullPrice: '150',
     price: '120',
@@ -55,6 +57,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 2,
     title: 'Gaming Laptop Pro 17',
     fullPrice: '2500',
     price: '2000',
@@ -81,6 +84,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 3,
     title: 'Smartwatch Gen 3',
     fullPrice: '300',
     price: '250',
@@ -107,6 +111,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 4,
     title: '4K Smart TV 50"',
     fullPrice: '800',
     price: '650',
@@ -133,6 +138,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 5,
     title: 'Gaming Chair XL',
     fullPrice: '300',
     price: '250',
@@ -159,6 +165,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 6,
     title: 'Electric Toothbrush S1',
     fullPrice: '100',
     price: '80',
@@ -185,6 +192,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 7,
     title: 'Bluetooth Speaker BoomBox',
     fullPrice: '200',
     price: '170',
@@ -211,6 +219,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 8,
     title: 'Smartphone X1',
     fullPrice: '1000',
     price: '800',
@@ -237,6 +246,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 9,
     title: 'Wireless Earbuds Z2',
     fullPrice: '150',
     price: '120',
@@ -263,6 +273,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 10,
     title: 'Gaming Laptop Pro 17',
     fullPrice: '2500',
     price: '2000',
@@ -289,6 +300,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 11,
     title: "Wireless Earbuds",
     fullPrice: "100",
     price: "75",
@@ -315,6 +327,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 12,
     title: "Tablet Pro 2024",
     fullPrice: "600",
     price: "550",
@@ -341,6 +354,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 13,
     title: "Gaming Laptop Z1",
     fullPrice: "1500",
     price: "1400",
@@ -367,6 +381,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 14,
     title: "Children's Sweater",
     fullPrice: "40",
     price: "30",
@@ -393,6 +408,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 15,
     title: "Women's Dress",
     fullPrice: "120",
     price: "85",
@@ -419,6 +435,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 16,
     title: "Men's Jacket",
     fullPrice: "200",
     price: "180",
@@ -445,6 +462,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 17,
     title: "Luxury Perfume",
     fullPrice: "150",
     price: "135",
@@ -471,6 +489,7 @@ List<Product> fakeProducts = [
     ),
   ),
   Product(
+    id: 18,
     title: "Skincare Cream",
     fullPrice: "50",
     price: "45",

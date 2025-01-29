@@ -82,8 +82,15 @@ class ProductClientSocket {
                 productScore: double.parse(fields[14]),
                 isLiked: fields[15].toLowerCase() == 'true',
                 category: fields[16],
-                specsId: int.parse(fields[17]),
                 quantity: int.parse(fields[18]),
+                specs: ProductSpecs(
+                  phoneType: "",
+                  model: "Fragrance Elite",
+                  releaseDate: "2024-03-01",
+                  dimensions: "100ml",
+                  features: ["Long-Lasting", "Luxury Packaging"],
+                ),
+
             );
             productList.add(product);
           }
@@ -109,7 +116,7 @@ class ProductClientSocket {
         "${product.rating}~${product.backgroundColor}~${product.strcolor}~${product.color}~" +
         "${product.img}~${product.discount}~${product.isAmazingOffer}~${product.isTopProduct}~" +
         "${product.stock}~${product.soldCount}~${product.productScore}~${product.isLiked}~" +
-        "${product.category}~${product.specsId}~${product.quantity}";
+        "${product.category}~${0000}~${product.quantity}";
 
     _socket?.write("ADD_PRODUCT $productString\n");
 
