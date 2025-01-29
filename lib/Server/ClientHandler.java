@@ -9,8 +9,8 @@ import com.google.gson.*;
 
 class ClientHandler implements Runnable {
     private final Socket socket;
-    private static final String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
-    private static final String AddressFilePath = "E:\\AP_java\\test_server\\src\\userAddress.txt";
+    private static final String filePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
+    private static final String AddressFilePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
 
     public ClientHandler(Socket socket) {
         this.socket = socket;

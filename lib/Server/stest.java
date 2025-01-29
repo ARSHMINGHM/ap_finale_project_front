@@ -6,8 +6,8 @@ import java.util.*;
 
 public class stest {
 
-    static String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
-    static final String AddressFilePath = "E:\\AP_java\\test_server\\src\\userAddress.txt";
+    static String filePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
+    static final String AddressFilePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
 
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(8080)) {

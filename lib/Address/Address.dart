@@ -1,12 +1,12 @@
 import 'package:ap_finale_project_front/Payment/Payment.dart';
 import 'package:flutter/material.dart';
 import 'package:ap_finale_project_front/main.dart';
-import 'package:untitled/Payment/Payment.dart';
+import 'package:ap_finale_project_front/Payment/Payment.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled/Cart/Cart.dart';
-import 'package:untitled/clientSocket.dart';
-import 'package:untitled/main.dart';
-import 'package:untitled/clientSocket.dart';
+import 'package:ap_finale_project_front/Cart/Cart.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
+import 'package:ap_finale_project_front/main.dart';
+import 'package:ap_finale_project_front/clientSocket.dart';
 
 class Address extends StatefulWidget {
   final int total;

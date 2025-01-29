@@ -2,8 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class DataBaseManager {
-    static String filePath = "E:\\AP_java\\test_server\\src\\users.txt";
-    static final String AddressFilePath = "E:\\AP_java\\test_server\\src\\userAddress.txt";
+    static String filePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
+    static final String AddressFilePath = "C:\\ap_finale_project_front\\lib\\Server\\users.txt";
     static int lastId = 1;
 
 

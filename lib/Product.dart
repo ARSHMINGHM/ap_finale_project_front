@@ -16,10 +16,10 @@ class Product {
   final double productScore; // امتیاز محصول
   final bool isLiked; // آیا محصول لایک شده است؟
   final String category; // دسته‌بندی محصول
-  final ProductSpecs specs; // مشخصات محصول
   final int discount;
   late int quantity;
-
+  final int specsId;
+  final int id;
   // کانستراکتور اصلی
    Product({
     required this.title,
@@ -38,8 +38,9 @@ class Product {
     required this.productScore,
     required this.isLiked,
     required this.category,
-    required this.specs,
      required this.quantity,
+     required this.specsId,
+     required this.id,
   });
 
   // کانستراکتور ساده برای محصولات پایه
@@ -48,6 +49,8 @@ class Product {
     required this.price,
     required this.img,
     required this.discount,
+     required this.specsId,
+     required this.id,
     this.fullPrice = '',
     this.rating = '0',
     this.backgroundColor = const Color(0xFFFFFFFF),
@@ -61,7 +64,7 @@ class Product {
     this.isLiked = false,
     this.category = "Others",
      this.quantity = 0,
-    this.specs = const ProductSpecs(phoneType: "", model: "", releaseDate: "", dimensions: "",features: [""]),
+
   });
 
   // کانستراکتور برای محصولات تخفیف شگفت‌انگیز
@@ -71,6 +74,8 @@ class Product {
     required this.price,
     required this.img,
     required this.discount,
+     required this.specsId,
+     required this.id,
     this.rating = '0',
     this.backgroundColor = const Color(0xFFFFE0B2),
     this.color = const Color(0xFFFFFFFF),
@@ -83,7 +88,6 @@ class Product {
      this.quantity = 0,
     this.isLiked = false,
     this.category = "Others",
-    this.specs = const ProductSpecs(phoneType: "", model: "", releaseDate: "", dimensions: "", features: [""]),
   });
 }
 
